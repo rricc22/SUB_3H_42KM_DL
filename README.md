@@ -1,202 +1,136 @@
-# Heart Rate Prediction from Running Activity Data
+# Heart Rate Prediction from Activity Data
 
-Deep Learning project for predicting heart rate time-series from running workout sequences using LSTM neural networks.
+**Deep Learning Course Project - CentraleSupélec**
 
-## Project Overview
+## Project Goal
 
-This project uses deep learning to predict heart rate responses during running workouts based on:
-- Speed sequences
-- Altitude/elevation changes
-- User characteristics (gender, userId)
-
-**Goal**: Given activity data (speed and altitude over time), predict the corresponding heart rate throughout the workout.
+Predict heart rate time-series from running activity sequences using deep learning. Given speed, altitude, gender, and user information, the model forecasts the corresponding heart rate response throughout the workout.
 
 ## Dataset
 
 **Endomondo Fitness Tracking Dataset**
-- Source: FitRec research project
-- Contains 253,020+ running workouts with heart rate data
-- Features: Speed, altitude, GPS coordinates, timestamps
-- Metadata: User ID, gender, distance, duration
+- `endomondoHR.json`: 253,020 workouts with heart rate data
+- `endomondoMeta.json`: 962,190 workouts with metadata
 
-**Note**: The dataset files are NOT included in this repository due to size constraints. See [Data Setup](#data-setup) section below.
+### Data Structure
 
-## Project Structure
+Each workout contains:
+- **Time-series data**: Speed, altitude, heart rate, GPS coordinates (lat/lon), timestamps
+- **Metadata**: User ID, sport type, gender, distance, duration, elevation gain/loss
+- **Labels**: Sport types include "run", "bike", "bike (transport)", "mountain bike", etc.
+
+## Files
 
 ```
-SUB_3H_42KM_DL/
-├── Model/                          # Neural network architectures
-│   ├── LSTM.py                    # Basic LSTM model
-│   ├── LSTM_with_embeddings.py    # LSTM with user embeddings
-│   ├── train.py                   # Training script
-│   ├── evaluate_test.py           # Evaluation on test set
-│   ├── inference.py               # Inference/prediction
-│   └── README.md                  # Model documentation
-├── Preprocessing/                  # Data preprocessing scripts
-│   ├── prepare_sequences.py       # Basic preprocessing
-│   ├── prepare_sequences_v2.py    # Enhanced version (recommended)
-│   └── prepare_sequences_streaming.py  # Low-RAM streaming version
-├── DATA/                          # Data directory (not tracked)
-│   ├── endomondoHR.json          # Raw dataset (download separately)
-│   ├── processed/                # Preprocessed tensors
-│   └── temp/                     # Temporary processing files
-├── checkpoints/                   # Saved model weights
-├── run_pipeline.sh               # Complete training pipeline
-├── .gitignore
-├── AGENTS.md                     # Agent guidelines
-├── Project_Description.pdf
-└── README.md                     # This file
+Project/
+├── endomondoHR.json          # Main dataset with heart rate
+├── endomondoMeta.json        # Metadata-only dataset
+├── EDA_baseline.ipynb        # Full exploratory data analysis & baseline model
+├── quick_test.py             # Quick validation script
+├── Data_explained.md         # Original dataset documentation
+└── README.md                 # This file
 ```
 
 ## Quick Start
 
-### 1. Setup Environment
-
+### 1. Prepare Data
 ```bash
-# Clone the repository
-git clone https://github.com/rricc22/SUB_3H_42KM_DL.git
-cd SUB_3H_42KM_DL
-
-# Install dependencies
-pip install torch numpy pandas scikit-learn tqdm h5py
+cd Project/
+python3 prepare_sequences.py
 ```
 
-### 2. Data Setup
+This will:
+- Load 974 running workouts with complete data
+- Pad/truncate sequences to fixed length (300 timesteps)
+- Normalize speed and altitude features
+- Split into train/val/test sets (70/15/15)
+- Save preprocessed PyTorch tensors
 
-Download the Endomondo dataset and place `endomondoHR.json` in the `DATA/` directory:
-
+### 2. Train LSTM Baseline
 ```bash
-# Create DATA directory if it doesn't exist
-mkdir -p DATA
-
-# Place your endomondoHR.json file here
-# The file should be at: DATA/endomondoHR.json
+python3 train_lstm_baseline.py
 ```
 
-### 3. Run Complete Pipeline
+Trains a simple LSTM model:
+- **Input**: Speed + altitude sequences, gender, userId
+- **Output**: Heart rate sequence predictions
+- **Loss**: Mean Squared Error (MSE)
+- **Target**: MAE < 5 BPM
+
+### 3. Visualize Results
 
 ```bash
-# Process data and train both models (basic LSTM + LSTM with embeddings)
-bash run_pipeline.sh
-
-# Or customize:
-# Process 10K samples and train only basic LSTM
-bash run_pipeline.sh -n 10000 -m lstm -e 50
-
-# Skip preprocessing and train with custom hyperparameters
-bash run_pipeline.sh -s -m lstm_embeddings --lr 0.0005 --hidden-size 128
+python3 visualize_predictions.py --checkpoint checkpoints/best_model.pt
 ```
 
-### 4. Manual Step-by-Step
-
-If you prefer to run each step manually:
-
-```bash
-# Step 1: Preprocess data (recommended version)
-python3 Preprocessing/prepare_sequences_v2.py
-
-# Step 2: Train basic LSTM
-python3 Model/train.py --model lstm --epochs 100 --batch_size 32
-
-# Step 3: Train LSTM with embeddings
-python3 Model/train.py --model lstm_embeddings --epochs 100 --batch_size 32
-
-# Step 4: Evaluate on test set
-python3 Model/evaluate_test.py --model lstm_embeddings
-
-# Step 5: Run inference
-python3 Model/inference.py --checkpoint checkpoints/lstm_embeddings_best.pt
-```
-
-## Data Preprocessing
-
-Three preprocessing scripts available:
-
-### 1. `prepare_sequences.py` (Basic)
-- Simple preprocessing
-- Fixed sequence length: 300 timesteps
-- Good for quick testing
-
-### 2. `prepare_sequences_v2.py` (Recommended)
-- Enhanced version with improvements
-- Sequence length: 500 timesteps (preserves more data)
-- Robust gender encoding
-- Saves timestamps for future use
-- Better documentation
-
-### 3. `prepare_sequences_streaming.py` (For large datasets)
-- Low RAM usage (~500 MB constant)
-- Processes full 253K workouts
-- Batch processing
-- Outputs both .pt and .h5 formats
-
-**Output**: Preprocessed data saved in `DATA/processed/`:
-- `train.pt`, `val.pt`, `test.pt`: PyTorch tensors
-- `scaler_params.json`: Feature normalization parameters
-- `metadata.json`: Dataset statistics
+Generates:
+- Predicted vs actual HR curves
+- Error distribution plots
+- Per-user performance analysis
 
 ## Model Architectures
 
-### 1. Basic LSTM (`LSTM.py`)
-Simple sequence-to-sequence model:
-```
-Input: [speed, altitude] sequences
-     ↓
-LSTM Layers (64 hidden units, 2 layers)
-     ↓
-Dense Layer
-     ↓
-Output: Heart rate predictions
-```
+### 1. LSTM Baseline (Implemented)
+```python
+Input Features:
+  - Speed sequence: [batch, 300, 1]
+  - Altitude sequence: [batch, 300, 1]
+  - Gender: [batch, 1] (embedded)
+  - UserId: [batch, 1] (embedded)
 
-### 2. LSTM with Embeddings (`LSTM_with_embeddings.py`)
-Enhanced model with user personalization:
-```
-Input: [speed, altitude] sequences + gender + userId
-     ↓
-User Embedding Layer (captures individual patterns)
-     ↓
-LSTM Layers (64 hidden units, 2 layers)
-     ↓
-Dense Layer
-     ↓
-Output: Personalized heart rate predictions
+Architecture:
+  Concat[speed, altitude] → LSTM(64) → LSTM(64) → Dense(1) → HR[batch, 300, 1]
 ```
 
-## Training Pipeline
+### 2. Transformer (Planned)
+- Multi-head self-attention
+- Positional encoding for temporal information
+- Better long-range dependency modeling
 
-The `run_pipeline.sh` script provides a complete training workflow:
+### 3. Pretrained Fine-tuning (Planned)
+- Chronos (Amazon): T5-based time-series model
+- TimeGPT: Foundation model for forecasting
+- Transfer learning from large-scale time-series data
 
-### Options:
-```bash
--n, --max-samples N       Number of samples to preprocess (default: all ~253K)
--s, --skip-preprocessing  Skip data preprocessing step
--m, --model MODEL         Model to train: lstm, lstm_embeddings, or both
--e, --epochs N            Number of training epochs (default: 100)
--b, --batch-size N        Batch size (default: 32)
---lr RATE                 Learning rate (default: 0.001)
---hidden-size N           LSTM hidden dimension (default: 64)
---num-layers N            Number of LSTM layers (default: 2)
---dropout RATE            Dropout probability (default: 0.2)
---patience N              Early stopping patience (default: 10)
---device DEVICE           Device: cuda, cpu, or auto (default: auto)
-```
+## Dataset Details
 
-### Examples:
-```bash
-# Full pipeline with all data
-bash run_pipeline.sh
+**Preprocessed Data**: 974 running workouts
+- **Average sequence length**: ~300 timesteps
+- **Heart rate range**: 100-180 BPM (running intensity)
+- **Speed range**: 0-15 km/h (running pace)
+- **Altitude range**: Variable terrain
 
-# Quick test with 1,000 samples
-bash run_pipeline.sh -n 1000 -m lstm -e 20
+**Input Features**:
+1. **Speed** (km/h): GPS-derived velocity
+2. **Altitude** (m): Elevation profile
+3. **Gender**: Binary feature (male/female)
+4. **UserId**: User identifier for personalization
 
-# Custom hyperparameters
-bash run_pipeline.sh -n 10000 -e 50 -b 16 --lr 0.0005 --hidden-size 128
-```
+**Target**:
+- **Heart Rate** (BPM): Physiological response to activity
+
+## Key Findings
+
+### Heart Rate Patterns
+
+1. **Speed-HR correlation**:
+   - Strong positive correlation (r ≈ 0.6-0.8)
+   - Higher speed → higher heart rate
+   - Non-linear relationship (effort increases faster)
+
+2. **Altitude-HR correlation**:
+   - Uphill segments → increased HR
+   - Downhill segments → decreased HR
+   - Delayed response (lag ~5-10 seconds)
+
+3. **Individual variability**:
+   - Fitness level affects HR response
+   - Gender differences in average HR
+   - User-specific patterns (importance of userId embedding)
 
 ## Evaluation Metrics
 
-**Primary**: Mean Absolute Error (MAE)
+**Primary**: MAE (Mean Absolute Error)
 - Target: < 5 BPM (excellent)
 - Acceptable: < 10 BPM
 
@@ -205,74 +139,35 @@ bash run_pipeline.sh -n 10000 -e 50 -b 16 --lr 0.0005 --hidden-size 128
 - R² score (coefficient of determination)
 - Per-timestep accuracy
 
-## Results
+## Next Steps
 
-After training, outputs include:
-- `checkpoints/lstm_best.pt`: Best basic LSTM weights
-- `checkpoints/lstm_embeddings_best.pt`: Best LSTM with embeddings weights
-- `checkpoints/*_training_curves.png`: Loss and accuracy plots
+### Phase 1: Baseline Models ✅
+- [x] Data preprocessing pipeline
+- [x] LSTM baseline implementation
+- [ ] Training and evaluation
+- [ ] Hyperparameter tuning
 
-## Key Findings
+### Phase 2: Advanced Models
+- [ ] Transformer architecture
+- [ ] Attention visualization
+- [ ] Multi-task learning (predict speed from HR)
 
-1. **Speed-HR Correlation**: Strong positive correlation (r ≈ 0.6-0.8)
-2. **Altitude Impact**: Uphill segments increase HR, with ~5-10 second lag
-3. **Individual Variability**: User embeddings significantly improve predictions
-4. **Gender Differences**: Observable patterns in average HR response
+### Phase 3: Transfer Learning
+- [ ] Fine-tune Chronos pretrained model
+- [ ] Compare with LSTM baseline
+- [ ] Ensemble methods
 
-## Development Guidelines
+## Project Deliverables
 
-See `AGENTS.md` for:
-- Build & test commands
-- Code style guidelines
-- AI/ML specific conventions
-- Python best practices
-
-## Requirements
-
-- Python 3.7+
-- PyTorch 1.9+
-- NumPy
-- Pandas
-- scikit-learn
-- tqdm
-- h5py (for streaming preprocessing)
-
-## Citation
-
-If you use this code or the Endomondo dataset, please cite the FitRec research project.
+According to course requirements:
+1. ✅ **One-page project description** (to be written)
+2. [ ] **Presentation** of main results
+3. [ ] **Final report** with methods and results + code
 
 ## Authors
 
-Riccardo & Team
-CentraleSupélec - Deep Learning Course Project
+Your names here
 
-## License
+## Dataset Citation
 
-This project is for educational purposes as part of the CentraleSupélec Deep Learning course.
-
-## Troubleshooting
-
-### Data not found error
-```bash
-# Ensure endomondoHR.json is in the correct location:
-ls DATA/endomondoHR.json
-```
-
-### Out of memory during preprocessing
-```bash
-# Use the streaming version:
-python3 Preprocessing/prepare_sequences_streaming.py
-```
-
-### CUDA out of memory during training
-```bash
-# Reduce batch size:
-bash run_pipeline.sh -b 16
-
-# Or use CPU:
-bash run_pipeline.sh --device cpu
-```
-
-## Contact
-
-For questions or issues, please open an issue on GitHub or contact the authors.
+Endomondo dataset from FitRec research project.

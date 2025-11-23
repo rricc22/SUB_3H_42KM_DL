@@ -13,20 +13,24 @@ env/
 # Jupyter
 .ipynb_checkpoints
 
-# Data
+# Data files (too large for GitHub)
 datasets/
 *.csv
 *.json
 *.zip
 *.h5
 *.pkl
+*.pt
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Specific
-
+# Specific dataset files
 endomondoHR.json
 endomondoMeta.json
 
+# Preprocessed data and model checkpoints (too large)
+DATA/processed/*.pt
+DATA/temp/
+checkpoints/*.pt
