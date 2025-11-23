@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+env/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Data
+datasets/
+*.csv
+*.json
+*.zip
+*.h5
+*.pkl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Specific
+
+endomondoHR.json
+endomondoMeta.json
+
