@@ -1,5 +1,15 @@
 # Training Commands Cheat Sheet
 
+## New Feature: Config String Filenames
+
+**All checkpoints and plots now include config strings to prevent overwriting!**
+
+Example: `lag_llama_bs32_lr0.0001_e50_h64_l2_emb16_best.pt`
+
+This allows running multiple training sessions in parallel with different hyperparameters without file conflicts.
+
+---
+
 ## Quick Start - All Models
 
 ### 1. Basic LSTM (Baseline)
@@ -89,14 +99,19 @@ python3 Model/train.py --model lag_llama --epochs 100 --batch_size 16 --lr 0.000
 # Check all saved checkpoints
 ls -lh checkpoints/
 
-# Files created:
-# - lstm_best.pt
-# - lstm_embeddings_best.pt
-# - lag_llama_best.pt
-# - lstm_training_curves.png
-# - lstm_embeddings_training_curves.png
-# - lag_llama_training_curves.png
+# Files created (with config strings to prevent overwriting):
+# - lstm_bs32_lr0.001_e100_h64_l2_best.pt
+# - lstm_embeddings_bs32_lr0.001_e100_h64_l2_emb16_best.pt
+# - lag_llama_bs16_lr0.0001_e100_h64_l2_emb16_best.pt
+# - lstm_bs32_lr0.001_e100_h64_l2_training_curves.png
+# - lstm_embeddings_bs32_lr0.001_e100_h64_l2_emb16_training_curves.png
+# - lag_llama_bs16_lr0.0001_e100_h64_l2_emb16_training_curves.png
 ```
+
+**Config String Format:**
+- `bs<batch_size>_lr<learning_rate>_e<epochs>_h<hidden_size>_l<num_layers>`
+- Additional: `_emb<embedding_dim>` for lstm_embeddings/lag_llama
+- Additional: `_bidir` for bidirectional models
 
 ---
 
