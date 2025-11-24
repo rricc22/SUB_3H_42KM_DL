@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
 from LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
+from PatchTST_HR import PatchTSTHeartRatePredictor, load_data_hf
 
 
 def parse_args():
@@ -31,8 +32,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train LSTM model for heart rate prediction')
     
     # Model selection
-    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings', 'lag_llama'],
-                        help='Model type: lstm, lstm_embeddings, or lag_llama')
+    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings', 'lag_llama', 'patchtst'],
+                        help='Model type: lstm, lstm_embeddings, lag_llama, or patchtst')
     
     # Training hyperparameters
     parser.add_argument('--epochs', type=int, default=100,
