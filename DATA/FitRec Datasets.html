@@ -1,0 +1,140 @@
+
+  FitRec Datasets
+
+*Julian McAuley <http://cseweb.ucsd.edu/~jmcauley/>*, UCSD
+
+
+    Description
+
+These datasets contain user sport records from Endomondo. Data includes
+multiple sources of sequential sensor data such as heart rate, speed,
+GPS as well as sport type, user gender and weather condition (i.e.
+temperature, humidity).
+
+We collected these datasets for academic use only. Please do not
+redistribute them or use for commercial purposes.
+
+
+    Citation
+
+Please cite the following if you use the data in any way:
+
+*Modeling heart rate and activity data for personalized fitness
+recommendation*
+Jianmo Ni, Larry Muhlstein, Julian McAuley
+/WWW/, 2019
+pdf <https://cseweb.ucsd.edu/~jmcauley/pdfs/www19.pdf>
+
+
+    Raw data
+
+In this work, we have prepared three versions of the dataset:
+
+The raw data:
+
+  * 253,020 workouts / 1,104 users
+
+This is the original dataset without cleaning. It contains meta data
+that we have not studied in this work such as weather condition. Feel
+free to play with it.
+
+These datasets can be downloaded here:
+
+  * endomondoHR.json.gz <https://mcauleylab.ucsd.edu/public_datasets/
+    gdrive/fitrec/endomondoHR.json.gz>
+
+  * endomondoMeta.json.gz <https://mcauleylab.ucsd.edu/public_datasets/
+    gdrive/fitrec/endomondoMeta.json.gz>
+
+
+    Filtered data
+
+The filtered version for workout route prediction task:
+
+  * 167,373 workouts / 956 users
+
+We use heuristics to clean the data by filtering out those abnormal
+workout samples such as overly large magnitude, mismatching timestamps,
+abrupt changes in GPS coordinates. We also derive multiple variables,
+e.g., speed and distance from the measurements.
+
+After getting the filter dataset (i.e. endomondoHR_proper.json), we
+process the dataset by normalizing the measurement data into Z-Scores
+(i.e. that's why the sample showing below includes both positive and
+negative values). During test, we further filter out those users with
+less than 10 workouts.
+
+Note: since_began and since_last mean are the number of seconds compared
+with the current workout and the first/most recent workout of that user.
+
+Followings are the download link:
+
+These datasets can be downloaded here:
+
+  * endomondoHR_proper.json.gz <https://mcauleylab.ucsd.edu/
+    public_datasets/gdrive/fitrec/endomondoHR_proper.json.gz>
+
+  * processed_endomondHR_proper.npy <https://mcauleylab.ucsd.edu/
+    public_datasets/gdrive/fitrec/processed_endomondHR_proper.npy>
+
+Example of one workout sample from endomondoHR_proper.json:
+
+{
+userId: 10921915
+gender: male
+sport: bike
+id: 396826535
+longitude: [24.64977040886879, 24.65014273300767, 24.650910682976246, 24.650668865069747, 24.649145286530256, ...]
+latitude: [60.173348765820265, 60.173239801079035, 60.17298021353781, 60.172477969899774, 60.17186114564538, ...]
+altitude: [-1.8044666444624418, -1.8190453555595787, -1.8190453555595787, -1.8511185199732794, -1.871528715509271, ...]
+timestamp: [1408898746, 1408898754, 1408898765, 1408898778, 1408898794, ...]
+time_elapsed: [-0.12256752559145224, -0.12221090169596584, -0.12172054383967204, -0.12114103000950663, -0.12042778221853381, ...]
+heart_rate: [-8.197369036801112, -5.867841701016304, -3.961864789919643, -4.173640002263717, -3.961864789919643, ...]
+derived_speed: [-7.0829444390064396, -2.8061928357004815, -0.3976286593020398, -0.7571073884764162, 2.6415189187026646, ...]
+distance: [-4.372303649217691, -2.374952819539426, -0.07926348591212737, 0.4284751220389811, 4.710835498111755, ...]
+tar_heart_rate: [100, 111, 120, 119, 120, ...]
+tar_derived_speed: [0, 10.751376415573548, 16.806294372816662, 15.902596545765366, 24.446443398153843, ...]
+since_begin: [1378478.8892184314, 1378478.8892184314, 1378478.8892184314, 1378478.8892184314, 1378478.8892184314, ...]
+since_last: [2158.84607810351, 2158.84607810351, 2158.84607810351, 2158.84607810351, 2158.84607810351, ...]
+}
+
+
+    Re-sampled data
+
+The re-sampled version for short term heart rate prediction task:
+
+  * 102,343 workouts / 887 users
+
+Based on the processed dataset above (the normalized version), we use
+interpolation to obtain a dataset with same sampling intervals (i.e. 10
+seconds) during each workout. To obatain a valid interpolation, we
+further clean the data once via timestampTest and filtered out abnormal
+samples after interpolation. You can check more details in our paper.
+
+Following is the download link for the data, we provide both the numpy
+format and JSON format:
+
+  * processed_endomondoHR_proper_interpolate.npy <https://
+    mcauleylab.ucsd.edu/public_datasets/gdrive/fitrec/
+    processed_endomondoHR_proper_interpolate.npy>
+
+Loading data:
+
+To load the npy file, you can use:
+
+{
+path = Path("data/")
+out_path = str(path / "processed_endomondoHR_proper.npy")
+data = np.load(out_path)[0]
+}
+
+To load the json file, you can use:
+
+{
+data = []
+#with gzip.open('endomondoHR.json.gz') as f:
+with open('endomondoHR_proper.json') as f:
+    for l in f:
+        data.append(eval(l))
+}
+

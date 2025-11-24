@@ -37,11 +37,12 @@ python3 Model/train.py \
 python3 Model/train.py \
   --model lstm \
   --hidden_size 256 \
-  --num_layers 3 \
+  --num_layers 4 \
   --dropout 0.2 \
-  --epochs 100 \
-  --batch_size 32 \
-  --device cpu
+  --epochs 10 \
+  --batch_size 64 \
+  --lr 0.005
+  --device cuda
 ```
 
 **LSTM with User Embeddings:**
@@ -56,6 +57,19 @@ python3 Model/train.py \
   --batch_size 32 \
   --device cpu
 ```
+
+nohup python3 -u Model/train.py \
+  --model lstm \
+  --hidden_size 256 \
+  --num_layers 3 \
+  --dropout 0.3 \
+  --epochs 2 \
+  --batch_size 64 \
+  --lr 0.001 \
+  --patience 25 \
+  --device cuda \
+  > training_overnight_$(date +%Y%m%d_%H%M%S).log 2>&1 &
+echo "Process ID: $!"
 
 **Output:**
 - Checkpoint: `checkpoints/{model}_best.pt`
