@@ -21,6 +21,7 @@ datasets/
 *.h5
 *.pkl
 *.pt
+*.arrow
 
 # OS
 .DS_Store
