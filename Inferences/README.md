@@ -1,6 +1,6 @@
 # Inferences
 
-Evaluate trained models and run predictions on test data.
+Evaluate trained models (LSTM, LSTM with embeddings, Lag-Llama) and run predictions on test data.
 
 ## Scripts
 
@@ -36,7 +36,7 @@ python3 Inferences/evaluate_test.py \
 ---
 
 ### `inference.py`
-Batch inference on test set (metrics only, no plots - faster).
+Batch inference on test set (metrics only, no plots - faster). Supports all model types.
 
 ```bash
 python3 Inferences/inference.py \
@@ -69,6 +69,7 @@ python3 Inferences/evaluate_test.py --checkpoint ... --device cuda
 
 - `checkpoints/lstm_best.pt` - Basic LSTM (MAE: 14.67 BPM on test)
 - `checkpoints/lstm_embeddings_best.pt` - LSTM with user embeddings
+- `checkpoints/lag_llama_best.pt` - Lag-Llama Transformer (MAE: 16.55 BPM on test)
 
 ---
 
@@ -77,6 +78,8 @@ python3 Inferences/evaluate_test.py --checkpoint ... --device cuda
 1. **Train model:**
    ```bash
    python3 Model/train.py --model lstm --epochs 100 --device cpu
+   # Or for Lag-Llama:
+   python3 Model/train.py --model lag_llama --epochs 10 --device cpu
    ```
 
 2. **Evaluate on test set:**
@@ -85,6 +88,13 @@ python3 Inferences/evaluate_test.py --checkpoint ... --device cuda
      --checkpoint checkpoints/lstm_best.pt \
      --data DATA/processed/test.pt \
      --output results/test_evaluation.png \
+     --device cpu
+   
+   # For Lag-Llama:
+   python3 Inferences/evaluate_test.py \
+     --checkpoint checkpoints/lag_llama_best.pt \
+     --data DATA/processed/test.pt \
+     --output results/lag_llama_test_evaluation.png \
      --device cpu
    ```
 
@@ -106,10 +116,14 @@ Current best: **14.67 BPM** (needs larger model)
 
 ## Recent Improvements ✨
 
-**v2.0 (Latest):**
+**v3.0 (Latest):**
+- ✅ Added support for Lag-Llama Transformer model
+- ✅ Automatic detection of num_users and d_model from checkpoints
+- ✅ All models (LSTM, LSTM+embeddings, Lag-Llama) now fully supported
+
+**v2.0:**
 - ✅ Fixed dict/namespace compatibility in checkpoint loading
 - ✅ Improved imports: `from Model.LSTM import ...` (clearer)
 - ✅ Better path handling: `sys.path.insert(0, ...)` (more reliable)
-- ✅ All scripts tested and working
 
 See `IMPORTS_EXPLAINED.md` for technical details on import improvements.

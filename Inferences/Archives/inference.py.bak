@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Inference script for heart rate prediction models.
-Supports LSTM, LSTM with embeddings, and Lag-Llama models.
+Supports both LSTM and LSTM with embeddings.
 """
 
 import torch
@@ -18,7 +18,6 @@ sys.path.insert(0, str(project_root))
 # Import models using package-style (cleaner and more maintainable)
 from Model.LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from Model.LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
-from Model.LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
 
 
 def load_model_and_args(checkpoint_path, device='cpu'):
@@ -78,34 +77,6 @@ def load_model_and_args(checkpoint_path, device='cpu'):
             embedding_dim=embedding_dim,
             num_users=checkpoint.get('num_users', 100),  # Fallback if not saved
             bidirectional=bidirectional
-        )
-    elif model_type == 'lag_llama':
-        # Extract num_users from checkpoint
-        num_users = checkpoint.get('num_users', None)
-        if num_users is None and 'user_embedding.weight' in checkpoint['model_state_dict']:
-            num_users = checkpoint['model_state_dict']['user_embedding.weight'].shape[0]
-        
-        # Infer Lag-Llama specific params from checkpoint weights if not in args
-        d_model = 128  # Default
-        if 'input_projection.weight' in checkpoint['model_state_dict']:
-            d_model = checkpoint['model_state_dict']['input_projection.weight'].shape[0]
-        
-        nhead = 8  # Default
-        dim_feedforward = 512  # Default
-        context_length = 500
-        prediction_length = 500
-        
-        model = LagLlamaHRPredictor(
-            context_length=context_length,
-            prediction_length=prediction_length,
-            num_users=num_users,
-            embedding_dim=embedding_dim,
-            d_model=d_model,
-            nhead=nhead,
-            num_layers=num_layers,
-            dim_feedforward=dim_feedforward,
-            dropout=dropout,
-            device=device
         )
     else:
         raise ValueError(f"Unknown model type: {model_type}")
@@ -203,9 +174,9 @@ def predict_single(model, speed, altitude, gender, original_length, model_type, 
     with torch.no_grad():
         if model_type == 'lstm':
             predictions = model(speed_tensor, altitude_tensor, gender_tensor, lengths_tensor)
-        elif model_type in ['lstm_embeddings', 'lag_llama']:
+        elif model_type == 'lstm_embeddings':
             if userId is None:
-                raise ValueError(f"userId required for {model_type} model")
+                raise ValueError("userId required for lstm_embeddings model")
             userId_tensor = torch.LongTensor([userId]).unsqueeze(-1).to(device)
             predictions = model(speed_tensor, altitude_tensor, gender_tensor, userId_tensor, lengths_tensor)
     
@@ -251,7 +222,7 @@ def predict_batch(model, data_loader, model_type, device='cpu'):
                 
                 predictions = model(speed, altitude, gender, original_lengths)
             
-            elif model_type in ['lstm_embeddings', 'lag_llama']:
+            elif model_type == 'lstm_embeddings':
                 speed, altitude, gender, userId, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -365,10 +336,8 @@ def main():
     
     if model_type == 'lstm':
         dataset = BasicDataset(data)
-    elif model_type == 'lstm_embeddings':
+    else:
         dataset = EmbeddingDataset(data)
-    elif model_type == 'lag_llama':
-        dataset = LagLlamaDataset(data)
     
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
     print(f"✓ Data loaded: {len(dataset)} samples")

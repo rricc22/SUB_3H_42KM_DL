@@ -19,7 +19,6 @@ sys.path.insert(0, str(project_root))
 # Import models using package-style (cleaner and more maintainable)
 from Model.LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from Model.LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
-from Model.LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
 
 
 def load_model(checkpoint_path, device='cpu'):
@@ -51,7 +50,7 @@ def load_model(checkpoint_path, device='cpu'):
             dropout=dropout,
             bidirectional=bidirectional
         )
-    elif model_type == 'lstm_embeddings':
+    else:
         model = HeartRateLSTMWithEmbeddings(
             input_size=3,
             hidden_size=hidden_size,
@@ -61,36 +60,6 @@ def load_model(checkpoint_path, device='cpu'):
             num_users=checkpoint.get('num_users', 100),
             bidirectional=bidirectional
         )
-    elif model_type == 'lag_llama':
-        # Extract num_users from checkpoint
-        num_users = checkpoint.get('num_users', None)
-        if num_users is None and 'user_embedding.weight' in checkpoint['model_state_dict']:
-            num_users = checkpoint['model_state_dict']['user_embedding.weight'].shape[0]
-        
-        # Infer Lag-Llama specific params from checkpoint weights if not in args
-        d_model = 128  # Default
-        if 'input_projection.weight' in checkpoint['model_state_dict']:
-            d_model = checkpoint['model_state_dict']['input_projection.weight'].shape[0]
-        
-        nhead = 8  # Default
-        dim_feedforward = 512  # Default
-        context_length = 500
-        prediction_length = 500
-        
-        model = LagLlamaHRPredictor(
-            context_length=context_length,
-            prediction_length=prediction_length,
-            num_users=num_users,
-            embedding_dim=embedding_dim,
-            d_model=d_model,
-            nhead=nhead,
-            num_layers=num_layers,
-            dim_feedforward=dim_feedforward,
-            dropout=dropout,
-            device=device
-        )
-    else:
-        raise ValueError(f"Unknown model type: {model_type}")
     
     model.load_state_dict(checkpoint['model_state_dict'])
     model = model.to(device)
@@ -122,7 +91,7 @@ def evaluate(model, data_loader, model_type, device):
                 original_lengths = original_lengths.to(device)
                 
                 predictions = model(speed, altitude, gender, original_lengths)
-            elif model_type in ['lstm_embeddings', 'lag_llama']:
+            else:
                 speed, altitude, gender, userId, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -374,10 +343,8 @@ def main():
     
     if model_type == 'lstm':
         dataset = BasicDataset(data)
-    elif model_type == 'lstm_embeddings':
+    else:
         dataset = EmbeddingDataset(data)
-    elif model_type == 'lag_llama':
-        dataset = LagLlamaDataset(data)
     
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
     print(f"✓ Test samples: {len(dataset)}")
