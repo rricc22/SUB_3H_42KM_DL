@@ -140,6 +140,21 @@ nohup python3 -u Model/train.py \
 echo "Process ID: $!"
 ```
 
+nohup python3 -u Model/train_patchtst.py \
+    --epochs 50 \
+    --batch_size 64 \
+    --d_model 256 \
+    --num_hidden_layers 6 \
+    --num_attention_heads 16 \
+    --ffn_dim 512 \
+    --patch_length 16 \
+    --stride 8 \
+    --device cuda \
+  > LOGS/training_patchtst_large_$(date +%Y%m%d_%H%M%S).log 2>/dev/null &
+echo "Training started! PID: $!"
+echo "Monitor with: tail -f LOGS/training_patchtst_large_*.log"
+echo "Check GPU: watch -n 5 nvidia-smi"
+
 **Output:**
 - Checkpoint: `checkpoints/{model}_best.pt`
 - Training curves: `checkpoints/{model}_training_curves.png`

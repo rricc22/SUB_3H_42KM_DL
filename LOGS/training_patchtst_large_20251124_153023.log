@@ -1,0 +1,289 @@
+================================================================================
+PATCHTST HEART RATE PREDICTION - TRAINING
+================================================================================
+
+Configuration:
+  Model: PatchTST
+  Epochs: 100
+  Batch size: 64
+  Learning rate: 0.0001
+  Device: cuda
+
+Architecture:
+  Patch length: 8
+  Stride: 8
+  Model dimension: 128
+  Attention heads: 8
+  Hidden layers: 4
+  FFN dimension: 256
+  Dropout: 0.1
+
+Loading HuggingFace dataset from DATA/processed_hf...
+✓ Loaded 13855 train samples
+✓ Loaded 3539 validation samples
+✓ Loaded 3581 test samples
+
+Dataset info:
+  Train samples: 13855
+  Val samples: 3539
+  Test samples: 3581
+  Sequence length: 500
+
+Initializing PatchTST model...
+✓ Model initialized
+  Total parameters: 854,008
+  Trainable parameters: 846,072
+
+================================================================================
+STARTING TRAINING
+================================================================================
+
+Epoch 1/100
+--------------------------------------------------------------------------------
+Train Loss: 19514.9710
+Val Loss:   9597.5837
+Val MAE:    91.23 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 9597.5837)
+
+Epoch 2/100
+--------------------------------------------------------------------------------
+Train Loss: 10697.7883
+Val Loss:   5642.3539
+Val MAE:    57.72 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 5642.3539)
+
+Epoch 3/100
+--------------------------------------------------------------------------------
+Train Loss: 8957.2370
+Val Loss:   4809.8245
+Val MAE:    47.65 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 4809.8245)
+
+Epoch 4/100
+--------------------------------------------------------------------------------
+Train Loss: 7295.9353
+Val Loss:   4096.8309
+Val MAE:    44.59 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 4096.8309)
+
+Epoch 5/100
+--------------------------------------------------------------------------------
+Train Loss: 6461.5546
+Val Loss:   3507.0863
+Val MAE:    42.27 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 3507.0863)
+
+Epoch 6/100
+--------------------------------------------------------------------------------
+Train Loss: 5598.5251
+Val Loss:   3434.2284
+Val MAE:    41.41 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 3434.2284)
+
+Epoch 7/100
+--------------------------------------------------------------------------------
+Train Loss: 5215.9699
+Val Loss:   3259.4612
+Val MAE:    46.54 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 3259.4612)
+
+Epoch 8/100
+--------------------------------------------------------------------------------
+Train Loss: 4997.1806
+Val Loss:   3037.8213
+Val MAE:    41.20 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 3037.8213)
+
+Epoch 9/100
+--------------------------------------------------------------------------------
+Train Loss: 4754.0694
+Val Loss:   2999.8216
+Val MAE:    40.43 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2999.8216)
+
+Epoch 10/100
+--------------------------------------------------------------------------------
+Train Loss: 4581.1934
+Val Loss:   2843.8685
+Val MAE:    39.82 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2843.8685)
+
+Epoch 11/100
+--------------------------------------------------------------------------------
+Train Loss: 4441.4986
+Val Loss:   2818.8410
+Val MAE:    39.19 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2818.8410)
+
+Epoch 12/100
+--------------------------------------------------------------------------------
+Train Loss: 4190.1004
+Val Loss:   2762.3789
+Val MAE:    38.84 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2762.3789)
+
+Epoch 13/100
+--------------------------------------------------------------------------------
+Train Loss: 4062.8877
+Val Loss:   2758.2174
+Val MAE:    39.60 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2758.2174)
+
+Epoch 14/100
+--------------------------------------------------------------------------------
+Train Loss: 4012.3449
+Val Loss:   2906.0190
+Val MAE:    39.45 BPM
+LR:         0.000100
+Patience: 1/10
+
+Epoch 15/100
+--------------------------------------------------------------------------------
+Train Loss: 3903.5076
+Val Loss:   2765.8088
+Val MAE:    40.07 BPM
+LR:         0.000100
+Patience: 2/10
+
+Epoch 16/100
+--------------------------------------------------------------------------------
+Train Loss: 3782.4273
+Val Loss:   2760.1111
+Val MAE:    39.43 BPM
+LR:         0.000100
+Patience: 3/10
+
+Epoch 17/100
+--------------------------------------------------------------------------------
+Train Loss: 3739.6106
+Val Loss:   2674.1684
+Val MAE:    40.61 BPM
+LR:         0.000100
+✓ New best model! (Val Loss: 2674.1684)
+
+Epoch 18/100
+--------------------------------------------------------------------------------
+Train Loss: 3587.5866
+Val Loss:   2979.7051
+Val MAE:    41.04 BPM
+LR:         0.000100
+Patience: 1/10
+
+Epoch 19/100
+--------------------------------------------------------------------------------
+Train Loss: 3609.8619
+Val Loss:   2699.1669
+Val MAE:    41.22 BPM
+LR:         0.000100
+Patience: 2/10
+
+Epoch 20/100
+--------------------------------------------------------------------------------
+Train Loss: 3524.5828
+Val Loss:   2858.4042
+Val MAE:    39.73 BPM
+LR:         0.000100
+Patience: 3/10
+
+Epoch 21/100
+--------------------------------------------------------------------------------
+Train Loss: 3509.4201
+Val Loss:   2735.4404
+Val MAE:    40.28 BPM
+LR:         0.000100
+Patience: 4/10
+
+Epoch 22/100
+--------------------------------------------------------------------------------
+Train Loss: 3433.1240
+Val Loss:   2926.4742
+Val MAE:    40.06 BPM
+LR:         0.000100
+Patience: 5/10
+
+Epoch 23/100
+--------------------------------------------------------------------------------
+Train Loss: 3398.0635
+Val Loss:   2743.0090
+Val MAE:    39.66 BPM
+LR:         0.000100
+Patience: 6/10
+
+Epoch 24/100
+--------------------------------------------------------------------------------
+Train Loss: 3303.6214
+Val Loss:   2699.8761
+Val MAE:    39.89 BPM
+LR:         0.000050
+Patience: 7/10
+
+Epoch 25/100
+--------------------------------------------------------------------------------
+Train Loss: 3340.8727
+Val Loss:   2703.0615
+Val MAE:    39.89 BPM
+LR:         0.000050
+Patience: 8/10
+
+Epoch 26/100
+--------------------------------------------------------------------------------
+Train Loss: 3291.2665
+Val Loss:   2861.0245
+Val MAE:    39.45 BPM
+LR:         0.000050
+Patience: 9/10
+
+Epoch 27/100
+--------------------------------------------------------------------------------
+Train Loss: 3262.0075
+Val Loss:   2694.7645
+Val MAE:    39.31 BPM
+LR:         0.000050
+Patience: 10/10
+
+Early stopping triggered after 27 epochs
+
+================================================================================
+TRAINING COMPLETE
+================================================================================
+Best Val Loss: 2674.1684
+
+================================================================================
+EVALUATING ON TEST SET
+================================================================================
+
+Test Results:
+  Loss: 5226.0574
+  MAE:  40.92 BPM
+  RMSE: 58.82 BPM
+
+✓ Training curves saved to: checkpoints/patchtst_bs64_lr0.0001_e100_d128_l4_p8_training_curves.png
+
+✓ Checkpoint saved:
+  Model:    checkpoints/patchtst_bs64_lr0.0001_e100_d128_l4_p8_model.pt
+  History:  checkpoints/patchtst_bs64_lr0.0001_e100_d128_l4_p8_history.json
+  Metrics:  checkpoints/patchtst_bs64_lr0.0001_e100_d128_l4_p8_metrics.json
+  Plot:     checkpoints/patchtst_bs64_lr0.0001_e100_d128_l4_p8_training_curves.png
+
+================================================================================
+TRAINING PIPELINE COMPLETE!
+================================================================================
+
+Final Test Results:
+  MAE:  40.92 BPM
+  RMSE: 58.82 BPM
+
+⚠ MAE > 10 BPM - Consider tuning hyperparameters
