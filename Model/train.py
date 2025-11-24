@@ -2,11 +2,15 @@
 """
 Generic training script for heart rate prediction models.
 
-Supports training both basic LSTM and LSTM with user embeddings.
+Supports training:
+1. Basic LSTM
+2. LSTM with user embeddings
+3. GRU (Robust variant)
 
 Usage:
     python3 Model/train.py --model lstm --epochs 100 --batch_size 32
     python3 Model/train.py --model lstm_embeddings --epochs 100 --batch_size 32
+    python3 Model/train.py --model gru --epochs 100 --batch_size 32
 """
 
 import argparse
@@ -23,40 +27,42 @@ import matplotlib.pyplot as plt
 # Import model classes
 from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
+# Importation du nouveau modèle GRU
+from GRU import HeartRateGRU
 
 
 def parse_args():
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Train LSTM model for heart rate prediction')
+    parser = argparse.ArgumentParser(description='Train RNN models (LSTM/GRU) for heart rate prediction')
     
-    # Model selection
-    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings'],
-                        help='Model type: lstm or lstm_embeddings')
+    # Model selection - AJOUT DE 'gru'
+    parser.add_argument('--model', type=str, default='gru', choices=['lstm', 'lstm_embeddings', 'gru'],
+                        help='Model type: lstm, lstm_embeddings, or gru')
     
     # Training hyperparameters
-    parser.add_argument('--epochs', type=int, default=100,
-                        help='Number of training epochs (default: 100)')
-    parser.add_argument('--batch_size', type=int, default=32,
-                        help='Batch size (default: 32)')
-    parser.add_argument('--lr', type=float, default=0.001,
-                        help='Learning rate (default: 0.001)')
+    parser.add_argument('--epochs', type=int, default=15,
+                        help='Number of training epochs (default: 15)')
+    parser.add_argument('--batch_size', type=int, default=16,
+                        help='Batch size (default: 16)')
+    parser.add_argument('--lr', type=float, default=0.0005,
+                        help='Learning rate (default: 0.0005)')
     parser.add_argument('--patience', type=int, default=10,
                         help='Early stopping patience (default: 10)')
     
     # Model architecture
     parser.add_argument('--hidden_size', type=int, default=64,
-                        help='LSTM hidden size (default: 64)')
+                        help='Hidden size (default: 64)')
     parser.add_argument('--num_layers', type=int, default=2,
-                        help='Number of LSTM layers (default: 2)')
+                        help='Number of layers (default: 2)')
     parser.add_argument('--dropout', type=float, default=0.2,
                         help='Dropout probability (default: 0.2)')
     parser.add_argument('--bidirectional', action='store_true',
-                        help='Use bidirectional LSTM')
+                        help='Use bidirectional RNN')
     parser.add_argument('--embedding_dim', type=int, default=16,
                         help='User embedding dimension (for lstm_embeddings, default: 16)')
     
     # Paths
-    parser.add_argument('--data_dir', type=str, default='DATA/processed',
+    parser.add_argument('--data_dir', type=str, default='DATA',
                         help='Directory with preprocessed data (default: DATA/processed)')
     parser.add_argument('--checkpoint_dir', type=str, default='checkpoints',
                         help='Directory to save checkpoints (default: checkpoints)')
@@ -71,14 +77,6 @@ def parse_args():
 def load_data(data_dir, model_type, batch_size):
     """
     Load preprocessed data and create DataLoaders.
-    
-    Args:
-        data_dir: Directory containing train.pt, val.pt, test.pt
-        model_type: 'lstm' or 'lstm_embeddings'
-        batch_size: Batch size for DataLoader
-    
-    Returns:
-        train_loader, val_loader, test_loader, metadata
     """
     print(f"\nLoading data from {data_dir}...")
     
@@ -92,7 +90,8 @@ def load_data(data_dir, model_type, batch_size):
         metadata = json.load(f)
     
     # Create datasets
-    if model_type == 'lstm':
+    # Le GRU utilise le même format de données que le LSTM basique
+    if model_type in ['lstm', 'gru']:
         train_dataset = BasicDataset(train_data)
         val_dataset = BasicDataset(val_data)
         test_dataset = BasicDataset(test_data)
@@ -123,19 +122,20 @@ def load_data(data_dir, model_type, batch_size):
 def create_model(model_type, metadata, args):
     """
     Create model based on model_type.
-    
-    Args:
-        model_type: 'lstm' or 'lstm_embeddings'
-        metadata: Dataset metadata
-        args: Command-line arguments
-    
-    Returns:
-        model: PyTorch model
     """
     print(f"\nCreating {model_type} model...")
     
     if model_type == 'lstm':
         model = HeartRateLSTM(
+            input_size=3,
+            hidden_size=args.hidden_size,
+            num_layers=args.num_layers,
+            dropout=args.dropout,
+            bidirectional=args.bidirectional
+        )
+    elif model_type == 'gru':
+        # Instanciation du modèle GRU
+        model = HeartRateGRU(
             input_size=3,
             hidden_size=args.hidden_size,
             num_layers=args.num_layers,
@@ -161,18 +161,6 @@ def create_model(model_type, metadata, args):
 def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
     """
     Train model for one epoch.
-    
-    Args:
-        model: PyTorch model
-        dataloader: Training DataLoader
-        criterion: Loss function
-        optimizer: Optimizer
-        device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
-    
-    Returns:
-        avg_loss: Average training loss
-        avg_mae: Average Mean Absolute Error
     """
     model.train()
     total_loss = 0.0
@@ -180,7 +168,8 @@ def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
     n_batches = 0
     
     for batch in dataloader:
-        if model_type == 'lstm':
+        # Le GRU et le LSTM partagent la même signature d'entrée
+        if model_type in ['lstm', 'gru']:
             speed, altitude, gender, heart_rate, original_lengths = batch
             speed = speed.to(device)
             altitude = altitude.to(device)
@@ -224,17 +213,6 @@ def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
 def validate(model, dataloader, criterion, device, model_type):
     """
     Validate model.
-    
-    Args:
-        model: PyTorch model
-        dataloader: Validation DataLoader
-        criterion: Loss function
-        device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
-    
-    Returns:
-        avg_loss: Average validation loss
-        avg_mae: Average Mean Absolute Error
     """
     model.eval()
     total_loss = 0.0
@@ -243,7 +221,7 @@ def validate(model, dataloader, criterion, device, model_type):
     
     with torch.no_grad():
         for batch in dataloader:
-            if model_type == 'lstm':
+            if model_type in ['lstm', 'gru']:
                 speed, altitude, gender, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -282,19 +260,6 @@ def validate(model, dataloader, criterion, device, model_type):
 def train(model, train_loader, val_loader, optimizer, criterion, scheduler, args):
     """
     Full training loop with early stopping.
-    
-    Args:
-        model: PyTorch model
-        train_loader: Training DataLoader
-        val_loader: Validation DataLoader
-        optimizer: Optimizer
-        criterion: Loss function
-        scheduler: Learning rate scheduler
-        args: Command-line arguments
-    
-    Returns:
-        history: Dictionary with training history
-        best_model_state: State dict of best model
     """
     device = args.device
     model = model.to(device)
@@ -373,15 +338,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, scheduler, args
 def evaluate(model, test_loader, device, model_type):
     """
     Evaluate model on test set.
-    
-    Args:
-        model: PyTorch model
-        test_loader: Test DataLoader
-        device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
-    
-    Returns:
-        metrics: Dictionary with test metrics
     """
     print(f"\n{'='*80}")
     print(f"EVALUATING ON TEST SET")
@@ -393,7 +349,7 @@ def evaluate(model, test_loader, device, model_type):
     
     with torch.no_grad():
         for batch in test_loader:
-            if model_type == 'lstm':
+            if model_type in ['lstm', 'gru']:
                 speed, altitude, gender, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -447,13 +403,6 @@ def evaluate(model, test_loader, device, model_type):
 def save_checkpoint(model, optimizer, history, metrics, args):
     """
     Save model checkpoint.
-    
-    Args:
-        model: PyTorch model
-        optimizer: Optimizer
-        history: Training history
-        metrics: Test metrics
-        args: Command-line arguments
     """
     checkpoint_dir = Path(args.checkpoint_dir)
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -475,10 +424,6 @@ def save_checkpoint(model, optimizer, history, metrics, args):
 def plot_training_curves(history, args):
     """
     Plot and save training curves.
-    
-    Args:
-        history: Training history dictionary
-        args: Command-line arguments
     """
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
@@ -489,7 +434,7 @@ def plot_training_curves(history, args):
     axes[0].plot(epochs, history['val_loss'], label='Val Loss', linewidth=2)
     axes[0].set_xlabel('Epoch', fontweight='bold')
     axes[0].set_ylabel('Loss (MSE)', fontweight='bold')
-    axes[0].set_title('Training and Validation Loss', fontweight='bold')
+    axes[0].set_title(f'{args.model.upper()} - Training and Validation Loss', fontweight='bold')
     axes[0].legend()
     axes[0].grid(True, alpha=0.3)
     
@@ -500,7 +445,7 @@ def plot_training_curves(history, args):
     axes[1].axhline(y=10, color='orange', linestyle='--', label='Acceptable: 10 BPM', alpha=0.7)
     axes[1].set_xlabel('Epoch', fontweight='bold')
     axes[1].set_ylabel('MAE (BPM)', fontweight='bold')
-    axes[1].set_title('Training and Validation MAE', fontweight='bold')
+    axes[1].set_title(f'{args.model.upper()} - Training and Validation MAE', fontweight='bold')
     axes[1].legend()
     axes[1].grid(True, alpha=0.3)
     
@@ -522,21 +467,14 @@ def main():
     if args.device == "auto":
         args.device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    # GPU optimizations and fixes for cuDNN errors
+    # GPU optimizations
     if args.device == "cuda":
-        # Clear GPU cache
         torch.cuda.empty_cache()
-        
-        # Disable cuDNN for older GPUs with compatibility issues (GTX 1060, etc.)
-        # This uses PyTorch's native LSTM implementation which is more stable
+        # Disable cuDNN for better LSTM/GRU compatibility on some drivers
         torch.backends.cudnn.enabled = False
         
         print(f"\nGPU Configuration:")
         print(f"  Device: {torch.cuda.get_device_name(0)}")
-        print(f"  Memory allocated: {torch.cuda.memory_allocated(0) / 1024**2:.2f} MB")
-        print(f"  Memory reserved: {torch.cuda.memory_reserved(0) / 1024**2:.2f} MB")
-        print(f"  cuDNN enabled: {torch.backends.cudnn.enabled} (disabled for compatibility)")
-        print(f"  Using PyTorch native LSTM implementation")
     
     print(f"\n{'='*80}")
     print(f"HEART RATE PREDICTION - MODEL TRAINING")
