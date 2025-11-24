@@ -1,0 +1,103 @@
+2025-11-24 17:49:37.886064: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+
+GPU Configuration:
+  Device: NVIDIA GeForce GTX 1060 6GB
+  Memory allocated: 0.00 MB
+  Memory reserved: 0.00 MB
+  cuDNN enabled: False (disabled for compatibility)
+  Using PyTorch native LSTM implementation
+
+================================================================================
+HEART RATE PREDICTION - MODEL TRAINING
+================================================================================
+Model: lstm
+Device: cuda
+
+Loading data from DATA/processed...
+✓ Data loaded:
+  Train: 13855 samples
+  Val:   3539 samples
+  Test:  3581 samples
+
+Creating lstm model...
+✓ Model created:
+  Total parameters: 51,009
+
+================================================================================
+TRAINING LSTM MODEL
+================================================================================
+Device: cuda
+Epochs: 30
+Batch size: 32
+Learning rate: 0.001
+Early stopping patience: 10
+================================================================================
+
+Epoch [  1/30] | Train Loss: 17827.3938 | Train MAE: 131.92 BPM | Val Loss: 14143.5118 | Val MAE: 117.41 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 117.41 BPM)
+Epoch [  2/30] | Train Loss: 11612.8194 | Train MAE: 105.87 BPM | Val Loss: 9084.8995 | Val MAE: 93.41 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 93.41 BPM)
+Epoch [  3/30] | Train Loss: 7337.6387 | Train MAE: 83.29 BPM | Val Loss: 5567.4238 | Val MAE: 72.19 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 72.19 BPM)
+Epoch [  4/30] | Train Loss: 4421.0718 | Train MAE: 63.48 BPM | Val Loss: 3231.8899 | Val MAE: 53.83 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 53.83 BPM)
+Epoch [  5/30] | Train Loss: 2542.2683 | Train MAE: 46.69 BPM | Val Loss: 1786.8860 | Val MAE: 38.67 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 38.67 BPM)
+Epoch [  6/30] | Train Loss: 1427.2237 | Train MAE: 33.35 BPM | Val Loss: 977.2584 | Val MAE: 27.25 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 27.25 BPM)
+Epoch [  7/30] | Train Loss: 835.6054 | Train MAE: 24.14 BPM | Val Loss: 580.4861 | Val MAE: 20.20 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 20.20 BPM)
+Epoch [  8/30] | Train Loss: 558.0682 | Train MAE: 18.95 BPM | Val Loss: 397.2740 | Val MAE: 16.29 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 16.29 BPM)
+Epoch [  9/30] | Train Loss: 439.3876 | Train MAE: 16.58 BPM | Val Loss: 339.4501 | Val MAE: 14.79 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 14.79 BPM)
+Epoch [ 10/30] | Train Loss: 393.0781 | Train MAE: 15.66 BPM | Val Loss: 298.0215 | Val MAE: 13.74 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 13.74 BPM)
+Epoch [ 11/30] | Train Loss: 370.8539 | Train MAE: 15.18 BPM | Val Loss: 288.0900 | Val MAE: 13.44 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 13.44 BPM)
+Epoch [ 12/30] | Train Loss: 356.8508 | Train MAE: 14.88 BPM | Val Loss: 323.9357 | Val MAE: 14.44 BPM | LR: 0.001000
+Epoch [ 13/30] | Train Loss: 357.9301 | Train MAE: 14.90 BPM | Val Loss: 274.7681 | Val MAE: 13.00 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 13.00 BPM)
+Epoch [ 14/30] | Train Loss: 342.7219 | Train MAE: 14.56 BPM | Val Loss: 271.4165 | Val MAE: 12.95 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 12.95 BPM)
+Epoch [ 15/30] | Train Loss: 337.4362 | Train MAE: 14.44 BPM | Val Loss: 275.7448 | Val MAE: 12.95 BPM | LR: 0.001000
+Epoch [ 16/30] | Train Loss: 335.1833 | Train MAE: 14.37 BPM | Val Loss: 273.6095 | Val MAE: 12.90 BPM | LR: 0.001000
+  ✓ New best model! (Val MAE: 12.90 BPM)
+Epoch [ 17/30] | Train Loss: 332.9676 | Train MAE: 14.33 BPM | Val Loss: 275.4305 | Val MAE: 12.93 BPM | LR: 0.001000
+Epoch [ 18/30] | Train Loss: 332.9421 | Train MAE: 14.32 BPM | Val Loss: 275.1726 | Val MAE: 12.96 BPM | LR: 0.001000
+Epoch [ 19/30] | Train Loss: 331.3537 | Train MAE: 14.28 BPM | Val Loss: 278.0752 | Val MAE: 12.98 BPM | LR: 0.001000
+Epoch [ 20/30] | Train Loss: 329.4559 | Train MAE: 14.24 BPM | Val Loss: 278.1851 | Val MAE: 13.03 BPM | LR: 0.001000
+Epoch [ 21/30] | Train Loss: 328.4877 | Train MAE: 14.22 BPM | Val Loss: 280.5575 | Val MAE: 12.99 BPM | LR: 0.001000
+Epoch [ 22/30] | Train Loss: 330.0018 | Train MAE: 14.26 BPM | Val Loss: 275.2682 | Val MAE: 12.96 BPM | LR: 0.000500
+Epoch [ 23/30] | Train Loss: 327.0877 | Train MAE: 14.19 BPM | Val Loss: 278.7236 | Val MAE: 12.99 BPM | LR: 0.000500
+Epoch [ 24/30] | Train Loss: 325.0672 | Train MAE: 14.14 BPM | Val Loss: 270.4847 | Val MAE: 12.79 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 12.79 BPM)
+Epoch [ 25/30] | Train Loss: 325.1535 | Train MAE: 14.13 BPM | Val Loss: 274.5194 | Val MAE: 12.88 BPM | LR: 0.000500
+Epoch [ 26/30] | Train Loss: 323.1432 | Train MAE: 14.09 BPM | Val Loss: 284.8833 | Val MAE: 13.12 BPM | LR: 0.000500
+Epoch [ 27/30] | Train Loss: 323.2140 | Train MAE: 14.09 BPM | Val Loss: 289.8273 | Val MAE: 13.26 BPM | LR: 0.000500
+Epoch [ 28/30] | Train Loss: 322.9208 | Train MAE: 14.09 BPM | Val Loss: 276.7643 | Val MAE: 12.96 BPM | LR: 0.000500
+Epoch [ 29/30] | Train Loss: 323.3380 | Train MAE: 14.09 BPM | Val Loss: 283.1362 | Val MAE: 13.09 BPM | LR: 0.000500
+Epoch [ 30/30] | Train Loss: 324.6331 | Train MAE: 14.13 BPM | Val Loss: 271.0882 | Val MAE: 12.80 BPM | LR: 0.000250
+
+================================================================================
+TRAINING COMPLETE
+================================================================================
+Best Val MAE: 12.79 BPM
+
+================================================================================
+EVALUATING ON TEST SET
+================================================================================
+Test Metrics:
+  MSE:  347.9489
+  MAE:  14.45 BPM
+  RMSE: 18.65 BPM
+  R²:   0.1358
+
+✓ Checkpoint saved to: experiments/batch_size_search/bs32/lstm_bs32_lr0.001_e30_h64_l2_best.pt
+✓ Training curves saved to: experiments/batch_size_search/bs32/lstm_bs32_lr0.001_e30_h64_l2_training_curves.png
+
+================================================================================
+✓ TRAINING PIPELINE COMPLETE!
+================================================================================
+
