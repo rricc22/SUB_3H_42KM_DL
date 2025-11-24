@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 # Import model classes
 from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
+from LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
 
 
 def parse_args():
@@ -30,8 +31,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train LSTM model for heart rate prediction')
     
     # Model selection
-    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings'],
-                        help='Model type: lstm or lstm_embeddings')
+    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings', 'lag_llama'],
+                        help='Model type: lstm, lstm_embeddings, or lag_llama')
     
     # Training hyperparameters
     parser.add_argument('--epochs', type=int, default=100,
@@ -96,10 +97,17 @@ def load_data(data_dir, model_type, batch_size):
         train_dataset = BasicDataset(train_data)
         val_dataset = BasicDataset(val_data)
         test_dataset = BasicDataset(test_data)
-    else:  # lstm_embeddings
+    elif model_type == 'lstm_embeddings':
         train_dataset = EmbeddingDataset(train_data)
         val_dataset = EmbeddingDataset(val_data)
         test_dataset = EmbeddingDataset(test_data)
+        
+        # Add num_users to metadata
+        metadata['num_users'] = train_dataset.num_users
+    else:  # lag_llama
+        train_dataset = LagLlamaDataset(train_data)
+        val_dataset = LagLlamaDataset(val_data)
+        test_dataset = LagLlamaDataset(test_data)
         
         # Add num_users to metadata
         metadata['num_users'] = train_dataset.num_users
@@ -142,7 +150,7 @@ def create_model(model_type, metadata, args):
             dropout=args.dropout,
             bidirectional=args.bidirectional
         )
-    else:  # lstm_embeddings
+    elif model_type == 'lstm_embeddings':
         model = HeartRateLSTMWithEmbeddings(
             num_users=metadata['num_users'],
             embedding_dim=args.embedding_dim,
@@ -150,6 +158,19 @@ def create_model(model_type, metadata, args):
             num_layers=args.num_layers,
             dropout=args.dropout,
             bidirectional=args.bidirectional
+        )
+    else:  # lag_llama
+        model = LagLlamaHRPredictor(
+            context_length=500,
+            prediction_length=500,
+            num_users=metadata['num_users'],
+            embedding_dim=args.embedding_dim,
+            d_model=128,
+            nhead=8,
+            num_layers=args.num_layers,
+            dim_feedforward=512,
+            dropout=args.dropout,
+            device=args.device
         )
     
     print(f"✓ Model created:")
@@ -189,7 +210,7 @@ def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
             
             # Forward pass
             predictions = model(speed, altitude, gender, original_lengths)
-        else:  # lstm_embeddings
+        else:  # lstm_embeddings or lag_llama
             speed, altitude, gender, userId, heart_rate, original_lengths = batch
             speed = speed.to(device)
             altitude = altitude.to(device)
@@ -252,7 +273,7 @@ def validate(model, dataloader, criterion, device, model_type):
                 
                 # Forward pass
                 predictions = model(speed, altitude, gender, original_lengths)
-            else:  # lstm_embeddings
+            else:  # lstm_embeddings or lag_llama
                 speed, altitude, gender, userId, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -401,7 +422,7 @@ def evaluate(model, test_loader, device, model_type):
                 heart_rate = heart_rate.to(device)
                 
                 predictions = model(speed, altitude, gender, original_lengths)
-            else:  # lstm_embeddings
+            else:  # lstm_embeddings or lag_llama
                 speed, altitude, gender, userId, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)

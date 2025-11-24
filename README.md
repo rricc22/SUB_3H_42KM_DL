@@ -82,12 +82,23 @@ Architecture:
   Concat[speed, altitude] → LSTM(64) → LSTM(64) → Dense(1) → HR[batch, 300, 1]
 ```
 
-### 2. Transformer (Planned)
-- Multi-head self-attention
-- Positional encoding for temporal information
-- Better long-range dependency modeling
+### 2. Transformer / Lag-Llama (Implemented)
+```python
+Input Features:
+  - Speed sequence: [batch, 500, 1]
+  - Altitude sequence: [batch, 500, 1]
+  - Gender: [batch, 1] (embedded)
+  - UserId: [batch, 1] (embedded)
 
-### 3. Pretrained Fine-tuning (Planned)
+Architecture:
+  Input Projection → Positional Encoding → Transformer Encoder (4 layers) → Output Projection → HR[batch, 500, 1]
+  - d_model: 128
+  - num_heads: 8
+  - num_layers: 4
+  - Parameters: ~2M (40x larger than LSTM)
+```
+
+### 3. Pretrained Fine-tuning (Future)
 - Chronos (Amazon): T5-based time-series model
 - TimeGPT: Foundation model for forecasting
 - Transfer learning from large-scale time-series data
@@ -144,11 +155,12 @@ Architecture:
 ### Phase 1: Baseline Models ✅
 - [x] Data preprocessing pipeline
 - [x] LSTM baseline implementation
-- [ ] Training and evaluation
+- [x] LSTM with user embeddings
+- [x] Training and evaluation infrastructure
 - [ ] Hyperparameter tuning
 
-### Phase 2: Advanced Models
-- [ ] Transformer architecture
+### Phase 2: Advanced Models ✅
+- [x] Transformer architecture (Lag-Llama inspired)
 - [ ] Attention visualization
 - [ ] Multi-task learning (predict speed from HR)
 
