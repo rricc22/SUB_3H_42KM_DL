@@ -467,7 +467,7 @@ def evaluate(model, test_loader, device, model_type):
 
 def save_checkpoint(model, optimizer, history, metrics, args):
     """
-    Save model checkpoint.
+    Save model checkpoint with config string in filename.
     
     Args:
         model: PyTorch model
@@ -479,7 +479,14 @@ def save_checkpoint(model, optimizer, history, metrics, args):
     checkpoint_dir = Path(args.checkpoint_dir)
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     
-    checkpoint_path = checkpoint_dir / f"{args.model}_best.pt"
+    # Create config string with key hyperparameters
+    config_str = f"bs{args.batch_size}_lr{args.lr}_e{args.epochs}_h{args.hidden_size}_l{args.num_layers}"
+    if args.model == 'lstm_embeddings' or args.model == 'lag_llama':
+        config_str += f"_emb{args.embedding_dim}"
+    if args.bidirectional:
+        config_str += "_bidir"
+    
+    checkpoint_path = checkpoint_dir / f"{args.model}_{config_str}_best.pt"
     
     checkpoint = {
         'model_state_dict': model.state_dict(),
@@ -495,7 +502,7 @@ def save_checkpoint(model, optimizer, history, metrics, args):
 
 def plot_training_curves(history, args):
     """
-    Plot and save training curves.
+    Plot and save training curves with config string in filename.
     
     Args:
         history: Training history dictionary
@@ -527,8 +534,15 @@ def plot_training_curves(history, args):
     
     plt.tight_layout()
     
+    # Create config string with key hyperparameters (same as checkpoint)
+    config_str = f"bs{args.batch_size}_lr{args.lr}_e{args.epochs}_h{args.hidden_size}_l{args.num_layers}"
+    if args.model == 'lstm_embeddings' or args.model == 'lag_llama':
+        config_str += f"_emb{args.embedding_dim}"
+    if args.bidirectional:
+        config_str += "_bidir"
+    
     # Save plot
-    plot_path = Path(args.checkpoint_dir) / f"{args.model}_training_curves.png"
+    plot_path = Path(args.checkpoint_dir) / f"{args.model}_{config_str}_training_curves.png"
     plt.savefig(plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Training curves saved to: {plot_path}")
     plt.close()
