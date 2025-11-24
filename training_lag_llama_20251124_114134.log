@@ -1,0 +1,78 @@
+nohup: ignoring input
+
+GPU Configuration:
+  Device: NVIDIA GeForce GTX 1060 6GB
+  Memory allocated: 0.00 MB
+  Memory reserved: 0.00 MB
+  cuDNN enabled: False (disabled for compatibility)
+  Using PyTorch native LSTM implementation
+
+================================================================================
+HEART RATE PREDICTION - MODEL TRAINING
+================================================================================
+Model: lag_llama
+Device: cuda
+
+Loading data from DATA/processed...
+✓ Data loaded:
+  Train: 13855 samples
+  Val:   3539 samples
+  Test:  3581 samples
+
+Creating lag_llama model...
+✓ Model created:
+  Total parameters: 1,009,089
+
+================================================================================
+TRAINING LAG_LLAMA MODEL
+================================================================================
+Device: cuda
+Epochs: 30
+Batch size: 256
+Learning rate: 0.0001
+Early stopping patience: 5
+================================================================================
+
+Traceback (most recent call last):
+  File "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Model/train.py", line 606, in <module>
+    main()
+  File "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Model/train.py", line 584, in main
+    history, best_model_state = train(
+                                ^^^^^^
+  File "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Model/train.py", line 347, in train
+    train_loss, train_mae = train_epoch(
+                            ^^^^^^^^^^^^
+  File "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Model/train.py", line 222, in train_epoch
+    predictions = model(speed, altitude, gender, userId, original_lengths)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Model/LagLlama_HR.py", line 150, in forward
+    x = self.transformer_encoder(x, src_key_padding_mask=src_mask)  # [batch, seq_len, d_model]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/transformer.py", line 511, in forward
+    output = mod(
+             ^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/transformer.py", line 906, in forward
+    x = self.norm2(x + self._ff_block(x))
+                       ^^^^^^^^^^^^^^^^^
+  File "/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/transformer.py", line 931, in _ff_block
+    x = self.linear2(self.dropout(self.activation(self.linear1(x))))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 107.38 MiB is free. Including non-PyTorch memory, this process has 5.64 GiB memory in use. Of the allocated memory 5.48 GiB is allocated by PyTorch, and 85.81 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

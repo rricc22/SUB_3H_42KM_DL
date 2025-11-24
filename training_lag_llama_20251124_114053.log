@@ -1,0 +1,35 @@
+nohup: ignoring input
+
+GPU Configuration:
+  Device: NVIDIA GeForce GTX 1060 6GB
+  Memory allocated: 0.00 MB
+  Memory reserved: 0.00 MB
+  cuDNN enabled: False (disabled for compatibility)
+  Using PyTorch native LSTM implementation
+
+================================================================================
+HEART RATE PREDICTION - MODEL TRAINING
+================================================================================
+Model: lag_llama
+Device: cuda
+
+Loading data from DATA/processed...
+✓ Data loaded:
+  Train: 13855 samples
+  Val:   3539 samples
+  Test:  3581 samples
+
+Creating lag_llama model...
+✓ Model created:
+  Total parameters: 810,817
+
+================================================================================
+TRAINING LAG_LLAMA MODEL
+================================================================================
+Device: cuda
+Epochs: 30
+Batch size: 128
+Learning rate: 0.0001
+Early stopping patience: 5
+================================================================================
+

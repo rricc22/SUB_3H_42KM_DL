@@ -1,0 +1,41 @@
+nohup: ignoring input
+
+GPU Configuration:
+  Device: NVIDIA GeForce GTX 1060 6GB
+  Memory allocated: 0.00 MB
+  Memory reserved: 0.00 MB
+  cuDNN enabled: False (disabled for compatibility)
+  Using PyTorch native LSTM implementation
+
+================================================================================
+HEART RATE PREDICTION - MODEL TRAINING
+================================================================================
+Model: lag_llama
+Device: cuda
+
+Loading data from DATA/processed...
+✓ Data loaded:
+  Train: 13855 samples
+  Val:   3539 samples
+  Test:  3581 samples
+
+Creating lag_llama model...
+✓ Model created:
+  Total parameters: 810,817
+
+================================================================================
+TRAINING LAG_LLAMA MODEL
+================================================================================
+Device: cuda
+Epochs: 100
+Batch size: 16
+Learning rate: 0.0001
+Early stopping patience: 15
+================================================================================
+
+/home/riccardo/anaconda3/envs/ai-general/lib/python3.11/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at ../aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+Epoch [  1/100] | Train Loss: 13313.9400 | Train MAE: 110.10 BPM | Val Loss: 6599.0635 | Val MAE: 69.38 BPM | LR: 0.000100
+  ✓ New best model! (Val MAE: 69.38 BPM)
+Epoch [  2/100] | Train Loss: 873.6574 | Train MAE: 23.40 BPM | Val Loss: 4449.5910 | Val MAE: 38.93 BPM | LR: 0.000100
+  ✓ New best model! (Val MAE: 38.93 BPM)
