@@ -67,3 +67,98 @@ Epoch [ 15/100] | Train Loss: 592.6429 | Train MAE: 19.89 BPM | Val Loss: 514.70
   ✓ New best model! (Val MAE: 18.85 BPM)
 Epoch [ 16/100] | Train Loss: 502.9082 | Train MAE: 17.98 BPM | Val Loss: 447.6241 | Val MAE: 17.36 BPM | LR: 0.000500
   ✓ New best model! (Val MAE: 17.36 BPM)
+Epoch [ 17/100] | Train Loss: 451.5023 | Train MAE: 16.85 BPM | Val Loss: 416.7717 | Val MAE: 16.64 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 16.64 BPM)
+Epoch [ 18/100] | Train Loss: 415.7733 | Train MAE: 16.08 BPM | Val Loss: 369.8482 | Val MAE: 15.59 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 15.59 BPM)
+Epoch [ 19/100] | Train Loss: 374.2963 | Train MAE: 15.22 BPM | Val Loss: 347.6737 | Val MAE: 15.02 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 15.02 BPM)
+Epoch [ 20/100] | Train Loss: 355.8792 | Train MAE: 14.81 BPM | Val Loss: 334.6775 | Val MAE: 14.65 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.65 BPM)
+Epoch [ 21/100] | Train Loss: 344.3620 | Train MAE: 14.56 BPM | Val Loss: 327.9134 | Val MAE: 14.44 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.44 BPM)
+Epoch [ 22/100] | Train Loss: 338.8404 | Train MAE: 14.43 BPM | Val Loss: 324.7415 | Val MAE: 14.32 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.32 BPM)
+Epoch [ 23/100] | Train Loss: 335.4852 | Train MAE: 14.34 BPM | Val Loss: 323.5550 | Val MAE: 14.25 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.25 BPM)
+Epoch [ 24/100] | Train Loss: 331.7920 | Train MAE: 14.27 BPM | Val Loss: 322.1231 | Val MAE: 14.22 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.22 BPM)
+Epoch [ 25/100] | Train Loss: 330.4237 | Train MAE: 14.24 BPM | Val Loss: 321.8396 | Val MAE: 14.19 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.19 BPM)
+Epoch [ 26/100] | Train Loss: 330.0112 | Train MAE: 14.23 BPM | Val Loss: 322.5350 | Val MAE: 14.22 BPM | LR: 0.000500
+Epoch [ 27/100] | Train Loss: 328.7353 | Train MAE: 14.20 BPM | Val Loss: 322.0175 | Val MAE: 14.19 BPM | LR: 0.000500
+Epoch [ 28/100] | Train Loss: 330.8380 | Train MAE: 14.21 BPM | Val Loss: 322.0574 | Val MAE: 14.16 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.16 BPM)
+Epoch [ 29/100] | Train Loss: 329.6324 | Train MAE: 14.17 BPM | Val Loss: 322.6136 | Val MAE: 14.18 BPM | LR: 0.000500
+Epoch [ 30/100] | Train Loss: 327.0410 | Train MAE: 14.15 BPM | Val Loss: 322.8304 | Val MAE: 14.14 BPM | LR: 0.000500
+  ✓ New best model! (Val MAE: 14.14 BPM)
+Epoch [ 31/100] | Train Loss: 326.2956 | Train MAE: 14.13 BPM | Val Loss: 322.8450 | Val MAE: 14.17 BPM | LR: 0.000500
+Epoch [ 32/100] | Train Loss: 325.6973 | Train MAE: 14.12 BPM | Val Loss: 325.0643 | Val MAE: 14.27 BPM | LR: 0.000500
+Epoch [ 33/100] | Train Loss: 325.6764 | Train MAE: 14.11 BPM | Val Loss: 325.4288 | Val MAE: 14.28 BPM | LR: 0.000500
+Epoch [ 34/100] | Train Loss: 325.1446 | Train MAE: 14.10 BPM | Val Loss: 323.7199 | Val MAE: 14.16 BPM | LR: 0.000500
+Epoch [ 35/100] | Train Loss: 325.0449 | Train MAE: 14.09 BPM | Val Loss: 327.8012 | Val MAE: 14.38 BPM | LR: 0.000500
+Epoch [ 36/100] | Train Loss: 325.0054 | Train MAE: 14.10 BPM | Val Loss: 325.0733 | Val MAE: 14.24 BPM | LR: 0.000250
+Epoch [ 37/100] | Train Loss: 323.3738 | Train MAE: 14.05 BPM | Val Loss: 324.3611 | Val MAE: 14.21 BPM | LR: 0.000250
+Epoch [ 38/100] | Train Loss: 323.6533 | Train MAE: 14.06 BPM | Val Loss: 323.4567 | Val MAE: 14.16 BPM | LR: 0.000250
+Epoch [ 39/100] | Train Loss: 305.1838 | Train MAE: 13.63 BPM | Val Loss: 280.6853 | Val MAE: 13.19 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 13.19 BPM)
+Epoch [ 40/100] | Train Loss: 290.8666 | Train MAE: 13.34 BPM | Val Loss: 289.0207 | Val MAE: 13.35 BPM | LR: 0.000250
+Epoch [ 41/100] | Train Loss: 293.8035 | Train MAE: 13.43 BPM | Val Loss: 281.2243 | Val MAE: 13.18 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 13.18 BPM)
+Epoch [ 42/100] | Train Loss: 281.9961 | Train MAE: 13.16 BPM | Val Loss: 280.0666 | Val MAE: 13.15 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 13.15 BPM)
+Epoch [ 43/100] | Train Loss: 281.4020 | Train MAE: 13.14 BPM | Val Loss: 278.7945 | Val MAE: 13.10 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 13.10 BPM)
+Epoch [ 44/100] | Train Loss: 278.4974 | Train MAE: 13.07 BPM | Val Loss: 279.7727 | Val MAE: 13.13 BPM | LR: 0.000250
+Epoch [ 45/100] | Train Loss: 276.6180 | Train MAE: 13.01 BPM | Val Loss: 275.3171 | Val MAE: 12.99 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 12.99 BPM)
+Epoch [ 46/100] | Train Loss: 274.7454 | Train MAE: 12.97 BPM | Val Loss: 280.5520 | Val MAE: 13.11 BPM | LR: 0.000250
+Epoch [ 47/100] | Train Loss: 272.8166 | Train MAE: 12.92 BPM | Val Loss: 282.1317 | Val MAE: 13.15 BPM | LR: 0.000250
+Epoch [ 48/100] | Train Loss: 271.7659 | Train MAE: 12.89 BPM | Val Loss: 274.3509 | Val MAE: 12.90 BPM | LR: 0.000250
+  ✓ New best model! (Val MAE: 12.90 BPM)
+Epoch [ 49/100] | Train Loss: 271.6267 | Train MAE: 12.87 BPM | Val Loss: 273.3749 | Val MAE: 12.92 BPM | LR: 0.000250
+Epoch [ 50/100] | Train Loss: 270.7906 | Train MAE: 12.86 BPM | Val Loss: 276.1050 | Val MAE: 12.98 BPM | LR: 0.000250
+Epoch [ 51/100] | Train Loss: 273.9534 | Train MAE: 12.94 BPM | Val Loss: 283.5066 | Val MAE: 13.09 BPM | LR: 0.000250
+Epoch [ 52/100] | Train Loss: 274.4453 | Train MAE: 12.96 BPM | Val Loss: 278.5753 | Val MAE: 13.04 BPM | LR: 0.000250
+Epoch [ 53/100] | Train Loss: 270.8437 | Train MAE: 12.84 BPM | Val Loss: 276.0678 | Val MAE: 12.99 BPM | LR: 0.000250
+Epoch [ 54/100] | Train Loss: 269.2751 | Train MAE: 12.82 BPM | Val Loss: 277.7619 | Val MAE: 13.01 BPM | LR: 0.000125
+Epoch [ 55/100] | Train Loss: 266.8958 | Train MAE: 12.76 BPM | Val Loss: 275.4803 | Val MAE: 12.93 BPM | LR: 0.000125
+Epoch [ 56/100] | Train Loss: 265.2017 | Train MAE: 12.72 BPM | Val Loss: 276.3043 | Val MAE: 12.96 BPM | LR: 0.000125
+Epoch [ 57/100] | Train Loss: 264.4255 | Train MAE: 12.69 BPM | Val Loss: 274.2958 | Val MAE: 12.92 BPM | LR: 0.000125
+Epoch [ 58/100] | Train Loss: 263.5750 | Train MAE: 12.67 BPM | Val Loss: 272.7362 | Val MAE: 12.85 BPM | LR: 0.000125
+  ✓ New best model! (Val MAE: 12.85 BPM)
+Epoch [ 59/100] | Train Loss: 264.0471 | Train MAE: 12.68 BPM | Val Loss: 275.5349 | Val MAE: 12.93 BPM | LR: 0.000125
+Epoch [ 60/100] | Train Loss: 263.1276 | Train MAE: 12.64 BPM | Val Loss: 278.1318 | Val MAE: 13.00 BPM | LR: 0.000125
+Epoch [ 61/100] | Train Loss: 262.4561 | Train MAE: 12.63 BPM | Val Loss: 278.6151 | Val MAE: 12.98 BPM | LR: 0.000125
+Epoch [ 62/100] | Train Loss: 261.4988 | Train MAE: 12.60 BPM | Val Loss: 273.7648 | Val MAE: 12.89 BPM | LR: 0.000125
+Epoch [ 63/100] | Train Loss: 259.9964 | Train MAE: 12.56 BPM | Val Loss: 277.3895 | Val MAE: 12.93 BPM | LR: 0.000125
+Epoch [ 64/100] | Train Loss: 260.1040 | Train MAE: 12.56 BPM | Val Loss: 276.3704 | Val MAE: 12.94 BPM | LR: 0.000063
+Epoch [ 65/100] | Train Loss: 259.1417 | Train MAE: 12.53 BPM | Val Loss: 278.6819 | Val MAE: 12.97 BPM | LR: 0.000063
+Epoch [ 66/100] | Train Loss: 258.0470 | Train MAE: 12.50 BPM | Val Loss: 278.7611 | Val MAE: 12.95 BPM | LR: 0.000063
+Epoch [ 67/100] | Train Loss: 258.2260 | Train MAE: 12.50 BPM | Val Loss: 275.4994 | Val MAE: 12.89 BPM | LR: 0.000063
+Epoch [ 68/100] | Train Loss: 257.2528 | Train MAE: 12.49 BPM | Val Loss: 277.6241 | Val MAE: 12.92 BPM | LR: 0.000063
+
+⚠ Early stopping triggered after 68 epochs
+  Best Val MAE: 12.85 BPM
+
+================================================================================
+TRAINING COMPLETE
+================================================================================
+Best Val MAE: 12.85 BPM
+
+================================================================================
+EVALUATING ON TEST SET
+================================================================================
+Test Metrics:
+  MSE:  329.9368
+  MAE:  13.96 BPM
+  RMSE: 18.16 BPM
+  R²:   0.1805
+
+✓ Checkpoint saved to: checkpoints/lstm_bs128_lr0.0005_e100_h256_l5_best.pt
+✓ Training curves saved to: checkpoints/lstm_bs128_lr0.0005_e100_h256_l5_training_curves.png
+
+================================================================================
+✓ TRAINING PIPELINE COMPLETE!
+================================================================================
+
