@@ -155,6 +155,35 @@ echo "Training started! PID: $!"
 echo "Monitor with: tail -f LOGS/training_patchtst_large_*.log"
 echo "Check GPU: watch -n 5 nvidia-smi"
 
+nohup python3 -u Model/train.py \
+  --model lstm \
+  --hidden_size 256 \
+  --num_layers 5 \
+  --dropout 0.2 \
+  --epochs 100 \
+  --batch_size 128 \
+  --lr 0.0005 \
+  --device cuda \
+  > LOGS/training_lstm_large_$(date +%Y%m%d_%H%M%S).log 2>&1 &
+echo "Training started! PID: $!"
+echo "Monitor with: tail -f LOGS/training_lstm_large_*.log"
+echo "Check GPU: watch -n 5 nvidia-smi"
+
+nohup python3 -u Model/train.py \
+  --model lstm \
+  --hidden_size 768 \
+  --num_layers 5 \
+  --dropout 0.35 \
+  --epochs 100 \
+  --batch_size 16 \
+  --lr 0.0002 \
+  --bidirectional \
+  --device cuda \
+  > LOGS/training_lstm_xlarge_$(date +%Y%m%d_%H%M%S).log 2>&1 &
+echo "Training started! PID: $!"
+echo "Monitor with: tail -f LOGS/training_lstm_xlarge_*.log"
+echo "Check GPU: watch -n 5 nvidia-smi"
+
 **Output:**
 - Checkpoint: `checkpoints/{model}_best.pt`
 - Training curves: `checkpoints/{model}_training_curves.png`
