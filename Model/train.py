@@ -26,7 +26,14 @@ from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
 from GRU import HeartRateGRU, WorkoutDataset as GRUDataset
 from LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
-from PatchTST_HR import PatchTSTHeartRatePredictor, load_data_hf
+
+# Optional: PatchTST (may require specific transformers version)
+try:
+    from PatchTST_HR import PatchTSTHeartRatePredictor, load_data_hf
+    PATCHTST_AVAILABLE = True
+except ImportError:
+    PATCHTST_AVAILABLE = False
+    print("Warning: PatchTST not available (transformers version incompatibility)")
 
 
 def parse_args():
@@ -583,6 +590,12 @@ def main():
         print(f"  Memory reserved: {torch.cuda.memory_reserved(0) / 1024**2:.2f} MB")
         print(f"  cuDNN enabled: {torch.backends.cudnn.enabled} (disabled for compatibility)")
         print(f"  Using PyTorch native LSTM implementation")
+    
+    # Validate model availability
+    if args.model == 'patchtst' and not PATCHTST_AVAILABLE:
+        print("ERROR: PatchTST model requested but not available.")
+        print("Please install compatible transformers version or use a different model.")
+        sys.exit(1)
     
     print(f"\n{'='*80}")
     print(f"HEART RATE PREDICTION - MODEL TRAINING")
