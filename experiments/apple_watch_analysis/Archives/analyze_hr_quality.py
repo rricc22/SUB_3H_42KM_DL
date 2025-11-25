@@ -24,7 +24,7 @@ def main():
     print("=" * 70)
     
     # Paths
-    base_dir = Path("/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/experiments/apple_health_export")
+    base_dir = Path("/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/DATA/CUSTOM_DATA/apple_health_export_User1")
     export_xml = base_dir / "export.xml"
     workouts_json = Path("experiments/apple_watch_analysis/output/workouts_summary.json")
     

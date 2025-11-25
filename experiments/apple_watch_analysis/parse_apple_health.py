@@ -337,8 +337,8 @@ class GPXParser:
 def main():
     """Test parsing functionality"""
     # Paths
-    export_xml = "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/experiments/apple_health_export/export.xml"
-    base_dir = "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/experiments/apple_health_export"
+    export_xml = "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/DATA/CUSTOM_DATA/apple_health_export_User1/export.xml"
+    base_dir = "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/DATA/CUSTOM_DATA/apple_health_export_User1"
     
     print("=" * 60)
     print("APPLE HEALTH DATA EXTRACTION - STEP 1: PARSING")
