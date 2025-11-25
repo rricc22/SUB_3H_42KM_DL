@@ -2,6 +2,7 @@
 """
 EDA script for raw endomondoHR_proper.json data.
 Analyzes feature-target correlations in raw data and compares with processed data.
+STREAMING VERSION - Low RAM usage for large datasets.
 """
 
 import json
@@ -12,6 +13,7 @@ from pathlib import Path
 from datetime import datetime
 import ast
 from tqdm import tqdm
+import gc
 
 # Set style
 sns.set_style("whitegrid")
@@ -23,16 +25,16 @@ OUTPUT_DIR = Path("EDA/EDA_Generation")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("="*80)
-print("RAW DATA CORRELATION ANALYSIS")
+print("RAW DATA CORRELATION ANALYSIS (STREAMING)")
 print("="*80)
 print(f"\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print(f"Analyzing: {RAW_DATA_FILE}")
 
 # ============================================================================
-# SECTION 1: LOAD AND PARSE RAW DATA
+# SECTION 1: STREAMING CORRELATION COMPUTATION
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 1: LOADING RAW DATA")
+print("SECTION 1: STREAMING THROUGH RAW DATA")
 print("="*80)
 
 def parse_workout(line):
@@ -48,47 +50,84 @@ def parse_workout(line):
         except:
             return None
 
-# Sample workouts (for faster processing)
-# Use reservoir sampling to get representative sample
-SAMPLE_SIZE = 140000  # Sample 50k workouts (should cover all valid ones)
+class StreamingCorrelation:
+    """Compute correlation incrementally without storing all data."""
+    def __init__(self):
+        self.n = 0
+        self.mean_x = 0.0
+        self.mean_y = 0.0
+        self.M2_x = 0.0
+        self.M2_y = 0.0
+        self.cov_xy = 0.0
+        self.min_x = float('inf')
+        self.max_x = float('-inf')
+        self.min_y = float('inf')
+        self.max_y = float('-inf')
+    
+    def update(self, x_values, y_values):
+        """Update statistics with new batch of values."""
+        for x, y in zip(x_values, y_values):
+            self.n += 1
+            delta_x = x - self.mean_x
+            delta_y = y - self.mean_y
+            
+            self.mean_x += delta_x / self.n
+            self.mean_y += delta_y / self.n
+            
+            delta_x2 = x - self.mean_x
+            delta_y2 = y - self.mean_y
+            
+            self.M2_x += delta_x * delta_x2
+            self.M2_y += delta_y * delta_y2
+            self.cov_xy += delta_x * delta_y2
+            
+            self.min_x = min(self.min_x, x)
+            self.max_x = max(self.max_x, x)
+            self.min_y = min(self.min_y, y)
+            self.max_y = max(self.max_y, y)
+    
+    def correlation(self):
+        """Compute Pearson correlation coefficient."""
+        if self.n < 2:
+            return 0.0
+        var_x = self.M2_x / (self.n - 1)
+        var_y = self.M2_y / (self.n - 1)
+        cov = self.cov_xy / (self.n - 1)
+        
+        if var_x == 0 or var_y == 0:
+            return 0.0
+        
+        return cov / (np.sqrt(var_x) * np.sqrt(var_y))
+    
+    def std(self, is_x=True):
+        """Compute standard deviation."""
+        if self.n < 2:
+            return 0.0
+        M2 = self.M2_x if is_x else self.M2_y
+        return np.sqrt(M2 / (self.n - 1))
 
-print(f"\nSampling up to {SAMPLE_SIZE:,} workouts from raw JSON...")
-print("(Using reservoir sampling for representative distribution)")
+def count_lines(filepath):
+    """Count total lines for progress bar."""
+    print("Counting total workouts...")
+    with open(filepath, 'r') as f:
+        return sum(1 for _ in f)
 
-workouts = []
+print("\nInitializing streaming correlation computation...")
+
+# Streaming correlation objects
+speed_hr_corr = StreamingCorrelation()
+altitude_hr_corr = StreamingCorrelation()
+speed_altitude_corr = StreamingCorrelation()
+
+# Counters
 valid_count = 0
 invalid_count = 0
-total_lines = 0
+filter_stats = {}
 
-with open(RAW_DATA_FILE, 'r') as f:
-    for line in tqdm(f, desc="Sampling workouts"):
-        total_lines += 1
-        workout = parse_workout(line.strip())
-        
-        if workout is not None:
-            if len(workouts) < SAMPLE_SIZE:
-                workouts.append(workout)
-            else:
-                # Reservoir sampling: randomly replace existing item
-                import random
-                j = random.randint(0, valid_count)
-                if j < SAMPLE_SIZE:
-                    workouts[j] = workout
-            valid_count += 1
-        else:
-            invalid_count += 1
-
-print(f"\n✓ Sampled {len(workouts)} workouts from {total_lines:,} total lines")
-print(f"  Valid workouts found: {valid_count:,}")
-if invalid_count > 0:
-    print(f"  (Skipped {invalid_count:,} invalid lines)")
-
-# ============================================================================
-# SECTION 2: FILTER WORKOUTS (SAME AS PREPROCESSING)
-# ============================================================================
-print("\n" + "="*80)
-print("SECTION 2: FILTERING WORKOUTS")
-print("="*80)
+# For scatter plot sampling (reservoir sampling)
+MAX_SCATTER_SAMPLES = 10000
+scatter_samples = {'speed': [], 'altitude': [], 'hr': []}
+scatter_count = 0
 
 def filter_workout(workout):
     """Apply same filters as preprocessing."""
@@ -133,21 +172,53 @@ def filter_workout(workout):
     except Exception as e:
         return False, f"error_{str(e)[:20]}"
 
-# Apply filters
-print("\nApplying filters...")
-filtered_workouts = []
-filter_stats = {}
+# Stream through file and compute correlations
+total_lines = count_lines(RAW_DATA_FILE)
+print(f"Total workouts in file: {total_lines:,}")
 
-for workout in tqdm(workouts, desc="Filtering"):
-    is_valid, reason = filter_workout(workout)
-    
-    if is_valid:
-        filtered_workouts.append(workout)
-    
-    filter_stats[reason] = filter_stats.get(reason, 0) + 1
+print("\nStreaming through data and computing correlations...")
+with open(RAW_DATA_FILE, 'r') as f:
+    for line in tqdm(f, total=total_lines, desc="Processing"):
+        workout = parse_workout(line.strip())
+        
+        if workout is None:
+            invalid_count += 1
+            continue
+        
+        is_valid, reason = filter_workout(workout)
+        filter_stats[reason] = filter_stats.get(reason, 0) + 1
+        
+        if is_valid:
+            valid_count += 1
+            
+            # Extract arrays
+            speed = np.array(workout['speed'], dtype=float)
+            altitude = np.array(workout['altitude'], dtype=float)
+            hr = np.array(workout['heart_rate'], dtype=float)
+            
+            # Update streaming correlations
+            speed_hr_corr.update(speed, hr)
+            altitude_hr_corr.update(altitude, hr)
+            speed_altitude_corr.update(speed, altitude)
+            
+            # Reservoir sampling for scatter plots
+            for i in range(len(speed)):
+                scatter_count += 1
+                if len(scatter_samples['speed']) < MAX_SCATTER_SAMPLES:
+                    scatter_samples['speed'].append(float(speed[i]))
+                    scatter_samples['altitude'].append(float(altitude[i]))
+                    scatter_samples['hr'].append(float(hr[i]))
+                else:
+                    # Random replacement
+                    import random
+                    j = random.randint(0, scatter_count - 1)
+                    if j < MAX_SCATTER_SAMPLES:
+                        scatter_samples['speed'][j] = float(speed[i])
+                        scatter_samples['altitude'][j] = float(altitude[i])
+                        scatter_samples['hr'][j] = float(hr[i])
 
-print(f"\n✓ {filter_stats.get('valid', 0)} workouts passed all filters")
-print(f"✗ {len(workouts) - filter_stats.get('valid', 0)} workouts filtered out")
+print(f"\n✓ {valid_count} workouts passed all filters")
+print(f"✗ {total_lines - valid_count} workouts filtered out")
 
 print("\nFilter breakdown:")
 for reason, count in sorted(filter_stats.items(), key=lambda x: -x[1]):
@@ -155,59 +226,45 @@ for reason, count in sorted(filter_stats.items(), key=lambda x: -x[1]):
         print(f"  {reason:25s}: {count:6d} workouts")
 
 # ============================================================================
-# SECTION 3: EXTRACT FEATURES AND COMPUTE CORRELATIONS
+# SECTION 2: COMPUTE RAW DATA CORRELATIONS
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 3: COMPUTING CORRELATIONS ON RAW DATA")
+print("SECTION 2: RAW DATA CORRELATIONS")
 print("="*80)
 
-print("\nExtracting features from all valid workouts...")
-
-# Collect all timesteps from all workouts
-all_speed = []
-all_altitude = []
-all_hr = []
-
-for workout in tqdm(filtered_workouts, desc="Extracting features"):
-    speed = np.array(workout['speed'], dtype=float)
-    altitude = np.array(workout['altitude'], dtype=float)
-    hr = np.array(workout['heart_rate'], dtype=float)
-    
-    all_speed.extend(speed.tolist())
-    all_altitude.extend(altitude.tolist())
-    all_hr.extend(hr.tolist())
-
-# Convert to numpy arrays
-all_speed = np.array(all_speed)
-all_altitude = np.array(all_altitude)
-all_hr = np.array(all_hr)
-
-print(f"\n✓ Extracted {len(all_speed):,} total timesteps")
+print(f"\n✓ Analyzed {speed_hr_corr.n:,} total timesteps")
 
 # Compute statistics
 print("\nRaw data statistics:")
-print(f"  Speed:     mean={np.mean(all_speed):8.2f}, std={np.std(all_speed):8.2f}, "
-      f"min={np.min(all_speed):8.2f}, max={np.max(all_speed):8.2f}")
-print(f"  Altitude:  mean={np.mean(all_altitude):8.2f}, std={np.std(all_altitude):8.2f}, "
-      f"min={np.min(all_altitude):8.2f}, max={np.max(all_altitude):8.2f}")
-print(f"  Heart Rate:mean={np.mean(all_hr):8.2f}, std={np.std(all_hr):8.2f}, "
-      f"min={np.min(all_hr):8.2f}, max={np.max(all_hr):8.2f}")
+print(f"  Speed:     mean={speed_hr_corr.mean_x:8.2f}, std={speed_hr_corr.std(True):8.2f}, "
+      f"min={speed_hr_corr.min_x:8.2f}, max={speed_hr_corr.max_x:8.2f}")
+print(f"  Altitude:  mean={altitude_hr_corr.mean_x:8.2f}, std={altitude_hr_corr.std(True):8.2f}, "
+      f"min={altitude_hr_corr.min_x:8.2f}, max={altitude_hr_corr.max_x:8.2f}")
+print(f"  Heart Rate:mean={speed_hr_corr.mean_y:8.2f}, std={speed_hr_corr.std(False):8.2f}, "
+      f"min={speed_hr_corr.min_y:8.2f}, max={speed_hr_corr.max_y:8.2f}")
 
-# Compute correlation matrix
-print("\nComputing correlations...")
-corr_data = np.column_stack([all_speed, all_altitude, all_hr])
-corr_matrix_raw = np.corrcoef(corr_data.T)
+# Compute correlations
+corr_speed_hr = speed_hr_corr.correlation()
+corr_altitude_hr = altitude_hr_corr.correlation()
+corr_speed_altitude = speed_altitude_corr.correlation()
 
 print(f"\nRAW DATA CORRELATIONS:")
-print(f"  Speed    → Heart Rate: {corr_matrix_raw[0, 2]:.6f}")
-print(f"  Altitude → Heart Rate: {corr_matrix_raw[1, 2]:.6f}")
-print(f"  Speed    → Altitude:   {corr_matrix_raw[0, 1]:.6f}")
+print(f"  Speed    → Heart Rate: {corr_speed_hr:.6f}")
+print(f"  Altitude → Heart Rate: {corr_altitude_hr:.6f}")
+print(f"  Speed    → Altitude:   {corr_speed_altitude:.6f}")
+
+# Build correlation matrix for visualization
+corr_matrix_raw = np.array([
+    [1.0, corr_speed_altitude, corr_speed_hr],
+    [corr_speed_altitude, 1.0, corr_altitude_hr],
+    [corr_speed_hr, corr_altitude_hr, 1.0]
+])
 
 # ============================================================================
-# SECTION 4: COMPUTE CORRELATION ON PROCESSED DATA (FOR COMPARISON)
+# SECTION 3: COMPUTE CORRELATION ON PROCESSED DATA (FOR COMPARISON)
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 4: LOADING PROCESSED DATA FOR COMPARISON")
+print("SECTION 3: LOADING PROCESSED DATA FOR COMPARISON")
 print("="*80)
 
 import torch
@@ -248,10 +305,10 @@ print(f"  Altitude → Heart Rate: {corr_matrix_norm[1, 2]:.6f}")
 print(f"  Speed    → Altitude:   {corr_matrix_norm[0, 1]:.6f}")
 
 # ============================================================================
-# SECTION 5: COMPARISON AND VISUALIZATION
+# SECTION 4: COMPARISON AND VISUALIZATION
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 5: CORRELATION COMPARISON")
+print("SECTION 4: CORRELATION COMPARISON")
 print("="*80)
 
 # Summary comparison
@@ -264,6 +321,11 @@ print(f"{'Altitude → Heart Rate':<30} {corr_matrix_raw[1,2]:>12.6f} {corr_matr
 
 # Visualizations
 fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+
+# Convert scatter samples to numpy
+scatter_speed = np.array(scatter_samples['speed'])
+scatter_altitude = np.array(scatter_samples['altitude'])
+scatter_hr = np.array(scatter_samples['hr'])
 
 # Row 1: Raw data correlations
 # Correlation matrix - Raw
@@ -282,8 +344,8 @@ ax.set_title('Raw Data Correlations', fontsize=12, fontweight='bold')
 
 # Scatter: Speed vs HR - Raw
 ax = axes[0, 1]
-sample_indices = np.random.choice(len(all_speed), min(10000, len(all_speed)), replace=False)
-ax.scatter(all_speed[sample_indices], all_hr[sample_indices], alpha=0.3, s=1)
+sample_indices = np.random.choice(len(scatter_speed), min(10000, len(scatter_speed)), replace=False)
+ax.scatter(scatter_speed[sample_indices], scatter_hr[sample_indices], alpha=0.3, s=1)
 ax.set_xlabel('Speed (km/h)')
 ax.set_ylabel('Heart Rate (BPM)')
 ax.set_title(f'Raw: Speed vs HR (r={corr_matrix_raw[0,2]:.3f})', fontsize=12, fontweight='bold')
@@ -291,7 +353,7 @@ ax.grid(True, alpha=0.3)
 
 # Scatter: Altitude vs HR - Raw
 ax = axes[0, 2]
-ax.scatter(all_altitude[sample_indices], all_hr[sample_indices], alpha=0.3, s=1, color='green')
+ax.scatter(scatter_altitude[sample_indices], scatter_hr[sample_indices], alpha=0.3, s=1, color='green')
 ax.set_xlabel('Altitude (m)')
 ax.set_ylabel('Heart Rate (BPM)')
 ax.set_title(f'Raw: Altitude vs HR (r={corr_matrix_raw[1,2]:.3f})', fontsize=12, fontweight='bold')
@@ -335,61 +397,74 @@ plt.savefig(OUTPUT_DIR / "correlation_comparison_raw_vs_processed.png", dpi=150,
 print(f"\n✓ Saved: {OUTPUT_DIR / 'correlation_comparison_raw_vs_processed.png'}")
 plt.close()
 
+# Free memory
+del scatter_speed, scatter_altitude, scatter_hr, scatter_samples
+gc.collect()
+
 # ============================================================================
-# SECTION 6: TEMPORAL CORRELATION ANALYSIS (LAG ANALYSIS)
+# SECTION 5: TEMPORAL CORRELATION ANALYSIS (LAG ANALYSIS)
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 6: TEMPORAL CORRELATION ANALYSIS (LAG)")
+print("SECTION 5: TEMPORAL CORRELATION ANALYSIS (LAG)")
 print("="*80)
 
-print("\nAnalyzing temporal correlations (how speed affects HR at different time lags)...")
+print("\nAnalyzing temporal correlations (streaming through data again for lag analysis)...")
 
-# Sample a subset of workouts for lag analysis
-sample_workouts = np.random.choice(filtered_workouts, min(1000, len(filtered_workouts)), replace=False)
+# Stream through file again for lag analysis (memory-efficient)
+max_lag = 30
+lag_corrs_speed = [StreamingCorrelation() for _ in range(max_lag + 1)]
+lag_corrs_altitude = [StreamingCorrelation() for _ in range(max_lag + 1)]
 
-# Compute lag correlations
-max_lag = 30  # Check up to 30 timesteps ahead
-lag_corrs_speed = []
-lag_corrs_altitude = []
+# Sample workouts for lag analysis (to keep it fast)
+WORKOUT_SAMPLE_RATE = 0.2  # Use 20% of workouts
 
-for lag in tqdm(range(0, max_lag + 1), desc="Computing lag correlations"):
-    speed_vals = []
-    altitude_vals = []
-    hr_vals = []
-    
-    for workout in sample_workouts:
-        speed = np.array(workout['speed'], dtype=float)
-        altitude = np.array(workout['altitude'], dtype=float)
-        hr = np.array(workout['heart_rate'], dtype=float)
+with open(RAW_DATA_FILE, 'r') as f:
+    for line in tqdm(f, total=total_lines, desc="Lag analysis"):
+        workout = parse_workout(line.strip())
         
-        if len(speed) > lag:
-            speed_vals.extend(speed[:-lag if lag > 0 else None].tolist())
-            altitude_vals.extend(altitude[:-lag if lag > 0 else None].tolist())
-            hr_vals.extend(hr[lag:].tolist())
-    
-    if len(speed_vals) > 0:
-        corr_speed = np.corrcoef(speed_vals, hr_vals)[0, 1]
-        corr_altitude = np.corrcoef(altitude_vals, hr_vals)[0, 1]
-        lag_corrs_speed.append(corr_speed)
-        lag_corrs_altitude.append(corr_altitude)
-    else:
-        lag_corrs_speed.append(0)
-        lag_corrs_altitude.append(0)
+        if workout is None:
+            continue
+        
+        is_valid, _ = filter_workout(workout)
+        
+        if is_valid:
+            # Sample 20% of workouts to speed up
+            import random
+            if random.random() > WORKOUT_SAMPLE_RATE:
+                continue
+            
+            speed = np.array(workout['speed'], dtype=float)
+            altitude = np.array(workout['altitude'], dtype=float)
+            hr = np.array(workout['heart_rate'], dtype=float)
+            
+            # Compute lag correlations
+            for lag in range(max_lag + 1):
+                if len(speed) > lag:
+                    speed_vals = speed[:-lag if lag > 0 else None]
+                    altitude_vals = altitude[:-lag if lag > 0 else None]
+                    hr_vals = hr[lag:]
+                    
+                    lag_corrs_speed[lag].update(speed_vals, hr_vals)
+                    lag_corrs_altitude[lag].update(altitude_vals, hr_vals)
+
+# Extract correlation values
+lag_corrs_speed_vals = [corr.correlation() for corr in lag_corrs_speed]
+lag_corrs_altitude_vals = [corr.correlation() for corr in lag_corrs_altitude]
 
 # Find best lag
-best_lag_speed = np.argmax(lag_corrs_speed)
-best_lag_altitude = np.argmax(lag_corrs_altitude)
+best_lag_speed = int(np.argmax(lag_corrs_speed_vals))
+best_lag_altitude = int(np.argmax(lag_corrs_altitude_vals))
 
-print(f"\nLag analysis results:")
-print(f"  Speed    → HR: Best correlation {lag_corrs_speed[best_lag_speed]:.6f} at lag={best_lag_speed}")
-print(f"  Altitude → HR: Best correlation {lag_corrs_altitude[best_lag_altitude]:.6f} at lag={best_lag_altitude}")
+print(f"\nLag analysis results (sampled {WORKOUT_SAMPLE_RATE*100:.0f}% of workouts):")
+print(f"  Speed    → HR: Best correlation {lag_corrs_speed_vals[best_lag_speed]:.6f} at lag={best_lag_speed}")
+print(f"  Altitude → HR: Best correlation {lag_corrs_altitude_vals[best_lag_altitude]:.6f} at lag={best_lag_altitude}")
 
 # Visualize lag correlations
 fig, ax = plt.subplots(figsize=(12, 6))
-ax.plot(range(max_lag + 1), lag_corrs_speed, marker='o', label='Speed → HR', linewidth=2)
-ax.plot(range(max_lag + 1), lag_corrs_altitude, marker='s', label='Altitude → HR', linewidth=2)
-ax.axvline(best_lag_speed, color='blue', linestyle='--', alpha=0.5, label=f'Best Speed lag={best_lag_speed}')
-ax.axvline(best_lag_altitude, color='orange', linestyle='--', alpha=0.5, label=f'Best Altitude lag={best_lag_altitude}')
+ax.plot(range(max_lag + 1), lag_corrs_speed_vals, marker='o', label='Speed → HR', linewidth=2)
+ax.plot(range(max_lag + 1), lag_corrs_altitude_vals, marker='s', label='Altitude → HR', linewidth=2)
+ax.axvline(float(best_lag_speed), color='blue', linestyle='--', alpha=0.5, label=f'Best Speed lag={best_lag_speed}')
+ax.axvline(float(best_lag_altitude), color='orange', linestyle='--', alpha=0.5, label=f'Best Altitude lag={best_lag_altitude}')
 ax.set_xlabel('Time Lag (timesteps)', fontsize=12)
 ax.set_ylabel('Correlation Coefficient', fontsize=12)
 ax.set_title('Temporal Correlation: Feature vs Heart Rate at Different Time Lags', fontsize=14, fontweight='bold')
@@ -401,10 +476,10 @@ print(f"✓ Saved: {OUTPUT_DIR / 'temporal_lag_correlation.png'}")
 plt.close()
 
 # ============================================================================
-# SECTION 7: GENERATE SUMMARY REPORT
+# SECTION 6: GENERATE SUMMARY REPORT
 # ============================================================================
 print("\n" + "="*80)
-print("SECTION 7: GENERATING SUMMARY REPORT")
+print("SECTION 6: GENERATING SUMMARY REPORT")
 print("="*80)
 
 report = []
@@ -412,9 +487,10 @@ report.append("# RAW vs PROCESSED DATA - CORRELATION ANALYSIS\n\n")
 report.append(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
 report.append("## Summary\n\n")
-report.append(f"- **Raw workouts analyzed:** {len(filtered_workouts):,}\n")
-report.append(f"- **Total timesteps (raw):** {len(all_speed):,}\n")
-report.append(f"- **Processed timesteps:** {len(train_speed):,}\n\n")
+report.append(f"- **Raw workouts analyzed:** {valid_count:,}\n")
+report.append(f"- **Total timesteps (raw):** {speed_hr_corr.n:,}\n")
+report.append(f"- **Processed timesteps:** {len(train_speed):,}\n")
+report.append(f"- **Analysis method:** Streaming (low RAM usage)\n\n")
 
 report.append("## Correlation Comparison\n\n")
 report.append("| Feature Pair | Raw Data | Processed Data | Difference |\n")
@@ -441,8 +517,8 @@ if corr_matrix_raw[0,2] < 0.3:
     report.append("This confirms that the weak correlation is **inherent to the data**, not caused by preprocessing.\n\n")
 
 report.append("## Temporal Lag Analysis\n\n")
-report.append(f"- **Best Speed lag:** {best_lag_speed} timesteps (correlation: {lag_corrs_speed[best_lag_speed]:.6f})\n")
-report.append(f"- **Best Altitude lag:** {best_lag_altitude} timesteps (correlation: {lag_corrs_altitude[best_lag_altitude]:.6f})\n\n")
+report.append(f"- **Best Speed lag:** {best_lag_speed} timesteps (correlation: {lag_corrs_speed_vals[best_lag_speed]:.6f})\n")
+report.append(f"- **Best Altitude lag:** {best_lag_altitude} timesteps (correlation: {lag_corrs_altitude_vals[best_lag_altitude]:.6f})\n\n")
 
 if best_lag_speed > 0:
     report.append(f"💡 **Insight:** Heart rate responds to speed changes with a **{best_lag_speed}-timestep delay**. "

@@ -1,0 +1,16 @@
+# This folder contains Apple Watch data processing scripts
+
+## What's tracked in git:
+- Python scripts (*.py)
+- Documentation (*.md)
+- Archives/ folder
+
+## What's ignored (too heavy):
+- apple_health_export/ (1.5 GB - raw Apple Health XML + GPX files)
+- output/ (workout metadata JSON files)
+- data_cache/ (8.3 MB - sample aligned CSVs)
+- plots/ (4.3 MB - validation plots)
+- processed_workouts/ (generated CSV files)
+- *.log files
+
+Total ignored: ~1.51 GB

@@ -256,3 +256,101 @@ All visualizations available in `EDA/EDA_Generation/`:
 - `padding_analysis.png` - Padding statistics by split
 - `DATA_QUALITY_REPORT.md` - Detailed statistical report
 - `FINDINGS_SUMMARY.md` - This document
+
+================================================================================
+RAW DATA CORRELATION ANALYSIS (STREAMING)
+================================================================================
+
+Timestamp: 2025-11-25 10:17:13
+Analyzing: DATA/endomondoHR_proper.json
+
+================================================================================
+SECTION 1: STREAMING THROUGH RAW DATA
+================================================================================
+
+Initializing streaming correlation computation...
+Counting total workouts...
+Total workouts in file: 167,783
+
+Streaming through data and computing correlations...
+Processing: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 167783/167783 [15:03<00:00, 185.64it/s]
+
+✓ 11442 workouts passed all filters
+✗ 156341 workouts filtered out
+
+Filter breakdown:
+  not_run                  :  97192 workouts
+  missing_speed            :  59059 workouts
+  hr_out_of_range          :     90 workouts
+
+================================================================================
+SECTION 2: RAW DATA CORRELATIONS
+================================================================================
+
+✓ Analyzed 5,721,000 total timesteps
+
+Raw data statistics:
+  Speed:     mean=   11.52, std=    2.72, min=    0.00, max=  233.46
+  Altitude:  mean=  150.24, std=  314.14, min= -500.00, max= 7325.40
+  Heart Rate:mean=  149.07, std=   17.64, min=   40.00, max=  220.00
+
+RAW DATA CORRELATIONS:
+  Speed    → Heart Rate: 0.212884
+  Altitude → Heart Rate: 0.045590
+  Speed    → Altitude:   -0.038368
+
+================================================================================
+SECTION 3: LOADING PROCESSED DATA FOR COMPARISON
+================================================================================
+
+✓ Loaded 6,927,500 timesteps from processed training data
+
+PROCESSED DATA CORRELATIONS (denormalized):
+  Speed    → Heart Rate: 0.253977
+  Altitude → Heart Rate: 0.022200
+  Speed    → Altitude:   0.008822
+
+PROCESSED DATA CORRELATIONS (normalized):
+  Speed    → Heart Rate: 0.253977
+  Altitude → Heart Rate: 0.022200
+  Speed    → Altitude:   0.008822
+
+================================================================================
+SECTION 4: CORRELATION COMPARISON
+================================================================================
+
+Correlation                        Raw Data    Processed   Difference
+----------------------------------------------------------------------
+Speed → Heart Rate                 0.212884     0.253977     0.041093
+Altitude → Heart Rate              0.045590     0.022200    -0.023390
+
+✓ Saved: EDA/EDA_Generation/correlation_comparison_raw_vs_processed.png
+
+================================================================================
+SECTION 5: TEMPORAL CORRELATION ANALYSIS (LAG)
+================================================================================
+
+Analyzing temporal correlations (streaming through data again for lag analysis)...
+Lag analysis: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████| 167783/167783 [16:04<00:00, 174.05it/s]
+
+Lag analysis results (sampled 20% of workouts):
+  Speed    → HR: Best correlation 0.195785 at lag=2
+  Altitude → HR: Best correlation 0.079828 at lag=30
+✓ Saved: EDA/EDA_Generation/temporal_lag_correlation.png
+
+================================================================================
+SECTION 6: GENERATING SUMMARY REPORT
+================================================================================
+
+✓ Report saved: EDA/EDA_Generation/RAW_VS_PROCESSED_CORRELATION.md
+
+================================================================================
+ANALYSIS COMPLETE
+================================================================================
+
+Generated files:
+  - correlation_comparison_raw_vs_processed.png
+  - temporal_lag_correlation.png
+  - RAW_VS_PROCESSED_CORRELATION.md
+
+================================================================================
