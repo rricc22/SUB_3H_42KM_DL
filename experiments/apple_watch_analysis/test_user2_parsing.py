@@ -18,7 +18,7 @@ def main():
     print("="*80)
     
     # Define paths
-    base_dir = Path("/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/DATA/apple_health_export_User2")
+    base_dir = Path("/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/DATA/CUSTOM_DATA/apple_health_export_User2")
     export_xml = base_dir / "export.xml"
     
     print(f"\n1. Checking paths...")
