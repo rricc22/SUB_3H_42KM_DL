@@ -35,3 +35,12 @@ endomondoMeta.json
 DATA/processed/*.pt
 DATA/temp/
 checkpoints/*.pt
+
+# Apple Watch / Apple Health data (1.5 GB - too heavy for git)
+experiments/apple_health_export/
+experiments/apple_watch_analysis/output/
+experiments/apple_watch_analysis/data_cache/
+experiments/apple_watch_analysis/plots/
+experiments/apple_watch_analysis/processed_workouts/
+experiments/apple_watch_analysis/processing.log
+experiments/apple_watch_analysis/*.log
