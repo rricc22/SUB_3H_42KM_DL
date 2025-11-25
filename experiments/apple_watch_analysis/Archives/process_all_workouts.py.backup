@@ -181,16 +181,6 @@ def process_single_workout(workout_data, parser, base_dir, output_dir):
         dict with processing results
     """
     workout_id = workout_data['workout_id']
-    csv_path = output_dir / f"{workout_id}_processed.csv"
-    
-    # Check if CSV already exists - SKIP if it does
-    if csv_path.exists():
-        return {
-            'workout_id': workout_id,
-            'success': True,
-            'skipped': True,
-            'reason': 'CSV already exists'
-        }
     
     try:
         # Parse GPX file
@@ -247,6 +237,9 @@ def process_single_workout(workout_data, parser, base_dir, output_dir):
         aligned_df['workout_id'] = workout_id
         aligned_df['date'] = start_date.date()
         
+        # Save to CSV
+        csv_path = output_dir / f"{workout_id}_processed.csv"
+        
         # Select relevant columns
         output_columns = [
             'workout_id',
@@ -273,7 +266,6 @@ def process_single_workout(workout_data, parser, base_dir, output_dir):
         return {
             'workout_id': workout_id,
             'success': True,
-            'skipped': False,
             'date': start_date.strftime('%Y-%m-%d'),
             'aligned_points': len(aligned_df),
             'duration_min': duration,
@@ -316,10 +308,6 @@ def main():
     workouts_with_gpx = [w for w in workouts_data if w['gpx_file_path']]
     print(f"   ✓ {len(workouts_with_gpx)} workouts have GPX files")
     
-    # Check existing CSV files
-    existing_csvs = len(list(output_dir.glob("*_processed.csv")))
-    print(f"   ✓ {existing_csvs} CSV files already exist (will be skipped)")
-    
     # Initialize parser
     print("\n2. Initializing Apple Health parser...")
     parser = AppleHealthParser(str(export_xml), str(base_dir))
@@ -327,13 +315,12 @@ def main():
     
     # Process all workouts
     print(f"\n3. Processing {len(workouts_with_gpx)} workouts...")
-    print("   (Existing CSV files will be skipped)")
+    print("   (This may take 30-60 minutes)")
     print("=" * 80)
     
     results = []
     successful = 0
     failed = 0
-    skipped = 0
     
     # Process with progress bar
     for workout_data in tqdm(workouts_with_gpx, desc="Processing workouts", unit="workout"):
@@ -341,10 +328,7 @@ def main():
         results.append(result)
         
         if result['success']:
-            if result.get('skipped', False):
-                skipped += 1
-            else:
-                successful += 1
+            successful += 1
         else:
             failed += 1
     
@@ -353,21 +337,19 @@ def main():
     print("PROCESSING SUMMARY")
     print("=" * 80)
     
-    successful_results = [r for r in results if r['success'] and not r.get('skipped', False)]
+    successful_results = [r for r in results if r['success']]
     
     print(f"\nTotal workouts: {len(workouts_with_gpx)}")
-    print(f"Newly processed: {successful} ({100*successful/len(workouts_with_gpx):.1f}%)")
-    print(f"Skipped (already existed): {skipped} ({100*skipped/len(workouts_with_gpx):.1f}%)")
+    print(f"Successful: {successful} ({100*successful/len(workouts_with_gpx):.1f}%)")
     print(f"Failed: {failed} ({100*failed/len(workouts_with_gpx):.1f}%)")
-    print(f"Total successful: {successful + skipped} ({100*(successful+skipped)/len(workouts_with_gpx):.1f}%)")
     
     if successful_results:
-        # Calculate aggregate statistics for newly processed workouts
+        # Calculate aggregate statistics
         total_distance = sum(r['distance_km'] for r in successful_results)
         total_duration = sum(r['duration_min'] for r in successful_results)
         total_points = sum(r['aligned_points'] for r in successful_results)
         
-        print(f"\n--- Newly Processed Statistics ---")
+        print(f"\n--- Aggregate Statistics ---")
         print(f"Total distance: {total_distance:.1f} km")
         print(f"Total duration: {total_duration/60:.1f} hours")
         print(f"Total aligned data points: {total_points:,}")
@@ -379,7 +361,7 @@ def main():
             q = r.get('quality', 'UNKNOWN')
             quality_counts[q] = quality_counts.get(q, 0) + 1
         
-        print(f"\n--- Heart Rate Quality (Newly Processed) ---")
+        print(f"\n--- Heart Rate Quality ---")
         for quality in ['GOOD', 'MEDIUM', 'SPARSE']:
             count = quality_counts.get(quality, 0)
             pct = 100 * count / successful if successful > 0 else 0
@@ -391,7 +373,7 @@ def main():
             year = r['date'][:4]
             years[year] = years.get(year, 0) + 1
         
-        print(f"\n--- Temporal Distribution (Newly Processed) ---")
+        print(f"\n--- Temporal Distribution ---")
         for year in sorted(years.keys()):
             print(f"{year}: {years[year]:3d} workouts")
     

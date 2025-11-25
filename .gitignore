@@ -44,3 +44,18 @@ experiments/apple_watch_analysis/plots/
 experiments/apple_watch_analysis/processed_workouts/
 experiments/apple_watch_analysis/processing.log
 experiments/apple_watch_analysis/*.log
+
+# Apple Health XML exports and GPX routes (heavy)
+DATA/apple_health_export_User2/
+DATA/apple_health_User3/
+DATA/**/*.xml
+DATA/**/workout-routes/
+
+# Model checkpoints and training outputs (heavy)
+checkpoints/
+results/
+LOGS/
+
+# EDA outputs
+EDA/EDA_Generation/
+EDA/EDA_generation_from_proccessed_HR/
