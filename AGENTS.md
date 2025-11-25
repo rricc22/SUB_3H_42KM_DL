@@ -8,10 +8,12 @@ jupyter notebook Preprocessing/verify_preprocessing.ipynb  # Verify preprocessin
 
 # Model training
 python3 Model/train.py --model lstm --epochs 100 --batch_size 32          # Train basic LSTM
+python3 Model/train.py --model gru --epochs 100 --batch_size 32           # Train basic GRU
 python3 Model/train.py --model lstm_embeddings --epochs 100 --batch_size 32  # Train LSTM with user embeddings
 
 # Test models (without training)
 python3 Model/LSTM.py                             # Test basic LSTM architecture
+python3 Model/GRU.py                              # Test basic GRU architecture
 python3 Model/LSTM_with_embeddings.py             # Test LSTM with embeddings architecture
 
 # Legacy EDA (deprecated - was for fraud detection)

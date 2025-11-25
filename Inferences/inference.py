@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Inference script for heart rate prediction models.
-Supports LSTM, LSTM with embeddings, and Lag-Llama models.
+Supports LSTM, GRU, LSTM with embeddings, and Lag-Llama models.
 """
 
 import torch
@@ -17,6 +17,7 @@ sys.path.insert(0, str(project_root))
 
 # Import models using package-style (cleaner and more maintainable)
 from Model.LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
+from Model.GRU import HeartRateGRU, WorkoutDataset as GRUDataset
 from Model.LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
 from Model.LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
 
@@ -32,7 +33,7 @@ def load_model_and_args(checkpoint_path, device='cpu'):
     Returns:
         model: Loaded model in eval mode
         args: Training arguments
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', or 'lag_llama'
     """
     print(f"Loading checkpoint from {checkpoint_path}...")
     checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
@@ -62,6 +63,14 @@ def load_model_and_args(checkpoint_path, device='cpu'):
     # Create model based on type
     if model_type == 'lstm':
         model = HeartRateLSTM(
+            input_size=3,  # speed, altitude, gender
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            dropout=dropout,
+            bidirectional=bidirectional
+        )
+    elif model_type == 'gru':
+        model = HeartRateGRU(
             input_size=3,  # speed, altitude, gender
             hidden_size=hidden_size,
             num_layers=num_layers,

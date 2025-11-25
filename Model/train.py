@@ -2,10 +2,11 @@
 """
 Generic training script for heart rate prediction models.
 
-Supports training both basic LSTM and LSTM with user embeddings.
+Supports training: LSTM, GRU, LSTM with user embeddings, LagLlama, and PatchTST.
 
 Usage:
     python3 Model/train.py --model lstm --epochs 100 --batch_size 32
+    python3 Model/train.py --model gru --epochs 100 --batch_size 32
     python3 Model/train.py --model lstm_embeddings --epochs 100 --batch_size 32
 """
 
@@ -23,17 +24,18 @@ import matplotlib.pyplot as plt
 # Import model classes
 from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
+from GRU import HeartRateGRU, WorkoutDataset as GRUDataset
 from LagLlama_HR import LagLlamaHRPredictor, WorkoutDataset as LagLlamaDataset
 from PatchTST_HR import PatchTSTHeartRatePredictor, load_data_hf
 
 
 def parse_args():
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Train LSTM model for heart rate prediction')
+    parser = argparse.ArgumentParser(description='Train heart rate prediction models (LSTM/GRU/etc.)')
     
     # Model selection
-    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings', 'lag_llama', 'patchtst'],
-                        help='Model type: lstm, lstm_embeddings, lag_llama, or patchtst')
+    parser.add_argument('--model', type=str, default='lstm', choices=['lstm', 'lstm_embeddings', 'gru', 'lag_llama', 'patchtst'],
+                        help='Model type: lstm, lstm_embeddings, gru, lag_llama, or patchtst')
     
     # Training hyperparameters
     parser.add_argument('--epochs', type=int, default=100,
@@ -47,13 +49,13 @@ def parse_args():
     
     # Model architecture
     parser.add_argument('--hidden_size', type=int, default=64,
-                        help='LSTM hidden size (default: 64)')
+                        help='LSTM/GRU hidden size (default: 64)')
     parser.add_argument('--num_layers', type=int, default=2,
-                        help='Number of LSTM layers (default: 2)')
+                        help='Number of LSTM/GRU layers (default: 2)')
     parser.add_argument('--dropout', type=float, default=0.2,
                         help='Dropout probability (default: 0.2)')
     parser.add_argument('--bidirectional', action='store_true',
-                        help='Use bidirectional LSTM')
+                        help='Use bidirectional LSTM/GRU')
     parser.add_argument('--embedding_dim', type=int, default=16,
                         help='User embedding dimension (for lstm_embeddings, default: 16)')
     
@@ -76,7 +78,7 @@ def load_data(data_dir, model_type, batch_size):
     
     Args:
         data_dir: Directory containing train.pt, val.pt, test.pt
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', etc.
         batch_size: Batch size for DataLoader
     
     Returns:
@@ -94,7 +96,7 @@ def load_data(data_dir, model_type, batch_size):
         metadata = json.load(f)
     
     # Create datasets
-    if model_type == 'lstm':
+    if model_type == 'lstm' or model_type == 'gru':
         train_dataset = BasicDataset(train_data)
         val_dataset = BasicDataset(val_data)
         test_dataset = BasicDataset(test_data)
@@ -134,7 +136,7 @@ def create_model(model_type, metadata, args):
     Create model based on model_type.
     
     Args:
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', etc.
         metadata: Dataset metadata
         args: Command-line arguments
     
@@ -145,6 +147,14 @@ def create_model(model_type, metadata, args):
     
     if model_type == 'lstm':
         model = HeartRateLSTM(
+            input_size=3,
+            hidden_size=args.hidden_size,
+            num_layers=args.num_layers,
+            dropout=args.dropout,
+            bidirectional=args.bidirectional
+        )
+    elif model_type == 'gru':
+        model = HeartRateGRU(
             input_size=3,
             hidden_size=args.hidden_size,
             num_layers=args.num_layers,
@@ -190,7 +200,7 @@ def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
         criterion: Loss function
         optimizer: Optimizer
         device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', etc.
     
     Returns:
         avg_loss: Average training loss
@@ -202,7 +212,7 @@ def train_epoch(model, dataloader, criterion, optimizer, device, model_type):
     n_batches = 0
     
     for batch in dataloader:
-        if model_type == 'lstm':
+        if model_type == 'lstm' or model_type == 'gru':
             speed, altitude, gender, heart_rate, original_lengths = batch
             speed = speed.to(device)
             altitude = altitude.to(device)
@@ -252,7 +262,7 @@ def validate(model, dataloader, criterion, device, model_type):
         dataloader: Validation DataLoader
         criterion: Loss function
         device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', etc.
     
     Returns:
         avg_loss: Average validation loss
@@ -265,7 +275,7 @@ def validate(model, dataloader, criterion, device, model_type):
     
     with torch.no_grad():
         for batch in dataloader:
-            if model_type == 'lstm':
+            if model_type == 'lstm' or model_type == 'gru':
                 speed, altitude, gender, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -400,7 +410,7 @@ def evaluate(model, test_loader, device, model_type):
         model: PyTorch model
         test_loader: Test DataLoader
         device: Device (cuda or cpu)
-        model_type: 'lstm' or 'lstm_embeddings'
+        model_type: 'lstm', 'gru', 'lstm_embeddings', etc.
     
     Returns:
         metrics: Dictionary with test metrics
@@ -415,7 +425,7 @@ def evaluate(model, test_loader, device, model_type):
     
     with torch.no_grad():
         for batch in test_loader:
-            if model_type == 'lstm':
+            if model_type == 'lstm' or model_type == 'gru':
                 speed, altitude, gender, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
