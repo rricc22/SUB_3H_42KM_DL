@@ -120,8 +120,10 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
     speed_list = []
     altitude_list = []
     hr_list = []
+    timestamp_list = []
     userId_list = []
     gender_list = []
+    original_length_list = []
     
     failed = 0
     
@@ -130,6 +132,10 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
         speed_seq = parse_sequence(row['speed_kmh'])
         altitude_seq = parse_sequence(row['altitude'])
         hr_seq = parse_sequence(row['heart_rate'])
+        timestamp_seq = parse_sequence(row['timestamps'])
+        
+        # Track original length before resampling
+        original_length = len(speed_seq)
         
         # Validate sequences
         if len(speed_seq) < 10 or len(altitude_seq) < 10 or len(hr_seq) < 10:
@@ -140,18 +146,22 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
         speed_resampled = resample_to_fixed_length(speed_seq)
         altitude_resampled = resample_to_fixed_length(altitude_seq)
         hr_resampled = resample_to_fixed_length(hr_seq)
+        timestamp_resampled = resample_to_fixed_length(timestamp_seq)
         
         # Handle NaN/Inf (should be rare after Step 1 filtering)
         speed_resampled = np.nan_to_num(speed_resampled, nan=0.0, posinf=0.0, neginf=0.0)
         altitude_resampled = np.nan_to_num(altitude_resampled, nan=0.0, posinf=0.0, neginf=0.0)
         hr_resampled = np.nan_to_num(hr_resampled, nan=0.0, posinf=0.0, neginf=0.0)
+        timestamp_resampled = np.nan_to_num(timestamp_resampled, nan=0.0, posinf=0.0, neginf=0.0)
         
         # Append to lists
         speed_list.append(speed_resampled)
         altitude_list.append(altitude_resampled)
         hr_list.append(hr_resampled)
+        timestamp_list.append(timestamp_resampled)
         userId_list.append(row['userId'])
         gender_list.append(row['gender'])
+        original_length_list.append(original_length)
     
     if len(speed_list) == 0:
         raise ValueError(f"No valid sequences in {split_name} split! Failed: {failed}")
@@ -160,8 +170,10 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
     speed_array = np.stack(speed_list, axis=0)
     altitude_array = np.stack(altitude_list, axis=0)
     hr_array = np.stack(hr_list, axis=0)
+    timestamp_array = np.stack(timestamp_list, axis=0)
     userId_array = np.array(userId_list, dtype=np.int64)
-    gender_array = np.array(gender_list, dtype=np.int64)
+    gender_array = np.array(gender_list, dtype=np.float32)  # Changed to float32
+    original_length_array = np.array(original_length_list, dtype=np.int64)
     
     print(f"  ✓ Loaded {len(speed_list)} sequences ({failed} failed)")
     
@@ -189,13 +201,17 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
     print(f"    Speed: range=[{speed_normalized.min():.2f}, {speed_normalized.max():.2f}]")
     print(f"    Altitude: range=[{altitude_normalized.min():.2f}, {altitude_normalized.max():.2f}]")
     print(f"    HR: range=[{hr_array.min():.0f}, {hr_array.max():.0f}] bpm (not normalized)")
+    print(f"    Timestamps: range=[{timestamp_array.min():.0f}, {timestamp_array.max():.0f}]")
+    print(f"    Original lengths: range=[{original_length_array.min()}, {original_length_array.max()}]")
     
     return {
         'speed': speed_normalized.astype(np.float32),
         'altitude': altitude_normalized.astype(np.float32),
-        'heart_rate': hr_array.astype(np.float32),
+        'heart_rate': hr_array.astype(np.float32),  # Keep unnormalized (raw BPM)
+        'timestamps': timestamp_array.astype(np.float32),
         'userId': userId_array,
         'gender': gender_array,
+        'original_lengths': original_length_array,
         'scaler_speed': scaler_speed,
         'scaler_altitude': scaler_altitude,
         'n_sequences': len(speed_list),
@@ -203,23 +219,27 @@ def process_split(df, split_name, scaler_speed=None, scaler_altitude=None):
     }
 
 
-def save_pytorch_format(train_data, val_data, test_data, output_dir):
+def save_pytorch_format(train_data, val_data, test_data, output_dir, df):
     """
     Save datasets in PyTorch format (compatible with Model/train.py)
     
     Args:
         train_data, val_data, test_data: processed data dicts
         output_dir: output directory path
+        df: original DataFrame (for metadata)
     """
     print(f"\nSaving PyTorch datasets to: {output_dir}")
     
     for split_name, data in [('train', train_data), ('val', val_data), ('test', test_data)]:
+        # Convert to tensors and add 3rd dimension: [N, 500] → [N, 500, 1]
         dataset = {
-            'speed': torch.from_numpy(data['speed']),           # (N, 500)
-            'altitude': torch.from_numpy(data['altitude']),     # (N, 500)
-            'heart_rate': torch.from_numpy(data['heart_rate']), # (N, 500)
-            'userId': torch.from_numpy(data['userId']),         # (N,)
-            'gender': torch.from_numpy(data['gender']),         # (N,)
+            'speed': torch.from_numpy(data['speed']).unsqueeze(-1),           # [N, 500, 1]
+            'altitude': torch.from_numpy(data['altitude']).unsqueeze(-1),     # [N, 500, 1]
+            'heart_rate': torch.from_numpy(data['heart_rate']).unsqueeze(-1), # [N, 500, 1]
+            'timestamps': torch.from_numpy(data['timestamps']).unsqueeze(-1), # [N, 500, 1]
+            'userId': torch.from_numpy(data['userId']).unsqueeze(-1),         # [N, 1]
+            'gender': torch.from_numpy(data['gender']).unsqueeze(-1),         # [N, 1]
+            'original_lengths': torch.from_numpy(data['original_lengths']).unsqueeze(-1), # [N, 1]
         }
         
         output_path = output_dir / f"{split_name}.pt"
@@ -242,6 +262,25 @@ def save_pytorch_format(train_data, val_data, test_data, output_dir):
         json.dump(scaler_info, f, indent=2)
     
     print(f"  ✓ Saved scaler_params.json")
+    
+    # Save metadata
+    metadata = {
+        'sequence_length': SEQUENCE_LENGTH,
+        'num_train': train_data['n_sequences'],
+        'num_val': val_data['n_sequences'],
+        'num_test': test_data['n_sequences'],
+        'random_seed': RANDOM_SEED,
+        'version': 'apple_watch_v2',
+        'source': 'apple_watch_clean',
+        'num_users': int(df['userId'].nunique()),
+        'formats': ['pt']
+    }
+    
+    metadata_path = output_dir / 'metadata.json'
+    with open(metadata_path, 'w') as f:
+        json.dump(metadata, f, indent=2)
+    
+    print(f"  ✓ Saved metadata.json")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -317,7 +356,7 @@ def main():
     print(f"\n{'='*80}")
     print("6. SAVING PYTORCH DATASETS")
     print(f"{'='*80}")
-    save_pytorch_format(train_data, val_data, test_data, OUTPUT_DIR)
+    save_pytorch_format(train_data, val_data, test_data, OUTPUT_DIR, df)
     
     # Final summary
     print(f"\n{'='*80}")
@@ -335,6 +374,7 @@ def main():
     print(f"  • {OUTPUT_DIR / 'val.pt'}")
     print(f"  • {OUTPUT_DIR / 'test.pt'}")
     print(f"  • {OUTPUT_DIR / 'scaler_params.json'}")
+    print(f"  • {OUTPUT_DIR / 'metadata.json'}")
     
     print(f"\n{'='*80}")
     print("NEXT STEPS:")

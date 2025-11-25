@@ -19,6 +19,7 @@ from pathlib import Path
 from datetime import datetime
 from tqdm import tqdm
 import json
+import ast
 from scipy.interpolate import interp1d
 
 # Add parser to path
@@ -362,15 +363,34 @@ def process_user1_from_csv(user_config):
 
 
 def process_user2_from_scratch(user_config):
-    """Process User2 from XML/GPX files (SLOW)"""
+    """Process User2 from XML/GPX files (SLOW) - saves CSVs for future fast loading"""
     user_name = 'User2'
     user_id = user_config['userId']
     gender = user_config['gender']
     base_dir = user_config['base_dir']
     
+    # Create User2 processed workouts directory
+    user2_processed_dir = Path(__file__).parent / 'processed_workouts_user2'
+    user2_processed_dir.mkdir(exist_ok=True)
+    
     print(f"\n{'='*80}")
     print(f"Processing {user_name} (FROM XML/GPX - SLOW)")
     print(f"{'='*80}")
+    
+    # Check if User2 CSVs already exist
+    existing_csvs = list(user2_processed_dir.glob('workout_*_processed.csv'))
+    if len(existing_csvs) > 0:
+        print(f"✓ Found {len(existing_csvs)} existing User2 CSV files - LOADING FROM DISK (FAST)")
+        workouts = []
+        for csv_path in tqdm(existing_csvs, desc=f"  {user_name}"):
+            workout_dict = load_processed_workout(csv_path, user_name, user_id, gender)
+            if workout_dict is not None:
+                workouts.append(workout_dict)
+        print(f"✓ Loaded {len(workouts)} valid workouts from existing CSVs")
+        return workouts
+    
+    # If no CSVs exist, process from scratch
+    print(f"No existing CSV files found - processing from scratch (will save for future runs)")
     
     if not base_dir.exists():
         print(f"⚠️  Warning: {user_name} data not found at {base_dir}")
@@ -391,13 +411,42 @@ def process_user2_from_scratch(user_config):
     
     # Process each workout
     print(f"\n2. Processing workouts (filtering for GOOD quality)...")
+    print(f"   Saving processed CSVs to: {user2_processed_dir}")
+    
     valid_workouts = []
+    saved_count = 0
+    
     for workout_data in tqdm(workouts_with_gpx, desc=f"  {user_name}"):
         result = process_workout_from_scratch(workout_data, parser, base_dir, user_name, user_id, gender)
         if result is not None:
             valid_workouts.append(result)
+            
+            # Save this workout as CSV for future fast loading
+            workout_id = result['workout_id']
+            csv_filename = f"{workout_id}_processed.csv"
+            csv_path = user2_processed_dir / csv_filename
+            
+            # Create DataFrame for this single workout
+            # Convert sequences back to lists
+            speed_list = ast.literal_eval(result['speed_kmh'])
+            altitude_list = ast.literal_eval(result['altitude'])
+            hr_list = ast.literal_eval(result['heart_rate'])
+            
+            # Create per-point DataFrame
+            workout_df = pd.DataFrame({
+                'workout_id': [workout_id] * len(speed_list),
+                'date': [result['date']] * len(speed_list),
+                'speed_kmh': speed_list,
+                'elevation': altitude_list,
+                'heart_rate': hr_list
+            })
+            
+            # Save to CSV
+            workout_df.to_csv(csv_path, index=False)
+            saved_count += 1
     
     print(f"\n✓ Processed {len(valid_workouts)} GOOD quality workouts (filtered from {len(workouts_with_gpx)})")
+    print(f"✓ Saved {saved_count} CSV files to {user2_processed_dir}")
     
     return valid_workouts
 
@@ -431,8 +480,8 @@ def main():
     
     df = pd.DataFrame(all_workouts)
     
-    # Sort by date
-    df['date'] = pd.to_datetime(df['date'])
+    # Sort by date (handle mixed formats from User1 CSV and User2 XML)
+    df['date'] = pd.to_datetime(df['date'], format='mixed')
     df = df.sort_values('date').reset_index(drop=True)
     
     # Summary statistics
