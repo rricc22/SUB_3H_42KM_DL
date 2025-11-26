@@ -16,6 +16,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from LSTM import HeartRateLSTM, WorkoutDataset as BasicDataset
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings, WorkoutDataset as EmbeddingDataset
+from GRU import HeartRateGRU
 
 
 def load_model(checkpoint_path, device='cpu'):
@@ -47,16 +48,26 @@ def load_model(checkpoint_path, device='cpu'):
             dropout=dropout,
             bidirectional=bidirectional
         )
-    else:
-        model = HeartRateLSTMWithEmbeddings(
+    elif model_type == 'gru':
+        model = HeartRateGRU(
             input_size=3,
             hidden_size=hidden_size,
             num_layers=num_layers,
             dropout=dropout,
-            embedding_dim=embedding_dim,
-            num_users=checkpoint.get('num_users', 100),
             bidirectional=bidirectional
         )
+    elif model_type == 'lstm_embeddings':
+        model = HeartRateLSTMWithEmbeddings(
+            num_users=checkpoint.get('num_users', 100),
+            embedding_dim=embedding_dim,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            dropout=dropout,
+            bidirectional=bidirectional
+        )
+    else:
+        # Default fallback for unknown types
+        raise ValueError(f"Unknown model type: {model_type}. Supported: 'lstm', 'gru', 'lstm_embeddings'")
     
     model.load_state_dict(checkpoint['model_state_dict'])
     model = model.to(device)
@@ -79,7 +90,7 @@ def evaluate(model, data_loader, model_type, device):
     model.eval()
     with torch.no_grad():
         for batch in data_loader:
-            if model_type == 'lstm':
+            if model_type in ['lstm', 'gru']:
                 speed, altitude, gender, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -88,7 +99,7 @@ def evaluate(model, data_loader, model_type, device):
                 original_lengths = original_lengths.to(device)
                 
                 predictions = model(speed, altitude, gender, original_lengths)
-            else:
+            else:  # lstm_embeddings
                 speed, altitude, gender, userId, heart_rate, original_lengths = batch
                 speed = speed.to(device)
                 altitude = altitude.to(device)
@@ -338,9 +349,9 @@ def main():
     print(f"\nLoading test data...")
     data = torch.load(args.data, weights_only=False)
     
-    if model_type == 'lstm':
+    if model_type in ['lstm', 'gru']:
         dataset = BasicDataset(data)
-    else:
+    else:  # lstm_embeddings
         dataset = EmbeddingDataset(data)
     
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
