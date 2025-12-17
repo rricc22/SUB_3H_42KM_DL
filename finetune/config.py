@@ -44,7 +44,7 @@ STAGE2_CONFIG = {
     'learning_rate': 1e-4,       # Lower LR for more layers
     'batch_size': 32,            # Same batch size
     'epochs': 50,                # Maximum epochs
-    'patience': 10,              # Early stopping patience
+    'patience': 40,              # Early stopping patience
     
     # Regularization
     'weight_decay': 1e-4,        # L2 regularization
