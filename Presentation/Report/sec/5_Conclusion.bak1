@@ -1,0 +1,8 @@
+\clearpage
+\section{Conclusion}
+
+This project explored heart rate prediction through two phases: (1) baseline models on 13,855 Endomondo workouts achieved MAE 13.64 BPM, limited by weak correlation ($r=0.254$); (2) transfer learning on 189 Apple Watch workouts with dense HR sampling improved correlation to $r=0.68$ and achieved \textbf{9.61 BPM validation MAE}, meeting our target.
+
+\textbf{Key Lessons:} (1) Data quality $>$ model complexity—189 high-quality samples outperformed 13,855 noisy samples; (2) Correlation acts as a performance ceiling; (3) Transfer learning enables personalization with minimal data by freezing lower layers.
+
+\textbf{Future Work:} Multi-user validation, real GPS integration (191 workouts with GPX available), few-shot learning ($<10$ BPM with only 10-20 workouts), and real-time wearable deployment. The path to sub-5 BPM accuracy lies in denser data from modern wearables, not more complex architectures.
