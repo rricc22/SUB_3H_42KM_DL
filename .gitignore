@@ -55,6 +55,7 @@ DATA/**/workout-routes/
 checkpoints/
 results/
 LOGS/
+logs/
 
 # EDA outputs
 EDA/EDA_Generation/

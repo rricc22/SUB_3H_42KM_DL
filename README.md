@@ -98,10 +98,23 @@ Architecture:
   - Parameters: ~2M (40x larger than LSTM)
 ```
 
-### 3. Pretrained Fine-tuning (Future)
-- Chronos (Amazon): T5-based time-series model
-- TimeGPT: Foundation model for forecasting
-- Transfer learning from large-scale time-series data
+### 3. Fine-tuning on Apple Watch Data ✅
+Multi-stage fine-tuning of pretrained LSTM models on personal Apple Watch workout data for user-specific heart rate prediction.
+
+**Architecture**: Two-stage progressive unfreezing
+- **Stage 1**: Freeze layer 0, train layer 1 + FC layer
+- **Stage 2**: Unfreeze all layers, fine-tune entire model
+
+**Usage**:
+```bash
+# Stage 1 fine-tuning
+python3 launch_training.py  # Automatically runs stage 1
+
+# Stage 2 fine-tuning (after stage 1 completes)
+python3 finetune/train_stage2.py
+```
+
+See `finetune/` directory for implementation details.
 
 ## Dataset Details
 
@@ -164,10 +177,12 @@ Architecture:
 - [ ] Attention visualization
 - [ ] Multi-task learning (predict speed from HR)
 
-### Phase 3: Transfer Learning
-- [ ] Fine-tune Chronos pretrained model
-- [ ] Compare with LSTM baseline
-- [ ] Ensemble methods
+### Phase 3: Transfer Learning ✅
+- [x] Multi-stage fine-tuning on Apple Watch data
+- [x] Progressive layer unfreezing strategy
+- [x] Training infrastructure with checkpointing
+- [ ] Evaluation on personalized data
+- [ ] Compare fine-tuned vs base model performance
 
 ## Project Deliverables
 

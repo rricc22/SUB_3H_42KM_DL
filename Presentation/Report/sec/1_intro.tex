@@ -1,0 +1,10 @@
+\section{Introduction}
+
+\subsection{Problem Statement}
+Heart rate monitoring is a standard feature in modern fitness tracking. The goal of this project is to predict heart rate time-series $y_t$ given a sequence of running activity data $x_t$. The specific inputs considered are speed sequences ($m/s$), altitude sequences ($meters$), and user metadata such as gender and user ID. The output is the predicted Heart Rate (BPM) over time.
+
+\subsection{Motivation and Goals}
+Accurate HR prediction is vital for health monitoring, fitness tracking, and validating wearable sensors. The target performance metric for this study is a Mean Absolute Error (MAE) of less than 10 BPM, with a strictly acceptable threshold defined at 5 BPM for high-precision applications.
+
+\subsection{Challenges}
+The primary challenge lies in modeling the physiological lag between physical exertion (speed/elevation change) and the cardiac response. Additionally, data quality from crowdsourced platforms presents significant noise issues.

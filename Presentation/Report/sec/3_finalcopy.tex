@@ -1,0 +1,58 @@
+\section{Experiments and Results}
+
+\subsection{Quantitative Results}
+We evaluated the models on the test set of 3,581 workouts. The results are summarized in Table \ref{tab:results}.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\textbf{Model} & \textbf{MAE (BPM)} & \textbf{Status} \\
+		\hline
+		LSTM           & \textbf{13.64}     & Best Performer  \\
+		GRU            & 13.77              & Comparable      \\
+		Llama          & 16.55              & Underperforming \\
+		\hline
+	\end{tabular}
+	\caption{Comparison of Mean Absolute Error (MAE) across different architectures.}
+	\label{tab:results}
+\end{table}
+
+The LSTM model achieved the lowest Mean Absolute Error (MAE) of 13.64 BPM. To understand the nuances of this performance, we generated a comprehensive evaluation dashboard shown in Figure \ref{fig:lstm_results}.
+
+\begin{figure}[htbp]
+	\centering
+	% Remplacez 'image_132840.jpg' par le nom réel de votre fichier
+	\includegraphics[width=\linewidth]{image.png}
+	\caption{Detailed performance analysis of the LSTM model. The dashboard includes prediction scatter plots, error distributions, and error breakdown by Heart Rate range.}
+	\label{fig:lstm_results}
+\end{figure}
+
+Figure \ref{fig:lstm_results} highlights several key behaviors of our best-performing model:
+\begin{itemize}
+	\item \textbf{Error Distribution:} The error histogram (top center) is normally distributed with a mean close to zero ($1.11$ BPM), indicating that the model has no significant systematic bias (it does not consistently over- or under-predict).
+	\item \textbf{Range-Specific Performance:} The "Error by HR Range" chart (bottom right) reveals a critical limitation: the model performs effectively in moderate zones (120-160 BPM) where data is abundant, but struggles significantly at extremes ($<100$ or $>180$ BPM), where the MAE spikes above 30 BPM.
+	\item \textbf{Temporal Tracking:} The workout examples (bottom left) demonstrate that while the LSTM captures the general trend of the heart rate (low-frequency components), it tends to smooth out rapid, high-frequency spikes.
+\end{itemize}
+\subsection{Error Analysis}
+
+\subsubsection{Correlation-Limited Performance}
+The models' inability to reach $<10$ BPM MAE can be directly attributed to the weak underlying correlation ($r=0.254$) identified in Section 2. Even with perfect modeling, predicting HR from weakly correlated features has an inherent error floor. The error distribution (Figure \ref{fig:lstm_results}, top center) shows:
+
+\begin{itemize}
+	\item \textbf{High Variance:} Standard error of 17.63 BPM reflects the noisy speed-HR relationship
+	\item \textbf{Range-Dependent Errors:} Extreme HR zones ($<100$ or $>180$ BPM) suffer from sparse representation and weak signal
+	\item \textbf{Smoothing Behavior:} Model captures low-frequency trends but misses high-frequency spikes due to interpolated ground truth
+\end{itemize}
+
+\subsubsection{Model Performance Comparison}
+\begin{itemize}
+	\item \textbf{LSTM Performance:} MAE 13.64 BPM—lowest error but missed the target. The error distribution showed a mean error of 1.11 BPM, indicating no massive systematic bias, but high variance (Std Error: 17.63 BPM).
+	\item \textbf{GRU Performance:} MAE 13.77 BPM—comparable to LSTM
+	\item \textbf{Llama Performance:} MAE 16.55 BPM and Max Error of 116.88 BPM—struggled to adapt to numerical time-series regression without extensive modification
+\end{itemize}
+
+\textbf{Key Insight:} The consistency between LSTM (13.64) and GRU (13.77) suggests the performance bottleneck is \textbf{data quality, not architecture}. More sophisticated models cannot overcome weak input-output correlations.
+
+\subsection{Evaluation}
+Overall, the evaluation verdict is "Needs Improvement". Only 25.2\% of predictions fell within a 5 BPM error margin, and 52.8\% were within 15 BPM. The models struggle to capture the sharp physiological responses in the crowdsourced data.

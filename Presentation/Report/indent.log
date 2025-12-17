@@ -1,0 +1,28 @@
+INFO:  latexindent version 3.15, 2022-01-21, a script to indent .tex files
+       latexindent lives here: /usr/share/texlive/texmf-dist/scripts/latexindent/
+       Wed Dec 17 11:23:29 2025
+       Filename: /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex
+INFO:  Processing switches:
+       -s|--silent: Silent mode active (you have used either -s or --silent)
+       -w|--overwrite: Overwrite mode active, will make a back up of /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex first
+INFO:  Directory for backup files and indent.log: /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report
+INFO:  YAML settings read: defaultSettings.yaml
+       Reading defaultSettings.yaml from /usr/share/texlive/texmf-dist/scripts/latexindent/defaultSettings.yaml
+INFO:  YAML settings read: indentconfig.yaml or .indentconfig.yaml
+       Home directory is /home/riccardo (didn't find either indentconfig.yaml or .indentconfig.yaml)
+       To specify user settings you would put indentconfig.yaml here: /home/riccardo/indentconfig.yaml
+       Alternatively, you can use the hidden file .indentconfig.yaml as: /home/riccardo/.indentconfig.yaml
+INFO:  Backup procedure (-w flag active):
+       /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.bak0 already exists, incrementing by 1... (see maxNumberOfBackUps and onlyOneBackUp)
+       copying /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex to /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.bak1
+       Backup file: /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.bak1
+       /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex will be overwritten after indentation
+INFO:  Phase 1: searching for objects
+INFO:  Phase 2: finding surrounding indentation
+INFO:  Phase 3: indenting objects
+INFO:  Phase 4: final indentation check
+INFO:  Output routine:
+       Overwriting file /home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex
+       --------------
+INFO:  Please direct all communication/issues to:
+        https://github.com/cmhughes/latexindent.pl
