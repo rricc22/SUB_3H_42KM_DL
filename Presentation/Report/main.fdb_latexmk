@@ -1,15 +1,8 @@
 # Fdb version 3
-["bibtex main"] 1765975811 "main.aux" "main.bbl" "main" 1765975815
-  "./ieeenat_fullname.bst" 1765962492 26900 a296cb1ebee73f7bfa143751dc4e1dfd ""
-  "main.aux" 1765975815 12999 75a8d254d152b6a1691d01974080ab2e "pdflatex"
-  "main.bib" 1765962492 2971 4d6cb2afc0a46aea1e444edcdaea4e6a ""
-  (generated)
-  "main.bbl"
-  "main.blg"
-["pdflatex"] 1765975811 "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex" "main.pdf" "main" 1765975815
+["pdflatex"] 1765987020 "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex" "main.pdf" "main" 1765987023
   "/etc/texmf/web2c/texmf.cnf" 1764694022 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/riccardo/.texlive2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1764694603 1405759 049fc5d515f6a1b6d7678bccd2677f2e ""
-  "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex" 1765975808 1744 d702756395bc8e983cd95b551e8bf573 ""
+  "/home/riccardo/Documents/Collaborative-Projects/SUB_3H_42KM_DL/Presentation/Report/main.tex" 1765987017 1835 e3a51d0427a806d1c2dd2060b704a37f ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -157,11 +150,9 @@
   "finetune_stage1_curves.png" 1765966871 200439 b0741c2255ae34a3d0e83ae2c29244d2 ""
   "finetune_stage2_curves.png" 1765966871 231444 15adc47f722e53c35dacc5f4ea8e301a ""
   "image.png" 1765962492 479079 539bfeb08662d002e9eeaef03faa41a1 ""
-  "main.aux" 1765975815 12999 75a8d254d152b6a1691d01974080ab2e "pdflatex"
-  "main.bbl" 1765975811 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex main"
-  "main.brf" 1765975814 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.out" 1765975815 4162 1415348b46c846082651f20d283425a3 "pdflatex"
-  "main.tex" 1765975808 1744 d702756395bc8e983cd95b551e8bf573 ""
+  "main.aux" 1765987023 12943 4193ddff7abf325a3c72df486f20d281 "pdflatex"
+  "main.out" 1765987023 4162 1415348b46c846082651f20d283425a3 "pdflatex"
+  "main.tex" 1765987017 1835 e3a51d0427a806d1c2dd2060b704a37f ""
   "preamble.tex" 1765962492 1385 e3af99dba6fe9ad53f7ba8d4fb862d31 ""
   "processed.png" 1765962492 193597 0793ee62dffba7d7e844644be858a2dc ""
   "sec/0_abstract.tex" 1765966881 932 377a47920838a8ab2c7ffa23c2955139 ""
@@ -172,7 +163,6 @@
   "sec/5_Conclusion.tex" 1765969130 2909 67f900abe472adc6a96040264e8da492 ""
   (generated)
   "main.aux"
-  "main.brf"
   "main.log"
   "main.out"
   "main.pdf"
