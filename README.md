@@ -2,198 +2,68 @@
 
 **Deep Learning Course Project - CentraleSupélec**
 
-## Project Goal
+## Overview
 
-Predict heart rate time-series from running activity sequences using deep learning. Given speed, altitude, gender, and user information, the model forecasts the corresponding heart rate response throughout the workout.
+Predict heart rate time-series from running activity sequences using deep learning. Given speed, altitude, gender, and user information, the model forecasts corresponding heart rate responses throughout workouts.
 
-## Dataset
-
-**Endomondo Fitness Tracking Dataset**
-- `endomondoHR.json`: 253,020 workouts with heart rate data
-- `endomondoMeta.json`: 962,190 workouts with metadata
-
-### Data Structure
-
-Each workout contains:
-- **Time-series data**: Speed, altitude, heart rate, GPS coordinates (lat/lon), timestamps
-- **Metadata**: User ID, sport type, gender, distance, duration, elevation gain/loss
-- **Labels**: Sport types include "run", "bike", "bike (transport)", "mountain bike", etc.
-
-## Files
-
-```
-Project/
-├── endomondoHR.json          # Main dataset with heart rate
-├── endomondoMeta.json        # Metadata-only dataset
-├── EDA_baseline.ipynb        # Full exploratory data analysis & baseline model
-├── quick_test.py             # Quick validation script
-├── Data_explained.md         # Original dataset documentation
-└── README.md                 # This file
-```
+**Dataset**: Endomondo fitness tracking (974 running workouts)  
+**Target**: MAE < 5 BPM (excellent), < 10 BPM (acceptable)
 
 ## Quick Start
 
-### 1. Prepare Data
 ```bash
-cd Project/
-python3 prepare_sequences.py
-```
+# 1. Preprocess data (pad to 500 timesteps, normalize, split 70/15/15)
+python3 Preprocessing/prepare_sequences.py
 
-This will:
-- Load 974 running workouts with complete data
-- Pad/truncate sequences to fixed length (300 timesteps)
-- Normalize speed and altitude features
-- Split into train/val/test sets (70/15/15)
-- Save preprocessed PyTorch tensors
+# 2. Train models
+python3 Model/train.py --model lstm --epochs 100 --batch_size 32
+python3 Model/train.py --model gru --epochs 100 --batch_size 32
+python3 Model/train.py --model lstm_embeddings --epochs 100 --batch_size 32
 
-### 2. Train LSTM Baseline
-```bash
-python3 train_lstm_baseline.py
-```
-
-Trains a simple LSTM model:
-- **Input**: Speed + altitude sequences, gender, userId
-- **Output**: Heart rate sequence predictions
-- **Loss**: Mean Squared Error (MSE)
-- **Target**: MAE < 5 BPM
-
-### 3. Visualize Results
-
-```bash
-python3 visualize_predictions.py --checkpoint checkpoints/best_model.pt
-```
-
-Generates:
-- Predicted vs actual HR curves
-- Error distribution plots
-- Per-user performance analysis
-
-## Model Architectures
-
-### 1. LSTM Baseline (Implemented)
-```python
-Input Features:
-  - Speed sequence: [batch, 300, 1]
-  - Altitude sequence: [batch, 300, 1]
-  - Gender: [batch, 1] (embedded)
-  - UserId: [batch, 1] (embedded)
-
-Architecture:
-  Concat[speed, altitude] → LSTM(64) → LSTM(64) → Dense(1) → HR[batch, 300, 1]
-```
-
-### 2. Transformer / Lag-Llama (Implemented)
-```python
-Input Features:
-  - Speed sequence: [batch, 500, 1]
-  - Altitude sequence: [batch, 500, 1]
-  - Gender: [batch, 1] (embedded)
-  - UserId: [batch, 1] (embedded)
-
-Architecture:
-  Input Projection → Positional Encoding → Transformer Encoder (4 layers) → Output Projection → HR[batch, 500, 1]
-  - d_model: 128
-  - num_heads: 8
-  - num_layers: 4
-  - Parameters: ~2M (40x larger than LSTM)
-```
-
-### 3. Fine-tuning on Apple Watch Data ✅
-Multi-stage fine-tuning of pretrained LSTM models on personal Apple Watch workout data for user-specific heart rate prediction.
-
-**Architecture**: Two-stage progressive unfreezing
-- **Stage 1**: Freeze layer 0, train layer 1 + FC layer
-- **Stage 2**: Unfreeze all layers, fine-tune entire model
-
-**Usage**:
-```bash
-# Stage 1 fine-tuning
-python3 launch_training.py  # Automatically runs stage 1
-
-# Stage 2 fine-tuning (after stage 1 completes)
+# 3. Fine-tune on personal data (two-stage progressive unfreezing)
+python3 finetune/train_stage1.py
 python3 finetune/train_stage2.py
+
+# 4. Evaluate
+python3 Model/evaluate_test.py
 ```
 
-See `finetune/` directory for implementation details.
+## Project Structure
 
-## Dataset Details
+```
+├── DATA/                     # Raw Endomondo dataset + documentation
+├── EDA/                      # Exploratory data analysis notebooks
+├── Preprocessing/            # Sequence preparation & normalization
+├── Model/                    # LSTM, GRU, PatchTST, Lag-Llama implementations
+├── finetune/                 # Multi-stage fine-tuning on Apple Watch data
+├── Inferences/               # Evaluation scripts & prediction visualization
+├── experiments/              # Apple Watch data parsing & preparation
+└── Presentation/             # Report (LaTeX) and slides
+```
 
-**Preprocessed Data**: 974 running workouts
-- **Average sequence length**: ~300 timesteps
-- **Heart rate range**: 100-180 BPM (running intensity)
-- **Speed range**: 0-15 km/h (running pace)
-- **Altitude range**: Variable terrain
+## Models Implemented
 
-**Input Features**:
-1. **Speed** (km/h): GPS-derived velocity
-2. **Altitude** (m): Elevation profile
-3. **Gender**: Binary feature (male/female)
-4. **UserId**: User identifier for personalization
+| Model | Architecture | Parameters | Best MAE |
+|-------|-------------|------------|----------|
+| **LSTM Baseline** | 2-layer LSTM (64 units) | ~50K | TBD |
+| **LSTM + Embeddings** | LSTM with user/gender embeddings | ~65K | TBD |
+| **GRU** | 2-layer GRU (64 units) | ~40K | TBD |
+| **PatchTST** | Patch-based Transformer | ~2M | TBD |
+| **Lag-Llama** | Transfer learning from pretrained | ~2M | TBD |
 
-**Target**:
-- **Heart Rate** (BPM): Physiological response to activity
+**Input**: Speed [500], altitude [500], gender, userId  
+**Output**: Heart rate [500]
 
-## Key Findings
+## Key Features
 
-### Heart Rate Patterns
+- **Multi-stage fine-tuning**: Progressive layer unfreezing for transfer learning
+- **User embeddings**: Personalized predictions accounting for fitness levels
+- **Data augmentation**: Jitter, scaling, time warping for robustness
+- **Sequence padding**: Handles variable-length workouts (median ~500 timesteps)
 
-1. **Speed-HR correlation**:
-   - Strong positive correlation (r ≈ 0.6-0.8)
-   - Higher speed → higher heart rate
-   - Non-linear relationship (effort increases faster)
+## Results Summary
 
-2. **Altitude-HR correlation**:
-   - Uphill segments → increased HR
-   - Downhill segments → decreased HR
-   - Delayed response (lag ~5-10 seconds)
-
-3. **Individual variability**:
-   - Fitness level affects HR response
-   - Gender differences in average HR
-   - User-specific patterns (importance of userId embedding)
-
-## Evaluation Metrics
-
-**Primary**: MAE (Mean Absolute Error)
-- Target: < 5 BPM (excellent)
-- Acceptable: < 10 BPM
-
-**Secondary**:
-- MSE (Mean Squared Error)
-- R² score (coefficient of determination)
-- Per-timestep accuracy
-
-## Next Steps
-
-### Phase 1: Baseline Models ✅
-- [x] Data preprocessing pipeline
-- [x] LSTM baseline implementation
-- [x] LSTM with user embeddings
-- [x] Training and evaluation infrastructure
-- [ ] Hyperparameter tuning
-
-### Phase 2: Advanced Models ✅
-- [x] Transformer architecture (Lag-Llama inspired)
-- [ ] Attention visualization
-- [ ] Multi-task learning (predict speed from HR)
-
-### Phase 3: Transfer Learning ✅
-- [x] Multi-stage fine-tuning on Apple Watch data
-- [x] Progressive layer unfreezing strategy
-- [x] Training infrastructure with checkpointing
-- [ ] Evaluation on personalized data
-- [ ] Compare fine-tuned vs base model performance
-
-## Project Deliverables
-
-According to course requirements:
-1. ✅ **One-page project description** (to be written)
-2. [ ] **Presentation** of main results
-3. [ ] **Final report** with methods and results + code
-
-## Authors
-
-Your names here
+See `Model/FINAL_RESULTS.md` for detailed comparison and `Presentation/Report/main.pdf` for full analysis.
 
 ## Dataset Citation
 
