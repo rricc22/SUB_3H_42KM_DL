@@ -1,17 +1,17 @@
 # Presentation Summary - Quick Reference Guide
 
-## 🎯 What We Have
+##  What We Have
 
 The Presentation folder now contains **complete materials** for your 7-minute group project presentation:
 
-### 📄 Files Created
+###  Files Created
 
 1. **PROJECT_PRESENTATION.md** (820 lines)
    - **Comprehensive slide deck** with all content
    - 9 core slides + appendix
    - Detailed technical information
    - Code snippets and architecture details
-   - **Status:** ✅ Complete and ready
+   - **Status:**  Complete and ready
 
 2. **SPEAKER_NOTES.md** (388 lines)
    - **Essential for delivery**
@@ -20,14 +20,14 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
    - Transition phrases
    - Anticipated Q&A with prepared answers
    - Pre-presentation checklist
-   - **Status:** ✅ Complete and ready
+   - **Status:**  Complete and ready
 
 3. **SLIDE_DECK.md** (405 lines)
    - **Concise version for copying into PowerPoint/Google Slides**
    - 13 slides (9 core + 4 backup)
    - Clean, minimal formatting
    - Ready to paste directly
-   - **Status:** ✅ Complete and ready
+   - **Status:**  Complete and ready
 
 4. **README.md** (326 lines)
    - Overview of all materials
@@ -35,7 +35,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
    - Speaker assignments
    - Success criteria
    - Tips and checklists
-   - **Status:** ✅ Complete and ready
+   - **Status:**  Complete and ready
 
 ---
 
@@ -90,9 +90,9 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 📊 Key Results to Highlight
+##  Key Results to Highlight
 
-### Main Achievements ✅
+### Main Achievements 
 
 1. **Dataset Processing**
    - 974 Endomondo workouts (multi-user)
@@ -103,7 +103,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
    - LSTM baseline: 15.41 BPM MAE
    - LSTM large: 8-10 BPM MAE (in progress)
    - Transformer: 6-9 BPM expected (retraining with correct params)
-   - **Target achieved:** < 10 BPM acceptable ✅
+   - **Target achieved:** < 10 BPM acceptable 
 
 3. **Novel Contributions**
    - Apple Watch extraction pipeline (timezone correction, GPS-HR alignment)
@@ -118,7 +118,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 💡 Key Messages for Audience
+##  Key Messages for Audience
 
 ### Problem is Real
 - 250K+ workouts available in datasets
@@ -132,7 +132,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ### Results are Strong
 - MAE: 8-15 BPM (target: <10 acceptable, <5 excellent)
-- Achieved acceptable performance ✅
+- Achieved acceptable performance 
 - Clear path to excellent performance identified
 
 ### Team is Competent
@@ -142,7 +142,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## ⚠️ Important Reminders
+##  Important Reminders
 
 ### Team Contributions (Must State Clearly!)
 
@@ -177,14 +177,14 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 - **Temporal dependencies complex:** Altitude lag of 5-10 seconds physiologically accurate
 
 ### Challenges Faced & Solved
-1. ✅ GPS-HR timezone misalignment → Fixed with auto-detection
-2. ✅ Transformer poor performance → Identified hyperparameter issue
-3. ✅ Apple Watch temporal shift → Diagnosed 6-year fitness evolution
-4. ✅ Variable HR quality → Created quality categorization system
+1.  GPS-HR timezone misalignment → Fixed with auto-detection
+2.  Transformer poor performance → Identified hyperparameter issue
+3.  Apple Watch temporal shift → Diagnosed 6-year fitness evolution
+4.  Variable HR quality → Created quality categorization system
 
 ---
 
-## 📈 Visualizations to Show
+##  Visualizations to Show
 
 ### Must Include (Pick 2-3)
 
@@ -203,7 +203,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 🎯 Success Checklist
+##  Success Checklist
 
 ### Before Presentation
 - [ ] Review all 4 markdown files
@@ -230,7 +230,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 🚀 Expected Questions & Answers
+##  Expected Questions & Answers
 
 ### Q1: "Why does the Apple Watch dataset have such high error?"
 **A:** "Temporal distribution shift. We train on 2019-2024 data and test on 2025. Over 6 years, fitness patterns evolved - heart rate responses changed due to improved fitness. This is an active research problem in domain adaptation." (Reference: Slide 8, Apple Watch results)
@@ -249,7 +249,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 📚 Quick Reference - File Locations
+##  Quick Reference - File Locations
 
 ### Presentation Materials
 - Main presentation: `PROJECT_PRESENTATION.md`
@@ -274,11 +274,11 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## 🎓 Final Tips
+##  Final Tips
 
 ### Confidence Boosters
 1. **You built a complete ML pipeline** - Data to models to evaluation
-2. **You achieved target performance** - MAE < 10 BPM ✅
+2. **You achieved target performance** - MAE < 10 BPM 
 3. **You solved real challenges** - Hyperparameters, data quality, temporal shift
 4. **You have novel contributions** - Apple Watch pipeline, HR quality analysis
 
@@ -297,7 +297,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-## ✅ Action Items (Before Presentation)
+##  Action Items (Before Presentation)
 
 ### Today (Priority 1)
 - [ ] Read through all 4 markdown files
@@ -315,7 +315,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 - [ ] Test equipment
 - [ ] Quick team huddle
 - [ ] Deep breaths
-- [ ] You've got this! 🚀
+- [ ] You've got this! 
 
 ---
 
@@ -336,7 +336,7 @@ The Presentation folder now contains **complete materials** for your 7-minute gr
 
 ---
 
-**Status:** ✅ **ALL MATERIALS COMPLETE AND READY**
+**Status:**  **ALL MATERIALS COMPLETE AND READY**
 
 **Next Step:** Review files → Practice → Present with confidence!
 

@@ -1,12 +1,12 @@
 # Visualizations Guide - For Presentation
 
-## 📊 Available Visualizations
+##  Available Visualizations
 
 This guide lists all available visualizations you can include in your presentation.
 
 ---
 
-## 🎯 Must-Have Visualizations (Pick 2-3)
+##  Must-Have Visualizations (Pick 2-3)
 
 ### 1. Training Curves (Best Model)
 **Path:** `../checkpoints/lstm_bs16_lr0.0003_e75_h128_l4_bidir_training_curves.png`
@@ -63,7 +63,7 @@ This guide lists all available visualizations you can include in your presentati
 
 ---
 
-## 📈 Additional Visualizations (If Available)
+##  Additional Visualizations (If Available)
 
 ### 4. Test Evaluation Plots
 **Path:** `../results/test_evaluation.png` (if generated)
@@ -144,7 +144,7 @@ This guide lists all available visualizations you can include in your presentati
 
 ---
 
-## 🎯 Recommended Slide Layout
+##  Recommended Slide Layout
 
 ### Slide 7: Results
 
@@ -173,7 +173,7 @@ This guide lists all available visualizations you can include in your presentati
 |                  |                  |
 |  [4-panel plot]  |  [4-panel plot]  |
 |                  |                  |
-| 12 samples/min ✅ | 0.7 samples/min ⚠️|
+| 12 samples/min  | 0.7 samples/min |
 +------------------+------------------+
 ```
 
@@ -203,14 +203,14 @@ This guide lists all available visualizations you can include in your presentati
 
 ## 📝 Tips for Effective Visualizations
 
-### Do's ✅
+### Do's 
 - **Large and readable:** Don't squeeze small images
 - **Add captions:** Explain what we're seeing
 - **Highlight key points:** Use arrows/circles
 - **Reference in speech:** "As you can see in this plot..."
 - **Keep it simple:** 2-3 visualizations max
 
-### Don'ts ❌
+### Don'ts 
 - **Too many plots:** Overwhelming, confusing
 - **Too small:** Audience can't read
 - **No explanation:** Don't assume meaning is obvious
@@ -238,9 +238,9 @@ This guide lists all available visualizations you can include in your presentati
 ## 🔧 Technical Details
 
 ### Image Formats
-- **PNG:** ✅ Best quality, use for presentation
-- **JPG:** ⚠️ Compressed, may look blurry when enlarged
-- **PDF:** ✅ Vector format, perfect for prints
+- **PNG:**  Best quality, use for presentation
+- **JPG:**  Compressed, may look blurry when enlarged
+- **PDF:**  Vector format, perfect for prints
 
 ### Resolution
 - Most plots are generated at **300 DPI** (high quality)
@@ -254,7 +254,7 @@ This guide lists all available visualizations you can include in your presentati
 
 ---
 
-## ✅ Checklist: Visualizations for Presentation
+##  Checklist: Visualizations for Presentation
 
 - [ ] **Selected 2-3 key visualizations**
 - [ ] **Training curves from best model** (required)
@@ -267,7 +267,7 @@ This guide lists all available visualizations you can include in your presentati
 
 ---
 
-## 🚀 Quick Reference Table
+##  Quick Reference Table
 
 | Visualization | Path | Use In | Key Message |
 |---------------|------|--------|-------------|
@@ -278,7 +278,7 @@ This guide lists all available visualizations you can include in your presentati
 
 ---
 
-**Status:** ✅ Guide complete  
+**Status:**  Guide complete  
 **Next:** Select visualizations → Insert into slides → Practice presentation
 
 **Remember:** Visualizations should support your narrative, not replace it! 🎨

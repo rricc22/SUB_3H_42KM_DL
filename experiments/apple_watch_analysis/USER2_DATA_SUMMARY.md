@@ -1,13 +1,13 @@
 # User2 Data Analysis Summary
 
-## ✅ Test Results - Data Quality Check
+##  Test Results - Data Quality Check
 
 **Date:** 2025-11-25  
 **Location:** `DATA/apple_health_export_User2/`
 
 ---
 
-## 📊 Overview
+##  Overview
 
 - **Total Workouts:** 209 (all running)
 - **Workouts with GPX:** 191 (91.4%)
@@ -41,7 +41,7 @@
   - File: `route_2024-07-16_6.32pm.gpx`
   - Trackpoints: 90 GPS points
   - Data includes: lat, lon, elevation, speed, course
-  - ✅ All fields properly populated
+  -  All fields properly populated
 
 ---
 
@@ -68,9 +68,9 @@ Based on similar datasets, expect:
 - `workout-routes/*.gpx` - 627 GPS route files
 
 ### Processing Scripts
-- ✅ `parse_apple_health.py` - Parser module
-- ✅ `test_user2_parsing.py` - Verification script (PASSED)
-- ✅ `explore_user2_data.ipynb` - Exploration notebook (READY)
+-  `parse_apple_health.py` - Parser module
+-  `test_user2_parsing.py` - Verification script (PASSED)
+-  `explore_user2_data.ipynb` - Exploration notebook (READY)
 
 ---
 
@@ -115,7 +115,7 @@ Combine User2 data with existing users for model training:
 
 ---
 
-## ⚠️ Data Quality Notes
+##  Data Quality Notes
 
 ### Potential Issues to Watch For
 1. **Duration Outlier:** One workout shows 3053 minutes (~50 hours)
@@ -131,15 +131,15 @@ Combine User2 data with existing users for model training:
    - Can be filtered if GPS features are required
 
 ### Data Strengths
-✅ High GPX coverage (91.4%)  
-✅ Good HR sampling rate (12.7/min)  
-✅ Recent data (2024-2025)  
-✅ Consistent workout frequency  
-✅ Sufficient workout count (191 usable)
+ High GPX coverage (91.4%)  
+ Good HR sampling rate (12.7/min)  
+ Recent data (2024-2025)  
+ Consistent workout frequency  
+ Sufficient workout count (191 usable)
 
 ---
 
-## 📈 Expected Dataset Contribution
+##  Expected Dataset Contribution
 
 If User2 data quality matches the test results:
 - **Usable workouts:** ~150-180 (after quality filtering)
@@ -150,14 +150,14 @@ This would significantly expand the training dataset!
 
 ---
 
-## 🎯 Recommendation
+##  Recommendation
 
 **PROCEED with full data processing.**
 
 The test results show User2's data is:
-- ✅ Well-formatted and parseable
-- ✅ High quality GPS tracking
-- ✅ Excellent heart rate coverage
-- ✅ Sufficient quantity for training
+-  Well-formatted and parseable
+-  High quality GPS tracking
+-  Excellent heart rate coverage
+-  Sufficient quantity for training
 
 Next action: Run the exploration notebook to visualize the full dataset characteristics before processing all 191 workouts.

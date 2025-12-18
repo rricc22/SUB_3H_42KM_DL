@@ -31,7 +31,7 @@
 ### Initial Dataset: Endomondo (FitRec)
 **Total available: 260,000 workouts with HR**
 
-### The Problem: Data Quality Issues ⚠️
+### The Problem: Data Quality Issues 
 
 **Filtering Process:**
 - Started with 260,000 workouts
@@ -136,7 +136,7 @@
 **Batch Size = 64 (Fast but generalizes poorly)**
 ![BS=64](../experiments/batch_size_search/bs64/lstm_bs64_lr0.001_e30_h64_l2_training_curves.png)
 
-### Key Finding: BS=16 is Optimal! ✅
+### Key Finding: BS=16 is Optimal! 
 
 **Performance:**
 - BS=8: Noisy training, unstable
@@ -145,8 +145,8 @@
 - BS=64: Fast but generalizes poorly
 
 **Trade-off:**
-- ✅ Best performance: BS=16
-- ❌ Slowest training: BS=16
+-  Best performance: BS=16
+-  Slowest training: BS=16
 - "We chose quality over speed"
 
 **Insight:** Smaller batches provide better gradient estimates with noisy data
@@ -422,7 +422,7 @@ Best of both worlds!
 - Apple Watch: `experiments/apple_watch_analysis/`
 - EDA: `EDA/EDA_Generation/`
 
-**Thank you!** 🚀
+**Thank you!** 
 
 ---
 
@@ -433,7 +433,7 @@ Best of both worlds!
 | Batch Size | Train MAE | Val MAE | Time/Epoch | Notes |
 |------------|-----------|---------|------------|-------|
 | 8 | 14.2 | 15.8 | 45s | Noisy, unstable |
-| **16** | **13.9** | **15.3** ✅ | 28s | **Best performance** |
+| **16** | **13.9** | **15.3**  | 28s | **Best performance** |
 | 32 | 14.1 | 15.4 | 18s | Good balance |
 | 64 | 14.5 | 16.2 | 12s | Fast but generalizes worse |
 

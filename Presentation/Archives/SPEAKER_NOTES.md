@@ -145,7 +145,7 @@
 ### Table Summary:
 | Model | MAE (BPM) | Status |
 |-------|-----------|--------|
-| LSTM basic | 15.41 | ✓ Complete |
+| LSTM basic | 15.41 |  Complete |
 | LSTM large | 8-10* | In progress |
 | Transformer | 6-9* | Retraining |
 | Apple Watch | 77.29 | Temporal shift |
@@ -324,12 +324,12 @@
 ## CONFIDENCE BOOSTERS
 
 ### What We Did Well:
-✅ Complete ML pipeline from raw data to trained models
-✅ Multiple architectures implemented and compared
-✅ Real-world datasets (974 + 285 workouts)
-✅ Strong baseline results (8-15 BPM MAE)
-✅ Identified and solved real challenges (hyperparameters, data quality)
-✅ Comprehensive evaluation and visualization
+ Complete ML pipeline from raw data to trained models
+ Multiple architectures implemented and compared
+ Real-world datasets (974 + 285 workouts)
+ Strong baseline results (8-15 BPM MAE)
+ Identified and solved real challenges (hyperparameters, data quality)
+ Comprehensive evaluation and visualization
 
 ### Honest About Challenges:
 - Initial transformer poor performance (but we fixed it!)
@@ -377,7 +377,7 @@
 
 ---
 
-## YOU'VE GOT THIS! 🚀
+## YOU'VE GOT THIS! 
 
 **Key Message:** We built a complete ML pipeline for heart rate prediction, achieved strong results, learned important lessons about deep learning for time-series, and have a clear path forward.
 

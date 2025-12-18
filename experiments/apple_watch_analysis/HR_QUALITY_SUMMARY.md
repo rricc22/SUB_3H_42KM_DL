@@ -22,14 +22,14 @@ This creates different-looking plots:
 
 | Workout Date | HR Records | Duration | HR/min | Quality | Plot Quality |
 |--------------|------------|----------|--------|---------|--------------|
-| 2025-11-23 | 627 | 52 min | **12.1** | **GOOD** | ✅ Excellent |
-| 2025-11-18 | 725 | 66 min | **11.0** | **GOOD** | ✅ Excellent |
+| 2025-11-23 | 627 | 52 min | **12.1** | **GOOD** |  Excellent |
+| 2025-11-18 | 725 | 66 min | **11.0** | **GOOD** |  Excellent |
 | 2025-01-02 | 512 | 124 min | **4.1** | **ACCEPTABLE** | 🟡 OK |
 | 2025-06-03 | 134 | 64 min | **2.1** | **ACCEPTABLE** | 🟡 OK |
-| 2024-11-14 | 48 | 71 min | **0.7** | **SPARSE** | ⚠️ Interpolated |
-| 2024-12-02 | 44 | 72 min | **0.6** | **SPARSE** | ⚠️ Interpolated |
-| 2021-01-14 | 43 | 96 min | **0.4** | **SPARSE** | ⚠️ Interpolated |
-| 2020-05-20 | 46 | 69 min | **0.7** | **SPARSE** | ⚠️ Interpolated |
+| 2024-11-14 | 48 | 71 min | **0.7** | **SPARSE** |  Interpolated |
+| 2024-12-02 | 44 | 72 min | **0.6** | **SPARSE** |  Interpolated |
+| 2021-01-14 | 43 | 96 min | **0.4** | **SPARSE** |  Interpolated |
+| 2020-05-20 | 46 | 69 min | **0.7** | **SPARSE** |  Interpolated |
 
 **Pattern**: Most recent 2025 workouts have BETTER HR quality!
 
@@ -84,7 +84,7 @@ Plot shows: Realistic HR fluctuations
 - HR decreases during rest/downhill
 - Natural variability visible
 ```
-**Plot**: `experiments/apple_watch_analysis/plots/validation_v2_workout_20251123_103725.png` ✅
+**Plot**: `experiments/apple_watch_analysis/plots/validation_v2_workout_20251123_103725.png` 
 
 ### Sparse HR Quality (workout_20241114_172333)
 ```
@@ -94,7 +94,7 @@ Plot shows: Smooth interpolated line
 - Missing natural fluctuations
 - Averaged over long segments
 ```
-**Plot**: `experiments/apple_watch_analysis/plots/validation_v2_workout_20241114_172333.png` ⚠️
+**Plot**: `experiments/apple_watch_analysis/plots/validation_v2_workout_20241114_172333.png` 
 
 ---
 
@@ -220,7 +220,7 @@ We can use these to validate interpolated predictions!
 
 ## Action Items
 
-**Current Status**: ✅ Fixed timezone, ✅ Fixed speed, ⚠️ Identified HR quality issue
+**Current Status**:  Fixed timezone,  Fixed speed,  Identified HR quality issue
 
 **Next Steps**:
 

@@ -1,4 +1,4 @@
-# Lag-Llama Integration Complete ✅
+# Lag-Llama Integration Complete 
 
 ## What Was Created
 
@@ -124,7 +124,7 @@ LAG-LLAMA INSPIRED MODEL FOR HEART RATE PREDICTION
 Model Architecture:
 ...
 Total parameters: 805,569
-✓ Model initialized successfully!
+ Model initialized successfully!
 ```
 
 ### Check Training Script
@@ -174,11 +174,11 @@ python3 Model/train.py --help
 
 ## Files Created/Modified
 
-✅ `Model/LagLlama_HR.py` - New Transformer model  
-✅ `Model/train.py` - Updated to support lag_llama  
-✅ `README.md` - Added architecture documentation  
-✅ `TRAINING_COMMANDS.md` - Complete training guide  
-✅ `LAG_LLAMA_SETUP.md` - This setup guide  
+ `Model/LagLlama_HR.py` - New Transformer model  
+ `Model/train.py` - Updated to support lag_llama  
+ `README.md` - Added architecture documentation  
+ `TRAINING_COMMANDS.md` - Complete training guide  
+ `LAG_LLAMA_SETUP.md` - This setup guide  
 
 ---
 
@@ -188,4 +188,4 @@ python3 Model/train.py --help
 - See `Model/README.md` for model architecture details
 - See `AGENTS.md` for general project guidelines
 
-**Ready to train! 🚀**
+**Ready to train! **

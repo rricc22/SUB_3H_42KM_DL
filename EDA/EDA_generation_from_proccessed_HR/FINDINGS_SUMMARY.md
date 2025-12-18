@@ -10,9 +10,9 @@
 
 The data quality analysis reveals **THREE CRITICAL ISSUES** that are likely contributing to poor model performance:
 
-1. ⚠️ **WEAK FEATURE-TARGET CORRELATION** - Speed has only 0.25 correlation with heart rate
-2. ⚠️ **DISTRIBUTION MISMATCH ACROSS SPLITS** - Test set has different statistics than train/val
-3. ⚠️ **HIGH PADDING RATIO** - 43% of sequences are artificially padded
+1.  **WEAK FEATURE-TARGET CORRELATION** - Speed has only 0.25 correlation with heart rate
+2.  **DISTRIBUTION MISMATCH ACROSS SPLITS** - Test set has different statistics than train/val
+3.  **HIGH PADDING RATIO** - 43% of sequences are artificially padded
 
 ---
 
@@ -105,14 +105,14 @@ The test set shows **different statistics** compared to train/val:
 
 ---
 
-## Positive Findings ✅
+## Positive Findings 
 
 ### Data Quality (GOOD)
-- ✅ **No data leakage**: Clean user splits (0 overlap)
-- ✅ **Normalization correct**: Train set has mean≈0, std≈1
-- ✅ **No invalid values**: No zeros, no physiologically impossible heart rates
-- ✅ **Outliers minimal**: <2% outliers (acceptable for real-world data)
-- ✅ **Sample size adequate**: 13,855 train / 3,539 val / 3,581 test
+-  **No data leakage**: Clean user splits (0 overlap)
+-  **Normalization correct**: Train set has mean≈0, std≈1
+-  **No invalid values**: No zeros, no physiologically impossible heart rates
+-  **Outliers minimal**: <2% outliers (acceptable for real-world data)
+-  **Sample size adequate**: 13,855 train / 3,539 val / 3,581 test
 
 ### Data Integrity (GOOD)
 - No missing heart rate values
@@ -219,12 +219,12 @@ Given the **weak correlation (0.254)**, the theoretical limit for this predictio
 
 ## Next Steps
 
-1. ✅ **Data quality verified** - No major data issues found
-2. 🔄 **Implement padding masks** in training loop (URGENT)
-3. 🔄 **Add feature engineering** (speed changes, rolling stats)
-4. 🔄 **Try user embeddings** if not already using
-5. 🔄 **Test PatchTST or Transformer models** (better for weak correlations)
-6. 🔄 **Re-evaluate performance expectations** based on correlation analysis
+1.  **Data quality verified** - No major data issues found
+2.  **Implement padding masks** in training loop (URGENT)
+3.  **Add feature engineering** (speed changes, rolling stats)
+4.  **Try user embeddings** if not already using
+5.  **Test PatchTST or Transformer models** (better for weak correlations)
+6.  **Re-evaluate performance expectations** based on correlation analysis
 
 ---
 
@@ -275,8 +275,8 @@ Total workouts in file: 167,783
 Streaming through data and computing correlations...
 Processing: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 167783/167783 [15:03<00:00, 185.64it/s]
 
-✓ 11442 workouts passed all filters
-✗ 156341 workouts filtered out
+ 11442 workouts passed all filters
+ 156341 workouts filtered out
 
 Filter breakdown:
   not_run                  :  97192 workouts
@@ -287,7 +287,7 @@ Filter breakdown:
 SECTION 2: RAW DATA CORRELATIONS
 ================================================================================
 
-✓ Analyzed 5,721,000 total timesteps
+ Analyzed 5,721,000 total timesteps
 
 Raw data statistics:
   Speed:     mean=   11.52, std=    2.72, min=    0.00, max=  233.46
@@ -303,7 +303,7 @@ RAW DATA CORRELATIONS:
 SECTION 3: LOADING PROCESSED DATA FOR COMPARISON
 ================================================================================
 
-✓ Loaded 6,927,500 timesteps from processed training data
+ Loaded 6,927,500 timesteps from processed training data
 
 PROCESSED DATA CORRELATIONS (denormalized):
   Speed    → Heart Rate: 0.253977
@@ -324,7 +324,7 @@ Correlation                        Raw Data    Processed   Difference
 Speed → Heart Rate                 0.212884     0.253977     0.041093
 Altitude → Heart Rate              0.045590     0.022200    -0.023390
 
-✓ Saved: EDA/EDA_Generation/correlation_comparison_raw_vs_processed.png
+ Saved: EDA/EDA_Generation/correlation_comparison_raw_vs_processed.png
 
 ================================================================================
 SECTION 5: TEMPORAL CORRELATION ANALYSIS (LAG)
@@ -336,13 +336,13 @@ Lag analysis: 100%|████████████████████�
 Lag analysis results (sampled 20% of workouts):
   Speed    → HR: Best correlation 0.195785 at lag=2
   Altitude → HR: Best correlation 0.079828 at lag=30
-✓ Saved: EDA/EDA_Generation/temporal_lag_correlation.png
+ Saved: EDA/EDA_Generation/temporal_lag_correlation.png
 
 ================================================================================
 SECTION 6: GENERATING SUMMARY REPORT
 ================================================================================
 
-✓ Report saved: EDA/EDA_Generation/RAW_VS_PROCESSED_CORRELATION.md
+ Report saved: EDA/EDA_Generation/RAW_VS_PROCESSED_CORRELATION.md
 
 ================================================================================
 ANALYSIS COMPLETE

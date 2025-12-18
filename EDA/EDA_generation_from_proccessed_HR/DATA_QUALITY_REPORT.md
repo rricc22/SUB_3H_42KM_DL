@@ -44,9 +44,9 @@
 - **Speed:** mean=-0.000000, std=1.000000
 - **Altitude:** mean=0.000000, std=1.000000
 
-✅ **Speed normalization:** CORRECT
+ **Speed normalization:** CORRECT
 
-✅ **Altitude normalization:** CORRECT
+ **Altitude normalization:** CORRECT
 
 ## 3. Outlier Detection
 
@@ -80,7 +80,7 @@
 - Train-Test: 0 users
 - Val-Test: 0 users
 
-✅ **No data leakage detected**
+ **No data leakage detected**
 
 ## 5. Sequence Length Analysis
 

@@ -1,6 +1,6 @@
 # Visualization Checklist - Actual Presentation
 
-## 📊 Graphs to Include (In Order)
+##  Graphs to Include (In Order)
 
 ### SLIDE 2: Endomondo Data Challenge
 
@@ -128,7 +128,7 @@ Position: Half slide, next to LSTM
 
 ---
 
-## 📋 Complete Graph Checklist
+##  Complete Graph Checklist
 
 Use this to verify you have all graphs ready:
 
@@ -152,7 +152,7 @@ Use this to verify you have all graphs ready:
    +----------------------------------+
    | Batch Size Search Results        |
    +----------------------------------+
-   |  BS=8        |  BS=16 ✅        |
+   |  BS=8        |  BS=16         |
    |  [curve]     |  [curve]         |
    +---------------+------------------+
    |  BS=32       |  BS=64           |
@@ -160,7 +160,7 @@ Use this to verify you have all graphs ready:
    +----------------------------------+
    ```
    - Add green border around BS=16
-   - Add text: "Best Performance ✅"
+   - Add text: "Best Performance "
 
 2. **Slide 6 (Apple Watch) Layout:**
    ```
@@ -226,7 +226,7 @@ checkpoints/apple_watch_v2_lstm_emb/gru_bs32_lr0.001_e100_h128_l4_training_curve
 
 ---
 
-## ✅ Pre-Presentation Checklist
+##  Pre-Presentation Checklist
 
 - [ ] All 13-14 graphs copied to presentation folder
 - [ ] Graphs inserted into correct slides
@@ -246,4 +246,4 @@ checkpoints/apple_watch_v2_lstm_emb/gru_bs32_lr0.001_e100_h128_l4_training_curve
 
 **These 8 graphs tell your story!**
 
-Good luck! 🚀
+Good luck! 

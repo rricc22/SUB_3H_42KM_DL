@@ -15,7 +15,7 @@ Analyzed 6,927,500 timesteps from processed training data.
 
 ## Key Findings
 
-✅ **Normalization preserves correlation** (difference < 0.001)
+ **Normalization preserves correlation** (difference < 0.001)
 
 This is expected - Z-score normalization is a linear transformation, which does not affect correlation coefficients.
 

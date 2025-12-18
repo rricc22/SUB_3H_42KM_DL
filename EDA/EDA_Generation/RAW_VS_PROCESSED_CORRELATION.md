@@ -19,7 +19,7 @@
 
 ## Key Findings
 
-✅ **Preprocessing preserves correlations well** - Speed-HR correlation difference < 0.05
+ **Preprocessing preserves correlations well** - Speed-HR correlation difference < 0.05
 
 🔴 **Weak correlation in raw data confirmed** - Speed-HR correlation is 0.213 in original data
 
@@ -30,7 +30,7 @@ This confirms that the weak correlation is **inherent to the data**, not caused 
 - **Best Speed lag:** 2 timesteps (correlation: 0.195785)
 - **Best Altitude lag:** 30 timesteps (correlation: 0.079828)
 
-💡 **Insight:** Heart rate responds to speed changes with a **2-timestep delay**. Consider adding lagged features to your model.
+ **Insight:** Heart rate responds to speed changes with a **2-timestep delay**. Consider adding lagged features to your model.
 
 ## Recommendations
 

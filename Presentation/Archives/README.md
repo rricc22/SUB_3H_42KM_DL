@@ -50,7 +50,7 @@ This folder contains **complete materials** for your 7-minute group project pres
 
 ---
 
-## 🎯 Presentation Structure (7 minutes)
+##  Presentation Structure (7 minutes)
 
 | Time | Topic | Speaker | File Reference |
 |------|-------|---------|----------------|
@@ -64,12 +64,12 @@ This folder contains **complete materials** for your 7-minute group project pres
 
 ---
 
-## 📊 Key Results to Highlight
+##  Key Results to Highlight
 
-### Achievements ✅
+### Achievements 
 - **Dataset:** 974 Endomondo + 285 Apple Watch workouts processed
 - **Models:** 4 architectures (LSTM, LSTM+emb, Transformer, PatchTST)
-- **Performance:** MAE 8-15 BPM (target: <10 acceptable ✅)
+- **Performance:** MAE 8-15 BPM (target: <10 acceptable )
 - **Novel:** Apple Watch pipeline, HR quality analysis
 
 ### Team Contributions (State Clearly!)
@@ -90,15 +90,15 @@ This folder contains **complete materials** for your 7-minute group project pres
 - [ ] Test equipment
 
 ### Success Criteria
-- ✅ Stay within 7 minutes
-- ✅ All members present
-- ✅ Clear contributions stated
-- ✅ Professional delivery
-- ✅ Can answer questions
+-  Stay within 7 minutes
+-  All members present
+-  Clear contributions stated
+-  Professional delivery
+-  Can answer questions
 
 ---
 
-## 🚀 You've Got This!
+##  You've Got This!
 
 **Key Message:** Complete ML pipeline, strong results (8-15 BPM MAE), novel contributions, clear path forward.
 
@@ -107,5 +107,5 @@ This folder contains **complete materials** for your 7-minute group project pres
 ---
 
 **Created:** November 26, 2025  
-**Status:** ✅ Ready for presentation  
+**Status:**  Ready for presentation  
 **Next:** Review → Practice → Present!

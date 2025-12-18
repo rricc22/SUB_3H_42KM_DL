@@ -5,13 +5,13 @@
 
 ---
 
-## 📊 Overview
+##  Overview
 
 Successfully integrated the **Transfer Learning fine-tuning results** into the report, emphasizing the correlation discovery and breakthrough to <10 BPM MAE.
 
 ---
 
-## ✅ Changes Made
+##  Changes Made
 
 ### 1. **Abstract (sec/0_abstract.tex)**
 - **Updated** to include fine-tuning results
@@ -83,7 +83,7 @@ Copied from `Test_finetunning/results/`:
 
 ---
 
-## 📈 Key Metrics Highlighted
+##  Key Metrics Highlighted
 
 | Metric | Endomondo Baseline | Fine-Tuned (Stage 1) | Improvement |
 |--------|-------------------|---------------------|-------------|
@@ -95,7 +95,7 @@ Copied from `Test_finetunning/results/`:
 
 ---
 
-## 🎯 Narrative Arc
+##  Narrative Arc
 
 **Before:** Problem → Models → Failed → Propose future work
 
@@ -110,7 +110,7 @@ The report now tells a complete story:
 
 ---
 
-## 📄 Final Document Stats
+##  Final Document Stats
 
 - **Total Pages:** 7 (up from 4)
 - **File Size:** 2.0 MB
@@ -120,16 +120,16 @@ The report now tells a complete story:
 
 ---
 
-## ✅ Compilation Status
+##  Compilation Status
 
-- ✅ LaTeX compilation successful
-- ✅ All figures embedded
-- ✅ Cross-references resolved
-- ⚠️ Empty bibliography warning (no citations used)
+-  LaTeX compilation successful
+-  All figures embedded
+-  Cross-references resolved
+-  Empty bibliography warning (no citations used)
 
 ---
 
-## 🔄 Next Steps (Optional)
+##  Next Steps (Optional)
 
 If you want to further improve the report:
 
@@ -173,6 +173,6 @@ Presentation/Report/
 
 ---
 
-**Status:** ✅ **COMPLETE**
+**Status:**  **COMPLETE**
 
 The report now comprehensively documents the entire project journey from problem identification through correlation discovery to successful transfer learning implementation.

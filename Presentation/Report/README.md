@@ -6,7 +6,7 @@
 
 ---
 
-## 📄 Document Overview
+##  Document Overview
 
 This report documents a complete heart rate prediction project, from baseline models on crowdsourced data to successful transfer learning on high-quality Apple Watch data.
 
@@ -14,7 +14,7 @@ This report documents a complete heart rate prediction project, from baseline mo
 
 ---
 
-## 📊 Report Structure (7 Pages)
+##  Report Structure (7 Pages)
 
 ### **Section 1: Introduction**
 - Problem statement: Predict HR time-series from speed/altitude
@@ -38,7 +38,7 @@ This report documents a complete heart rate prediction project, from baseline mo
 - **Hypothesis:** High-quality data → stronger correlation → better predictions
 - Apple Watch dataset: 271 workouts, r=0.68 correlation (2.7× improvement)
 - Two-stage fine-tuning strategy
-- **Results:** Validation MAE 9.61 BPM ✅ (target achieved!)
+- **Results:** Validation MAE 9.61 BPM  (target achieved!)
 - Analysis: Why it worked, limitations, implications
 
 ### **Section 5: Conclusion**
@@ -48,20 +48,20 @@ This report documents a complete heart rate prediction project, from baseline mo
 
 ---
 
-## 🎯 Key Results Summary
+##  Key Results Summary
 
 | Metric | Endomondo Baseline | Apple Watch Fine-Tuned | Improvement |
 |--------|-------------------|------------------------|-------------|
 | **Data Quality** | Sparse HR | Dense (10-12/min) | Better ground truth |
 | **Correlation** | r=0.254 | **r=0.68** | **+2.7×** |
-| **Validation MAE** | 13.88 BPM | **9.61 BPM** | **-30.7%** ✅ |
+| **Validation MAE** | 13.88 BPM | **9.61 BPM** | **-30.7%**  |
 | **Test MAE** | 13.64 BPM | **11.03 BPM** | **-19.1%** |
 | **R² Score** | 0.44 | 0.59 | +34% |
 | **Training Samples** | 13,855 | 189 | 70× fewer! |
 
 ---
 
-## 📈 Visualizations Included
+##  Visualizations Included
 
 ### Existing Figures (4):
 1. `distribution_feature.png` - Feature distributions across splits
@@ -111,7 +111,7 @@ If you need to reference this work:
 
 ---
 
-## 🎓 Key Takeaways for Future Projects
+##  Key Takeaways for Future Projects
 
 1. **Data quality matters more than model complexity**
    - 189 high-quality samples > 13,855 noisy samples
@@ -146,6 +146,6 @@ For questions about the report or methodology:
 
 ---
 
-**Status:** ✅ Report Complete - Ready for Review/Submission
+**Status:**  Report Complete - Ready for Review/Submission
 
 **Last Updated:** December 17, 2025

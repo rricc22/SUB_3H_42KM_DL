@@ -146,10 +146,10 @@ This runs a test with dummy data to verify:
 - **Output**: `[batch, 500, 1]` - predicted heart rate
 
 ### Advantages Over LSTM
-- ✅ Better at capturing long-range dependencies
-- ✅ Parallel processing (faster training on GPU)
-- ✅ State-of-the-art performance on time-series tasks
-- ✅ Can leverage pre-trained weights (future work)
+-  Better at capturing long-range dependencies
+-  Parallel processing (faster training on GPU)
+-  State-of-the-art performance on time-series tasks
+-  Can leverage pre-trained weights (future work)
 
 ## Performance Expectations
 

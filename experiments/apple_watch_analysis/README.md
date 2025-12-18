@@ -1,6 +1,6 @@
 # Apple Watch Data Analysis - Complete Pipeline
 
-## Status: ✅ EXTRACTION, VALIDATION & PROCESSING PIPELINE READY
+## Status:  EXTRACTION, VALIDATION & PROCESSING PIPELINE READY
 
 ---
 
@@ -45,7 +45,7 @@ python3 ../../Model/train_patchtst.py --epochs 50 --batch_size 32
 
 ## Pipeline Components
 
-### 1. Data Extraction (`parse_apple_health.py`) ✅ COMPLETED
+### 1. Data Extraction (`parse_apple_health.py`)  COMPLETED
 **Purpose**: Extract workout metadata and raw data from Apple Health export
 
 **Features**:
@@ -61,7 +61,7 @@ python3 ../../Model/train_patchtst.py --epochs 50 --batch_size 32
 
 **Output**: `output/workouts_summary.json` (285 workouts)
 
-### 2. Validation (`validate_extraction_v2.py`) ✅ COMPLETED
+### 2. Validation (`validate_extraction_v2.py`)  COMPLETED
 **Purpose**: Validate data extraction with timezone fixes
 
 **Features**:
@@ -136,8 +136,8 @@ python3 ../../Model/train_patchtst.py --epochs 50 --batch_size 32
 
 ### Validation Results (8 samples tested)
 - **Successful alignments**: 8/10 (80%)
-- **Timezone fix**: ✅ Implemented (auto-detection)
-- **Speed calculation**: ✅ Implemented (haversine formula)
+- **Timezone fix**:  Implemented (auto-detection)
+- **Speed calculation**:  Implemented (haversine formula)
 - **Average aligned points per workout**: ~4,458
 
 ### HR Quality Distribution (from validation samples)
@@ -148,7 +148,7 @@ python3 ../../Model/train_patchtst.py --epochs 50 --batch_size 32
 
 ## Key Features
 
-### ✅ Implemented Solutions
+###  Implemented Solutions
 
 1. **Timezone Correction** (`validate_extraction_v2.py:98-119`)
    - Auto-detects offset between GPX (UTC) and HR (local time)
@@ -171,7 +171,7 @@ python3 ../../Model/train_patchtst.py --epochs 50 --batch_size 32
    - Automatic quality categorization
    - Temporal distribution analysis
 
-### 📊 Data Format
+###  Data Format
 
 **Input** (Apple Health Export):
 ```
@@ -202,8 +202,8 @@ workout_20251118_154916,2025-11-18,2025-11-18 15:49:16,0.0,45.123,7.456,100.5,10
 
 ```
 experiments/apple_watch_analysis/
-├── parse_apple_health.py              # ✅ Data extraction (285 workouts)
-├── validate_extraction_v2.py          # ✅ Validation with timezone fix (80% success)
+├── parse_apple_health.py              #  Data extraction (285 workouts)
+├── validate_extraction_v2.py          #  Validation with timezone fix (80% success)
 ├── process_all_workouts.py            # ⏳ Full processing pipeline
 ├── filter_by_quality.py               # ⏳ Quality categorization
 ├── create_dataset.py                  # ⏳ Training dataset creation
@@ -234,20 +234,20 @@ experiments/apple_watch_analysis/
 - Duration: 52.1 minutes
 - Distance: ~8-10 km (estimated)
 - GPS points: 3,124 trackpoints
-- **HR samples**: 627 records (12 samples/min) ✅ EXCELLENT
+- **HR samples**: 627 records (12 samples/min)  EXCELLENT
 - Aligned data: 3,124 points
 
-**Quality**: ✅ GOOD - Rich HR dynamics, minimal interpolation
+**Quality**:  GOOD - Rich HR dynamics, minimal interpolation
 
 ### Workout: `workout_20241114_172333` (Mid-2024, SPARSE Quality)
 **Metadata**:
 - Date: 2024-11-14 17:23
 - Duration: 71.2 minutes
 - GPS points: 4,273 trackpoints
-- **HR samples**: 48 records (0.7 samples/min) ⚠️ SPARSE
+- **HR samples**: 48 records (0.7 samples/min)  SPARSE
 - Aligned data: 4,273 points (heavily interpolated)
 
-**Quality**: ⚠️ SPARSE - Smooth interpolation, less HR detail
+**Quality**:  SPARSE - Smooth interpolation, less HR detail
 
 ---
 
@@ -279,21 +279,21 @@ experiments/apple_watch_analysis/
 - **Split**: By userId (70/15/15)
 
 ### Apple Watch Dataset
-- **Format**: ✅ Same PyTorch .pt structure
-- **Sequence length**: ✅ 500 timesteps (resampled)
-- **Features**: ✅ speed, altitude, gender (placeholder), userId (single user = 0)
-- **Target**: ✅ heart_rate (500 timesteps)
-- **Split**: ⚠️ **Temporal** (70/15/15 by date, not userId)
+- **Format**:  Same PyTorch .pt structure
+- **Sequence length**:  500 timesteps (resampled)
+- **Features**:  speed, altitude, gender (placeholder), userId (single user = 0)
+- **Target**:  heart_rate (500 timesteps)
+- **Split**:  **Temporal** (70/15/15 by date, not userId)
 
 **Difference**: Temporal split instead of user-based split (only 1 user)
 
 ### Model Compatibility
 | Model | Compatible | Notes |
 |-------|------------|-------|
-| LSTM (`Model/LSTM.py`) | ✅ Yes | Direct drop-in replacement |
-| LSTM + Embeddings (`Model/LSTM_with_embeddings.py`) | ⚠️ Partial | userId embedding not useful (single user) |
-| PatchTST (`Model/PatchTST_HR.py`) | ✅ Yes | After `convert_pt_to_hf.py` |
-| Lag-Llama (`Model/LagLlama_HR.py`) | ✅ Yes | After format conversion |
+| LSTM (`Model/LSTM.py`) |  Yes | Direct drop-in replacement |
+| LSTM + Embeddings (`Model/LSTM_with_embeddings.py`) |  Partial | userId embedding not useful (single user) |
+| PatchTST (`Model/PatchTST_HR.py`) |  Yes | After `convert_pt_to_hf.py` |
+| Lag-Llama (`Model/LagLlama_HR.py`) |  Yes | After format conversion |
 
 ---
 
@@ -362,12 +362,12 @@ print({k: v.shape for k, v in data.items()})
 ---
 
 ## Code Quality
-- ✅ PEP 8 compliant (snake_case, docstrings)
-- ✅ Type hints (dataclasses for data containers)
-- ✅ Error handling (try-except with continue)
-- ✅ Memory efficient (streaming XML parsing, progress bars)
-- ✅ Reproducible (RANDOM_SEED=42)
-- ⚠️ Type checker warnings (pandas DataFrame accessors, non-blocking)
+-  PEP 8 compliant (snake_case, docstrings)
+-  Type hints (dataclasses for data containers)
+-  Error handling (try-except with continue)
+-  Memory efficient (streaming XML parsing, progress bars)
+-  Reproducible (RANDOM_SEED=42)
+-  Type checker warnings (pandas DataFrame accessors, non-blocking)
 
 ---
 
@@ -382,7 +382,7 @@ print({k: v.shape for k, v in data.items()})
 
 **Generated**: 2025-11-25  
 **Author**: Apple Watch Analysis Pipeline  
-**Status**: ✅ **READY FOR FULL PROCESSING** - All scripts created and tested
+**Status**:  **READY FOR FULL PROCESSING** - All scripts created and tested
 
 **To proceed**: Run `python3 process_all_workouts.py`
 

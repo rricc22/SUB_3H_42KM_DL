@@ -1,6 +1,6 @@
 # Presentation Materials - ACTUAL Version
 
-## ✅ What's New
+##  What's New
 
 Based on your feedback, I've created the **ACTUAL** presentation that follows YOUR real project story:
 
@@ -14,7 +14,7 @@ Based on your feedback, I've created the **ACTUAL** presentation that follows YO
 
 ---
 
-## 📄 New Files Created
+##  New Files Created
 
 ### 1. **ACTUAL_PRESENTATION.md** ⭐ USE THIS
 - Follows YOUR actual project journey
@@ -38,14 +38,14 @@ Based on your feedback, I've created the **ACTUAL** presentation that follows YO
 
 ---
 
-## 🎯 Your Story in 7 Minutes
+##  Your Story in 7 Minutes
 
 ### Timing Breakdown
 
 | Slide | Topic | Time | Key Point |
 |-------|-------|------|-----------|
 | 1 | Problem | 1:00 | Predict HR from activity |
-| 2 | Endomondo Challenge | 1:30 | 260K→13K, low correlations ⚠️ |
+| 2 | Endomondo Challenge | 1:30 | 260K→13K, low correlations  |
 | 3 | First Models | 1:00 | LSTM/GRU, MAE ~15 BPM |
 | 4 | Batch Size Search | 1:00 | BS=16 best (show all 4 graphs!) ⭐ |
 | 5 | Transfer Learning | 0:30 | Lag-Llama didn't help |
@@ -58,7 +58,7 @@ Based on your feedback, I've created the **ACTUAL** presentation that follows YO
 
 ---
 
-## 📊 Key Graphs to Include
+##  Key Graphs to Include
 
 ### Must-Have (8 graphs):
 
@@ -90,7 +90,7 @@ All paths listed in `VISUALIZATION_CHECKLIST.md`
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Step 1: Read Your Story (15 min)
 ```bash
@@ -137,7 +137,7 @@ cp checkpoints/gru_bs16_lr0.0003_e30_h128_l4_bidir_training_curves.png Presentat
 
 ---
 
-## 💡 Key Messages
+##  Key Messages
 
 ### What Makes Your Story Unique
 
@@ -172,7 +172,7 @@ cp checkpoints/gru_bs16_lr0.0003_e30_h128_l4_bidir_training_curves.png Presentat
 
 ---
 
-## ⚠️ Important Notes
+##  Important Notes
 
 ### What Changed from Generic Version
 
@@ -199,7 +199,7 @@ cp checkpoints/gru_bs16_lr0.0003_e30_h128_l4_bidir_training_curves.png Presentat
 
 ---
 
-## 📋 Pre-Presentation Checklist
+##  Pre-Presentation Checklist
 
 ### Content
 - [ ] Read `ACTUAL_PRESENTATION.md` fully
@@ -225,7 +225,7 @@ cp checkpoints/gru_bs16_lr0.0003_e30_h128_l4_bidir_training_curves.png Presentat
 
 ---
 
-## 🎯 Success Criteria
+##  Success Criteria
 
 ### Minimum
 - [ ] Tell the complete story (data challenge → solution)
@@ -263,25 +263,25 @@ cp checkpoints/gru_bs16_lr0.0003_e30_h128_l4_bidir_training_curves.png Presentat
 
 ---
 
-## ✅ Final Checklist
+##  Final Checklist
 
 **Files to use:**
-- ✅ `ACTUAL_PRESENTATION.md` (main content)
-- ✅ `VISUALIZATION_CHECKLIST.md` (graph paths)
+-  `ACTUAL_PRESENTATION.md` (main content)
+-  `VISUALIZATION_CHECKLIST.md` (graph paths)
 
 **Key slides:**
-- ✅ Slide 2: Endomondo challenge (low correlations)
-- ✅ Slide 4: Batch size search (2x2 grid) ⭐
-- ✅ Slide 6: Apple Watch breakthrough (side-by-side) ⭐
+-  Slide 2: Endomondo challenge (low correlations)
+-  Slide 4: Batch size search (2x2 grid) ⭐
+-  Slide 6: Apple Watch breakthrough (side-by-side) ⭐
 
 **Key messages:**
-- ✅ Data quality > model complexity
-- ✅ Systematic experiments guide decisions
-- ✅ Adaptation when faced with challenges
+-  Data quality > model complexity
+-  Systematic experiments guide decisions
+-  Adaptation when faced with challenges
 
 ---
 
-**You've got a great story to tell! Good luck! 🚀**
+**You've got a great story to tell! Good luck! **
 
-**Status:** ✅ Ready for presentation
+**Status:**  Ready for presentation
 **Next:** Read ACTUAL_PRESENTATION.md → Gather graphs → Create slides → Practice

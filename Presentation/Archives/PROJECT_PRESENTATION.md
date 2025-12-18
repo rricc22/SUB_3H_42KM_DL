@@ -455,7 +455,7 @@ Output Projection → Heart Rate
 **2. Strong Baseline Results**
 - LSTM: ~15 BPM MAE (basic)
 - Large LSTM: ~8-10 BPM MAE (estimated)
-- Target: <10 BPM (acceptable) ✓
+- Target: <10 BPM (acceptable) 
 - Path to <5 BPM (excellent) identified
 
 **3. Novel Contributions**
@@ -520,21 +520,21 @@ Output Projection → Heart Rate
 ### Project Status
 
 **Completed:**
-- ✅ Data preprocessing pipelines (2 datasets)
-- ✅ 4 model architectures implemented
-- ✅ Training infrastructure with GPU support
-- ✅ Evaluation framework with visualizations
-- ✅ Baseline results (MAE ~8-15 BPM)
+-  Data preprocessing pipelines (2 datasets)
+-  4 model architectures implemented
+-  Training infrastructure with GPU support
+-  Evaluation framework with visualizations
+-  Baseline results (MAE ~8-15 BPM)
 
 **In Progress:**
-- 🔄 Transformer retraining (correct hyperparameters)
-- 🔄 PatchTST training (large model)
-- 🔄 Apple Watch model optimization
+-  Transformer retraining (correct hyperparameters)
+-  PatchTST training (large model)
+-  Apple Watch model optimization
 
 **Future Work:**
-- 📋 Transfer learning experiments
-- 📋 Attention visualization
-- 📋 Real-time deployment
+-  Transfer learning experiments
+-  Attention visualization
+-  Real-time deployment
 
 ---
 

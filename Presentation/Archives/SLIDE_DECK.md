@@ -33,7 +33,7 @@ Predict heart rate time-series from running activity data
 - Heart rate sequence (BPM) - 500 timesteps
 
 **Success Metrics:**
-- ✅ Acceptable: MAE < 10 BPM
+-  Acceptable: MAE < 10 BPM
 - 🌟 Excellent: MAE < 5 BPM
 
 **Why This Matters:**
@@ -151,11 +151,11 @@ Output Projection → HR [500, 1]
 
 | Model | MAE (BPM) | RMSE (BPM) | R² | Status |
 |-------|-----------|------------|----|--------|
-| LSTM (basic) | 15.41 | 20.11 | -0.052 | ✅ Complete |
-| LSTM (large, bidir) | 8-10* | ~12* | ~0.4* | 🔄 Training |
-| LSTM + Embeddings | 15.79 | 20.61 | -0.106 | ✅ Complete |
-| Transformer (wrong params) | 38.78 | 64.72 | -9.41 | ❌ Failed |
-| Transformer (correct params) | 6-9* | ~10* | ~0.5* | 🔄 Retraining |
+| LSTM (basic) | 15.41 | 20.11 | -0.052 |  Complete |
+| LSTM (large, bidir) | 8-10* | ~12* | ~0.4* |  Training |
+| LSTM + Embeddings | 15.79 | 20.61 | -0.106 |  Complete |
+| Transformer (wrong params) | 38.78 | 64.72 | -9.41 |  Failed |
+| Transformer (correct params) | 6-9* | ~10* | ~0.5* |  Retraining |
 
 *Estimated based on partial training
 
@@ -164,7 +164,7 @@ Output Projection → HR [500, 1]
 - Large LSTM: Approaching acceptable (8-10 BPM)
 - Transformer: Needs correct hyperparameters (6-9 BPM expected)
 
-**Target:** ✅ < 10 BPM achieved | 🌟 < 5 BPM in progress
+**Target:**  < 10 BPM achieved | 🌟 < 5 BPM in progress
 
 ---
 
@@ -222,7 +222,7 @@ Output Projection → HR [500, 1]
 
 **By HR Range:**
 - Low (100-130 BPM): MAE ~12 BPM
-- Medium (130-160 BPM): MAE ~8 BPM ✅ Best
+- Medium (130-160 BPM): MAE ~8 BPM  Best
 - High (160-180 BPM): MAE ~15 BPM
 
 **By Workout Type:**
@@ -235,22 +235,22 @@ Output Projection → HR [500, 1]
 ## SLIDE 10: Next Steps
 
 ### Immediate (1-2 weeks)
-- ✅ Complete transformer retraining (correct hyperparams)
+-  Complete transformer retraining (correct hyperparams)
 - ⏳ Hyperparameter grid search
 - ⏳ Ensemble methods (LSTM + Transformer)
 - ⏳ Attention visualization
 
 ### Advanced (1-2 months)
-- 📋 Transfer learning: Endomondo → Apple Watch
-- 📋 Multi-task learning (HR ↔ Speed)
-- 📋 Data augmentation (sliding windows)
-- 📋 Temporal domain adaptation
+-  Transfer learning: Endomondo → Apple Watch
+-  Multi-task learning (HR ↔ Speed)
+-  Data augmentation (sliding windows)
+-  Temporal domain adaptation
 
 ### Long-term (3+ months)
-- 📋 Pretrained models (Chronos, TimeGPT)
-- 📋 Real-time deployment (mobile apps)
-- 📋 Expand to other sports (cycling, swimming)
-- 📋 Health applications (VO2 max, fatigue detection)
+-  Pretrained models (Chronos, TimeGPT)
+-  Real-time deployment (mobile apps)
+-  Expand to other sports (cycling, swimming)
+-  Health applications (VO2 max, fatigue detection)
 
 ---
 
@@ -284,7 +284,7 @@ Output Projection → HR [500, 1]
 
 ## SLIDE 12: Key Takeaways
 
-### What We Achieved ✅
+### What We Achieved 
 - Complete ML pipeline (preprocessing → training → evaluation)
 - 974 Endomondo + 285 Apple Watch workouts processed
 - 4 model architectures implemented
@@ -297,13 +297,13 @@ Output Projection → HR [500, 1]
 - Hyperparameter lessons (transformer vs LSTM)
 - Temporal shift identification
 
-### Lessons Learned 💡
+### Lessons Learned 
 - Data quality matters (HR sampling rate)
 - Hyperparameters critical (transformers ≠ LSTMs)
 - Temporal dependencies complex (lag effects)
 - Transfer learning promising
 
-### Path Forward 🚀
+### Path Forward 
 - Clear roadmap to < 5 BPM
 - Multiple promising techniques
 - Real-world deployment potential
