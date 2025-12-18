@@ -82,6 +82,9 @@ LOGS/
 logs/
 *.log
 
+# Exception: Keep experiment training logs (documentation of hyperparameter tuning)
+!experiments/**/logs/*.log
+
 # ============================================
 # EDA OUTPUTS
 # ============================================
