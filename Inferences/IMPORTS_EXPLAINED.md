@@ -1,8 +1,8 @@
 # Import Styles Explained
 
-## 🎯 What Changed
+##  What Changed
 
-### ❌ Old Approach (Hacky)
+###  Old Approach (Hacky)
 ```python
 # Add Model directory to path
 sys.path.append(str(Path(__file__).parent.parent / "Model"))
@@ -11,7 +11,7 @@ from LSTM import HeartRateLSTM
 from LSTM_with_embeddings import HeartRateLSTMWithEmbeddings
 ```
 
-### ✅ New Approach (Clean & Professional)
+###  New Approach (Clean & Professional)
 ```python
 # Add project root to path for clean imports
 project_root = Path(__file__).parent.parent
@@ -23,7 +23,7 @@ from Model.LSTM_with_embeddings import HeartRateLSTMWithEmbeddings
 
 ---
 
-## 🤔 Why the Change?
+##  Why the Change?
 
 ### **1. Explicit Package Structure**
 - **Old:** `from LSTM import ...` - Where is LSTM from? Unclear!
@@ -64,7 +64,7 @@ from metrics import compute_mae
 
 ---
 
-## 📊 Technical Details
+##  Technical Details
 
 ### **sys.path.append vs sys.path.insert(0, ...)**
 
@@ -88,24 +88,24 @@ sys.path.insert(0, str(project_root))  # Adds to START of search path
 
 Adding project root allows:
 ```python
-from Model.LSTM import HeartRateLSTM          # ✅ Works
-from Preprocessing.dataset import Dataset      # ✅ Works
-from utils.config import load_config           # ✅ Works
+from Model.LSTM import HeartRateLSTM          #  Works
+from Preprocessing.dataset import Dataset      #  Works
+from utils.config import load_config           #  Works
 ```
 
 Adding just Model/ only allows:
 ```python
-from LSTM import HeartRateLSTM                 # ✅ Works
-from Preprocessing.dataset import Dataset      # ❌ Fails!
-from utils.config import load_config           # ❌ Fails!
+from LSTM import HeartRateLSTM                 #  Works
+from Preprocessing.dataset import Dataset      #  Fails!
+from utils.config import load_config           #  Fails!
 ```
 
 ---
 
-## 🎯 Best Practices Summary
+##  Best Practices Summary
 
 ### **Current Project (Scripts-based)**
-✅ What we're doing now:
+ What we're doing now:
 ```python
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
@@ -124,12 +124,12 @@ from heart_rate_prediction.data.dataset import WorkoutDataset
 
 ---
 
-## 🔍 How to Check Import Style
+##  How to Check Import Style
 
 ### **Test 1: Does it work?**
 ```bash
 cd Project/
-python3 -c "from Model.LSTM import HeartRateLSTM; print('✅ Works!')"
+python3 -c "from Model.LSTM import HeartRateLSTM; print(' Works!')"
 ```
 
 ### **Test 2: Is the path correct?**
@@ -154,11 +154,11 @@ python3 Inferences/inference.py \
 | **Script in same dir** | Relative import | `from .lstm import LSTM` |
 | **Script in subfolder** | Package-style | `from Model.LSTM import ...` |
 | **Installed package** | Full path | `from heart_rate.models import ...` |
-| **Quick test/debug** | sys.path hack | `sys.path.append(...)` ⚠️ |
+| **Quick test/debug** | sys.path hack | `sys.path.append(...)`  |
 
 ---
 
-## 🚀 Next Steps (Optional Improvements)
+##  Next Steps (Optional Improvements)
 
 ### **1. Create `Model/__init__.py`**
 ```python
@@ -198,19 +198,19 @@ from heart_rate_prediction.models import HeartRateLSTM
 
 ---
 
-## ✅ Summary
+##  Summary
 
 **What we fixed:**
-1. ✅ Changed from `sys.path.append` to `sys.path.insert(0, ...)`
-2. ✅ Changed from `from LSTM import` to `from Model.LSTM import`
-3. ✅ Added project root instead of Model directory
-4. ✅ Made imports more explicit and professional
+1.  Changed from `sys.path.append` to `sys.path.insert(0, ...)`
+2.  Changed from `from LSTM import` to `from Model.LSTM import`
+3.  Added project root instead of Model directory
+4.  Made imports more explicit and professional
 
 **Benefits:**
-- 🎯 Clearer code structure
+-  Clearer code structure
 - 🛡️ Avoids name collisions
-- 🔍 Better IDE support
-- 📈 Scales better as project grows
+-  Better IDE support
+-  Scales better as project grows
 - 👥 Easier for collaborators
 
-**Current status:** ✅ All inference scripts working with improved imports!
+**Current status:**  All inference scripts working with improved imports!

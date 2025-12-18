@@ -3,10 +3,10 @@
 ## v3.0 (2025-11-24) - Lag-Llama Support
 
 ### Added
-- ✅ Full support for Lag-Llama Transformer model in `inference.py` and `evaluate_test.py`
-- ✅ Automatic detection of `num_users` from checkpoint weights when not explicitly saved
-- ✅ Automatic inference of `d_model` from checkpoint weights for Lag-Llama
-- ✅ Support for all three model types: LSTM, LSTM with embeddings, and Lag-Llama
+-  Full support for Lag-Llama Transformer model in `inference.py` and `evaluate_test.py`
+-  Automatic detection of `num_users` from checkpoint weights when not explicitly saved
+-  Automatic inference of `d_model` from checkpoint weights for Lag-Llama
+-  Support for all three model types: LSTM, LSTM with embeddings, and Lag-Llama
 
 ### Changed
 - Updated `inference.py` to handle Lag-Llama model architecture
@@ -20,9 +20,9 @@
 - Uses default values for `nhead` (8) and `dim_feedforward` (512) if not in checkpoint args
 
 ### Testing
-- ✅ Tested `inference.py` with `checkpoints/lag_llama_best.pt` - Works correctly
-- ✅ Tested `evaluate_test.py` with `checkpoints/lag_llama_best.pt` - Generates visualization
-- ✅ Results: MAE: 16.55 BPM, RMSE: 20.74 BPM, R²: -0.1019
+-  Tested `inference.py` with `checkpoints/lag_llama_best.pt` - Works correctly
+-  Tested `evaluate_test.py` with `checkpoints/lag_llama_best.pt` - Generates visualization
+-  Results: MAE: 16.55 BPM, RMSE: 20.74 BPM, R²: -0.1019
 
 ### Files Modified
 - `Inferences/inference.py` - Added Lag-Llama support
@@ -30,9 +30,9 @@
 - `Inferences/README.md` - Updated documentation
 
 ### Backward Compatibility
-- ✅ All changes are backward compatible
-- ✅ LSTM and LSTM with embeddings models still work as before
-- ✅ No breaking changes to API or command-line arguments
+-  All changes are backward compatible
+-  LSTM and LSTM with embeddings models still work as before
+-  No breaking changes to API or command-line arguments
 
 ---
 

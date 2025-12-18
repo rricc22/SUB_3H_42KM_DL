@@ -110,7 +110,7 @@ python3 Model/train.py \
   --device cuda
 ```
 
-**⚠️ IMPORTANT - Lag-Llama Training Tips:**
+** IMPORTANT - Lag-Llama Training Tips:**
 1. **Lower batch size (16):** Transformers use more memory
 2. **Lower learning rate (0.0001):** Attention is sensitive to LR
 3. **More epochs (100):** Transformers converge slower than LSTM
@@ -118,10 +118,10 @@ python3 Model/train.py \
 
 **Common Mistakes:**
 ```bash
-# ❌ WRONG - These settings give BAD performance (MAE ~38 BPM):
+#  WRONG - These settings give BAD performance (MAE ~38 BPM):
 python3 Model/train.py --model lag_llama --epochs 10 --batch_size 128 --lr 0.001 --num_layers 2
 
-# ✅ CORRECT - Proper settings (Expected MAE: 6-9 BPM):
+#  CORRECT - Proper settings (Expected MAE: 6-9 BPM):
 python3 Model/train.py --model lag_llama --epochs 100 --batch_size 16 --lr 0.0001 --num_layers 4
 ```
 
@@ -196,9 +196,9 @@ echo "Check GPU: watch -n 5 nvidia-smi"
 
 | Model | MAE (BPM) | RMSE (BPM) | R² | Parameters | Status |
 |-------|-----------|------------|----|------------|--------|
-| LSTM | 15.41 | 20.11 | -0.052 | ~50K | ✅ Trained |
-| LSTM+Embeddings | 15.79 | 20.61 | -0.106 | ~60K | ✅ Trained |
-| **Lag-Llama** | **38.78** ❌ | **64.72** | **-9.41** | **~805K** | ⚠️ **Bad Hyperparams** |
+| LSTM | 15.41 | 20.11 | -0.052 | ~50K |  Trained |
+| LSTM+Embeddings | 15.79 | 20.61 | -0.106 | ~60K |  Trained |
+| **Lag-Llama** | **38.78**  | **64.72** | **-9.41** | **~805K** |  **Bad Hyperparams** |
 
 **Lag-Llama Issues:**
 - Trained with WRONG hyperparameters:

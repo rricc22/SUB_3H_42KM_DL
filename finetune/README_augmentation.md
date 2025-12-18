@@ -9,8 +9,8 @@ This document describes data augmentation strategies for heart rate time-series 
 ## Problem Statement
 
 **Challenge**: Stage 2 fine-tuning (unfreeze all layers) overfits on 196 training samples
-- Stage 1 MAE: 8.94 BPM ✅
-- Stage 2 MAE: 10.15 BPM ❌ (worse due to overfitting)
+- Stage 1 MAE: 8.94 BPM 
+- Stage 2 MAE: 10.15 BPM  (worse due to overfitting)
 
 **Solution**: Apply data augmentation to increase effective dataset size and regularize training
 
@@ -46,7 +46,7 @@ speed_aug, altitude_aug, hr_aug = augmenter.time_warp(
 
 ---
 
-### 2. 📊 Magnitude Warping (Physiologically Realistic)
+### 2.  Magnitude Warping (Physiologically Realistic)
 
 **What it does**: Multiplies sequences by smooth random curves, simulating varying effort levels.
 
@@ -73,7 +73,7 @@ speed_aug, altitude_aug, hr_aug = augmenter.magnitude_warp(
 
 ---
 
-### 3. 🎯 Window Slicing (Simple & Effective)
+### 3.  Window Slicing (Simple & Effective)
 
 **What it does**: Extracts random windows from longer sequences.
 
@@ -125,7 +125,7 @@ speed_aug, altitude_aug, hr_aug = augmenter.jitter(
 
 ---
 
-### 5. 🔄 Rotation (Advanced)
+### 5.  Rotation (Advanced)
 
 **What it does**: Rotates speed-altitude in 2D feature space while preserving correlations.
 
@@ -282,7 +282,7 @@ print(f"Augmented speed mean: {speed_aug.mean():.3f}")
 Train samples: 196
 Val loss: 102.49
 Test MAE: 10.15 BPM
-Status: Overfitting ❌
+Status: Overfitting 
 ```
 
 ### Stage 2 With Augmentation (Conservative)
@@ -290,7 +290,7 @@ Status: Overfitting ❌
 Train samples: 392 (2x)
 Val loss: ~90 (expected)
 Test MAE: ~9.2 BPM (expected)
-Status: Improved ✅
+Status: Improved 
 ```
 
 ### Stage 2 With Augmentation (Aggressive)
@@ -298,7 +298,7 @@ Status: Improved ✅
 Train samples: 588 (3x)
 Val loss: ~85 (expected)
 Test MAE: ~8.8 BPM (expected)
-Status: Near Stage 1 performance ✅
+Status: Near Stage 1 performance 
 ```
 
 ---
@@ -307,10 +307,10 @@ Status: Near Stage 1 performance ✅
 
 | Method | Dataset Size | Val Loss | Test MAE | Improvement | Status |
 |--------|-------------|----------|----------|-------------|---------|
-| Stage 1 (Freeze Layer 0) | 196 | 84.0 | **8.94** | Baseline | ✅ BEST |
-| Stage 2 (No Aug) | 196 | 102.5 | 10.15 | -13% | ❌ Worse |
-| Stage 2 + Conservative Aug | 392 | ~90 | ~9.2 | +9% | ✅ Better |
-| Stage 2 + Aggressive Aug | 588 | ~85 | ~8.8 | +13% | ✅ Best |
+| Stage 1 (Freeze Layer 0) | 196 | 84.0 | **8.94** | Baseline |  BEST |
+| Stage 2 (No Aug) | 196 | 102.5 | 10.15 | -13% |  Worse |
+| Stage 2 + Conservative Aug | 392 | ~90 | ~9.2 | +9% |  Better |
+| Stage 2 + Aggressive Aug | 588 | ~85 | ~8.8 | +13% |  Best |
 
 ---
 
@@ -352,7 +352,7 @@ prob = 0.7  # Aggressive - more diversity
 ```python
 multiplier = 1  # No augmentation
 multiplier = 2  # 2x dataset (conservative)
-multiplier = 3  # 3x dataset (balanced) ✅ Recommended
+multiplier = 3  # 3x dataset (balanced)  Recommended
 multiplier = 5  # 5x dataset (aggressive)
 ```
 
@@ -368,16 +368,16 @@ warp_factor = 0.2  # ±20% time change (aggressive)
 ## Physiological Considerations
 
 ### Valid Augmentations
-- ✅ **Time warping**: Realistic - people run at different paces
-- ✅ **Magnitude warping**: Realistic - effort varies during workout
-- ✅ **Jittering**: Realistic - sensors have noise
-- ✅ **Window slicing**: Realistic - extracts workout segments
+-  **Time warping**: Realistic - people run at different paces
+-  **Magnitude warping**: Realistic - effort varies during workout
+-  **Jittering**: Realistic - sensors have noise
+-  **Window slicing**: Realistic - extracts workout segments
 
 ### Invalid Augmentations
-- ❌ **Random flipping**: HR time-series has direction (warmup → peak → cooldown)
-- ❌ **Random cropping**: Would break HR dynamics
-- ❌ **Extreme warping** (>30%): Unrealistic HR response
-- ❌ **Permutation**: Would destroy temporal dependencies
+-  **Random flipping**: HR time-series has direction (warmup → peak → cooldown)
+-  **Random cropping**: Would break HR dynamics
+-  **Extreme warping** (>30%): Unrealistic HR response
+-  **Permutation**: Would destroy temporal dependencies
 
 ---
 
@@ -445,7 +445,7 @@ python3 finetune/train_stage2_augmented.py
 
 ## Next Steps
 
-1. ✅ Implement augmentation (done)
+1.  Implement augmentation (done)
 2. ⏳ Train Stage 2 with augmentation
 3. ⏳ Compare with Stage 1 and Stage 2 (no aug)
 4. ⏳ Tune hyperparameters if needed

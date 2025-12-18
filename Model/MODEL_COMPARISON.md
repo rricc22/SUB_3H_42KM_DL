@@ -6,9 +6,9 @@ Complete comparison of all trained models on heart rate prediction task.
 
 | Rank | Model | Type | MAE (BPM) | RMSE (BPM) | R² | Hyperparameters |
 |------|-------|------|-----------|------------|-----|-----------------|
-| 1 🥇 | lstm_bs16_lr0.001_e30_h64_l2 | LSTM | **13.88** | 18.08 | 0.188 | bs=16, lr=0.001, h=64, l=2 |
-| 2 🥈 | lstm_bs16_lr0.0003_e75_h128_l4_bidir | LSTM | **13.89** | 17.99 | 0.196 | bs=16, lr=0.0003, h=128, l=4, bidir |
-| 3 🥉 | lstm_bs128_lr0.0005_e100_h256_l5 | LSTM | **13.96** | 18.16 | 0.181 | bs=128, lr=0.0005, h=256, l=5 |
+| 1  | lstm_bs16_lr0.001_e30_h64_l2 | LSTM | **13.88** | 18.08 | 0.188 | bs=16, lr=0.001, h=64, l=2 |
+| 2  | lstm_bs16_lr0.0003_e75_h128_l4_bidir | LSTM | **13.89** | 17.99 | 0.196 | bs=16, lr=0.0003, h=128, l=4, bidir |
+| 3  | lstm_bs128_lr0.0005_e100_h256_l5 | LSTM | **13.96** | 18.16 | 0.181 | bs=128, lr=0.0005, h=256, l=5 |
 | 4 | lstm_bs8_lr0.001_e30_h64_l2 | LSTM | 14.09 | 18.31 | 0.167 | bs=8, lr=0.001, h=64, l=2 |
 | 5 | gru_bs16_lr0.0003_e30_h128_l4_bidir | GRU | 14.23 | 18.43 | 0.156 | bs=16, lr=0.0003, h=128, l=4, bidir |
 | 6 | lstm_bs64_lr0.001_e30_h64_l2 | LSTM | 14.27 | 18.38 | 0.161 | bs=64, lr=0.001, h=64, l=2 |

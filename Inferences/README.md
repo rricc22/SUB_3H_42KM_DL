@@ -56,10 +56,10 @@ python3 Inferences/inference.py \
 Due to cuDNN compatibility issues with GTX 1060, always use `--device cpu`:
 
 ```bash
-# ✅ Correct
+#  Correct
 python3 Inferences/evaluate_test.py --checkpoint ... --device cpu
 
-# ❌ Will crash with cuDNN error
+#  Will crash with cuDNN error
 python3 Inferences/evaluate_test.py --checkpoint ... --device cuda
 ```
 
@@ -107,23 +107,23 @@ python3 Inferences/evaluate_test.py --checkpoint ... --device cuda
 ## Target Performance
 
 - 🌟 **Excellent**: MAE < 5 BPM
-- ✅ **Acceptable**: MAE < 10 BPM
-- ⚠️ **Needs improvement**: MAE > 10 BPM
+-  **Acceptable**: MAE < 10 BPM
+-  **Needs improvement**: MAE > 10 BPM
 
 Current best: **14.67 BPM** (needs larger model)
 
 ---
 
-## Recent Improvements ✨
+## Recent Improvements 
 
 **v3.0 (Latest):**
-- ✅ Added support for Lag-Llama Transformer model
-- ✅ Automatic detection of num_users and d_model from checkpoints
-- ✅ All models (LSTM, LSTM+embeddings, Lag-Llama) now fully supported
+-  Added support for Lag-Llama Transformer model
+-  Automatic detection of num_users and d_model from checkpoints
+-  All models (LSTM, LSTM+embeddings, Lag-Llama) now fully supported
 
 **v2.0:**
-- ✅ Fixed dict/namespace compatibility in checkpoint loading
-- ✅ Improved imports: `from Model.LSTM import ...` (clearer)
-- ✅ Better path handling: `sys.path.insert(0, ...)` (more reliable)
+-  Fixed dict/namespace compatibility in checkpoint loading
+-  Improved imports: `from Model.LSTM import ...` (clearer)
+-  Better path handling: `sys.path.insert(0, ...)` (more reliable)
 
 See `IMPORTS_EXPLAINED.md` for technical details on import improvements.

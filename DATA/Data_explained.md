@@ -30,12 +30,12 @@ Metadata:
 ---
 Key Insights for Your Project
 Advantages:
-✅ Pre-labeled transport modes: Contains "bike", "bike (transport)", "run" - you can use these as fraud labels!
-✅ Heart rate data: The endomondoHR file has BPM which is CRUCIAL for detecting fraud:
+ Pre-labeled transport modes: Contains "bike", "bike (transport)", "run" - you can use these as fraud labels!
+ Heart rate data: The endomondoHR file has BPM which is CRUCIAL for detecting fraud:
    - Real runners: HR correlates with speed/elevation
    - Fake (bike/scooter): HR too low or inconsistent with speed
-✅ Rich GPS data: Speed, elevation, GPS coordinates for trajectory analysis
-✅ Large dataset: 250K+ workouts with HR, nearly 1M total
+ Rich GPS data: Speed, elevation, GPS coordinates for trajectory analysis
+ Large dataset: 250K+ workouts with HR, nearly 1M total
 Your Fraud Detection Approach:
 1. Binary classification:
    - Genuine runs: Activities labeled as "run"
