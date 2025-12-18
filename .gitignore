@@ -1,19 +1,24 @@
-# Python
+# ============================================
+# PYTHON
+# ============================================
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.ipynb_checkpoints/
-
-# Virtual environments
+*.egg-info/
 .venv/
 env/
-*.egg-info/
+venv/
 
-# Jupyter
+# ============================================
+# JUPYTER
+# ============================================
 .ipynb_checkpoints
+*.ipynb_checkpoints/
 
-# Data files (too large for GitHub)
+# ============================================
+# DATA FILES (Large)
+# ============================================
 datasets/
 *.csv
 *.json
@@ -23,20 +28,19 @@ datasets/
 *.pt
 *.arrow
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Specific dataset files
 endomondoHR.json
 endomondoMeta.json
 
-# Preprocessed data and model checkpoints (too large)
+# Preprocessed data
 DATA/processed/*.pt
 DATA/temp/
-checkpoints/*.pt
 
-# Apple Watch / Apple Health data (1.5 GB - too heavy for git)
+# Apple Watch / Health data
+DATA/apple_health_export_User2/
+DATA/apple_health_User3/
+DATA/**/*.xml
+DATA/**/workout-routes/
 experiments/apple_health_export/
 experiments/apple_watch_analysis/output/
 experiments/apple_watch_analysis/data_cache/
@@ -45,18 +49,145 @@ experiments/apple_watch_analysis/processed_workouts/
 experiments/apple_watch_analysis/processing.log
 experiments/apple_watch_analysis/*.log
 
-# Apple Health XML exports and GPX routes (heavy)
-DATA/apple_health_export_User2/
-DATA/apple_health_User3/
-DATA/**/*.xml
-DATA/**/workout-routes/
+# ============================================
+# ARCHIVES - ENTIRE FOLDER (22 GB!)
+# ============================================
+# Ignore entire Archives directory
+Archives/
 
-# Model checkpoints and training outputs (heavy)
+# ============================================
+# MODEL CHECKPOINTS & OUTPUTS
+# ============================================
 checkpoints/
 results/
+
+# Exception: Keep final stage results metadata
+!checkpoints/stage1/
+!checkpoints/stage2/
+!checkpoints/stage2_aug/
+!results/stage1/
+!results/stage2/
+!results/stage2_aug/
+
+# But ignore model files in those folders
+checkpoints/**/*.pt
+results/**/*.png
+
+# Keep only metrics
+!results/**/test_metrics.json
+!results/**/val_metrics.json
+
+# Logs
 LOGS/
 logs/
+*.log
 
-# EDA outputs
+# ============================================
+# EDA OUTPUTS
+# ============================================
+# Generated analysis outputs
 EDA/EDA_Generation/
 EDA/EDA_generation_from_proccessed_HR/
+
+# Exception: Keep markdown documentation
+!EDA/EDA_Generation/*.md
+!EDA/EDA_generation_from_proccessed_HR/*.md
+
+# ============================================
+# LATEX (Build Artifacts & Backups)
+# ============================================
+# LaTeX intermediate files
+*.aux
+*.log
+*.bbl
+*.blg
+*.brf
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+indent.log
+
+# LaTeX backup files
+*.bak
+*.bak[0-9]
+*.bak[0-9][0-9]
+*.sav
+*~
+
+# ============================================
+# PRESENTATION
+# ============================================
+# Presentation draft/archive files
+Presentation/Archives/
+
+# Slides markdown drafts (keep only PDF)
+Presentation/Slides/ACTUAL_PRESENTATION.md
+Presentation/Slides/README_ACTUAL.md
+Presentation/Slides/SLIDES_FOR_PDF.md
+
+# Optional: PowerPoint source (keep for now)
+# Presentation/Slides/*.pptx
+
+# ============================================
+# DUPLICATE & BACKUP FILES
+# ============================================
+# Files with "copy" in name (accidental duplicates)
+*copy*.png
+*copy*.pt
+* copy.*
+
+# Backup files
+*.backup
+*.old
+*_old.*
+*_backup.*
+
+# Editor backups
+*~
+*.swp
+*.swo
+
+# ============================================
+# TEMPORARY & TEST FILES
+# ============================================
+# Screenshots with poor naming
+*[Ss]creenshot*.png
+
+# Temporary files
+*_temp.*
+*_test_*.py
+
+# Debug files
+*_debug.*
+
+# ============================================
+# OS & EDITORS
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Vim
+*.swp
+*.swo
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Emacs
+*~
+\#*\#
