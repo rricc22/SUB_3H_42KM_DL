@@ -59,21 +59,13 @@ Archives/
 # MODEL CHECKPOINTS & OUTPUTS
 # ============================================
 checkpoints/
-results/
-
-# Exception: Keep final stage results metadata
-!checkpoints/stage1/
-!checkpoints/stage2/
-!checkpoints/stage2_aug/
-!results/stage1/
-!results/stage2/
-!results/stage2_aug/
 
 # But ignore model files in those folders
 checkpoints/**/*.pt
-results/**/*.png
 
-# Keep only metrics
+# Results: ignore most but keep specific files
+results/*
+!results/*.gif
 !results/**/test_metrics.json
 !results/**/val_metrics.json
 
